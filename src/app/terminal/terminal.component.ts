@@ -28,7 +28,7 @@ import { WebLinksAddon } from 'xterm-addon-web-links';
 @Component({
   selector: 'app-terminal',
   templateUrl: './terminal.component.html',
-  styleUrls: ['./terminal.component.css'],
+  styleUrls: ['./terminal.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
 export class TerminalComponent

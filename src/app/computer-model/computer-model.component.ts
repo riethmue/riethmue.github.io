@@ -19,7 +19,7 @@ import { ModelInteractionService } from '../services/model-interaction.service';
 @Component({
   selector: 'app-computer-model',
   templateUrl: './computer-model.component.html',
-  styleUrls: ['./computer-model.component.css'],
+  styleUrls: ['./computer-model.component.scss'],
 })
 export class ComputerModelComponent implements OnInit {
   @ViewChild('renderContainer', { static: true }) renderContainer: ElementRef;
