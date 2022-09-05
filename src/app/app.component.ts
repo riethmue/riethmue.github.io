@@ -18,7 +18,7 @@ import { InitialSceneConfig } from './computer-model/scene-constants';
 import { ModelInteractionService } from './services/model-interaction.service';
 import { MatDialog } from '@angular/material/dialog';
 import { TerminalComponent } from './terminal/terminal.component';
-
+import { MatIconRegistry } from '@angular/material/icon';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -33,8 +33,11 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
   constructor(
     private modelInteractionService: ModelInteractionService,
-    public terminalDialog: MatDialog
-  ) {}
+    public terminalDialog: MatDialog,
+    private matIconRegistry: MatIconRegistry
+  ) {
+    this.matIconRegistry.addSvgIcon('test', 'assets/icon/linkedin.svg');
+  }
 
   ngOnDestroy() {
     this.destroyed$.next();
