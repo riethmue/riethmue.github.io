@@ -5,6 +5,10 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { CustomControls } from './custom-controls';
 import { DracoModel } from './draco-model';
 import { SceneConfig } from './scene-constants';
+import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass';
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer';
+import { PixelShader } from 'three/examples/jsm/shaders/PixelShader';
 
 export class ModelScene extends THREE.Scene {
   modelClicked = new EventEmitter<void>();
@@ -12,6 +16,9 @@ export class ModelScene extends THREE.Scene {
   renderer: THREE.WebGLRenderer;
   camera: THREE.PerspectiveCamera;
   controls: any;
+  effectComposer: EffectComposer;
+  renderPass: RenderPass;
+  shaderPass: ShaderPass;
 
   raycaster: THREE.Raycaster;
   mouse: THREE.Vector2;
@@ -39,6 +46,7 @@ export class ModelScene extends THREE.Scene {
     this.initCamera();
     this.initScene();
     this.initRenderer();
+    this.addPixelShader();
     this.initControls();
     this.addLights();
 
@@ -241,12 +249,70 @@ export class ModelScene extends THREE.Scene {
         }
       });
       this.add(gltfScene);
+      this.addGeometries();
       this.updateMatrixWorld(true);
       //this.prepareMaterials();
       this.sceneLoaded.emit();
     } catch (error) {
       console.error(error);
     }
+  }
+
+  async addPixelShader() {
+    this.effectComposer = new EffectComposer(this.renderer);
+    this.effectComposer.addPass(new RenderPass(this, this.camera));
+
+    this.shaderPass = new ShaderPass(PixelShader);
+    this.shaderPass.material.uniforms['resolution'].value = new THREE.Vector2(
+      window.innerWidth,
+      window.innerHeight
+    );
+    this.shaderPass.uniforms['resolution'].value.multiplyScalar(
+      window.devicePixelRatio
+    );
+    this.effectComposer.addPass(this.shaderPass);
+  }
+
+  async addGeometries() {
+    const geometries = [
+      new THREE.SphereGeometry(1, 64, 64),
+      new THREE.BoxGeometry(1, 1, 1),
+      new THREE.ConeGeometry(1, 1, 32),
+      new THREE.TetrahedronGeometry(1),
+      //new THREE.TorusKnotGeometry(1, 0.4),
+    ];
+
+    const group = new THREE.Group();
+
+    for (let i = 0; i < 50; i++) {
+      const geom = geometries[Math.floor(Math.random() * geometries.length)];
+
+      const color = new THREE.Color();
+      color.setHSL(
+        Math.random(),
+        0.7 + 0.2 * Math.random(),
+        0.5 + 0.1 * Math.random()
+      );
+
+      const mat = new THREE.MeshPhongMaterial({ color: color, shininess: 200 });
+
+      const mesh = new THREE.Mesh(geom, mat);
+
+      const s = 3 + Math.random();
+      mesh.scale.set(s, s, s);
+      mesh.position
+        .set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5)
+        .normalize();
+      mesh.position.multiplyScalar(Math.random() * 200);
+      mesh.rotation.set(
+        Math.random() * 2,
+        Math.random() * 2,
+        Math.random() * 2
+      );
+      group.add(mesh);
+    }
+
+    this.add(group);
   }
 
   // this method is based on threejs version 0.134.0:
@@ -411,23 +477,29 @@ export class ModelScene extends THREE.Scene {
 
     const intersects = this.raycaster.intersectObjects(this.children, true);
     if (intersects.length > 0) {
-      this.hoverModel = true;
-      const object = intersects[0].object as THREE.Mesh;
-      (object?.material as THREE.MeshStandardMaterial)?.color.set(
-        Math.random() * 0xffffff
-      );
+      const child = intersects[0].object as THREE.Mesh;
+      if (child?.name) {
+        (child?.material as THREE.MeshStandardMaterial)?.color.set(
+          Math.random() * 0xffffff
+        );
+      }
     } else {
       this.hoverModel = false;
       this.traverse((child: any) => {
         if (child.isMesh) {
-          (child?.material as THREE.MeshStandardMaterial)?.color.set(0xffffff);
+          if (child?.name) {
+            (child?.material as THREE.MeshStandardMaterial)?.color.set(
+              0xffffff
+            );
+          }
         }
       });
     }
   }
 
   animation(renderer, scene, camera, controls) {
-    renderer.render(scene, camera);
+    //renderer.render(scene, camera);
+    this.effectComposer.render();
     controls.update();
   }
 

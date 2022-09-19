@@ -20,3 +20,11 @@
   width: 100%;
   height: 100%;
 }
+
+.fab {
+  button,
+  a {
+    @apply hover:bg-primary-300;
+    @apply mx-0.5;
+  }
+}

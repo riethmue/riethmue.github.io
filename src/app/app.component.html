@@ -1,7 +1,5 @@
 <div>
-  <!-- <div class="font-mono text-xl font-medium text-black">
-    Hi I'm Sarah. I'm a software developer and exploring computers since 1996 👶
-  </div> -->
+  <app-about-me-card></app-about-me-card>
   <div class="model-scene" #model>
     <app-computer-model
       [hidden]="sceneLoaded"
@@ -9,23 +7,39 @@
       (modelClicked)="onModelClicked()"
     ></app-computer-model>
   </div>
-  <a
-    href="https://github.com/riethmue/website"
-    color="primary"
-    mat-mini-fab
-    aria-label="code"
-  >
-    <mat-icon>code</mat-icon>
-  </a>
-  <a
-    href="https://github.com/riethmue/website"
-    color="primary"
-    mat-mini-fab
-    aria-label="code"
-  >
-    In
-  </a>
+  <div class="bg-black flex justify-center">
+    <div class="fixed bottom-0 m-5">
+      <div class="fab flex justify-center m-2">
+        <button
+          (click)="openTerminalDialog()"
+          color="primary"
+          mat-mini-fab
+          aria-label="code"
+        >
+          <mat-icon>terminal</mat-icon>
+        </button>
+        <a
+          href="https://github.com/riethmue/website"
+          color="primary"
+          mat-mini-fab
+          aria-label="code"
+        >
+          <mat-icon>code</mat-icon>
+        </a>
+        <a
+          href="https://www.linkedin.com/in/sarah-riethm%C3%BCller-b18b14137/"
+          color="primary"
+          mat-mini-fab
+          aria-label="code"
+        >
+          <fa-icon size="lg" [icon]="faLinkedin"></fa-icon>
+        </a>
+      </div>
+      <div class="font-mono text-xs text-center text-black">
+        &lt;Sarah Riethmüller&gt; &lt;👩🏻‍💻 Software Developer&gt; &lt;anno
+        2022&gt;
+      </div>
+    </div>
+  </div>
 </div>
-<div class="container">
-  <router-outlet></router-outlet>
-</div>
+<router-outlet></router-outlet>
