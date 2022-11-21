@@ -7,7 +7,6 @@ import {
 } from '@angular/core';
 import { OnChanges } from '@angular/core';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
 import {
   from,
   of,
@@ -39,7 +38,7 @@ export class TerminalComponent
   destroyed$ = new Subject<void>();
   resize$: Observable<Event>;
   resizeTimerSub$: Subscription;
-  constructor(public dialogRef: MatDialogRef<TerminalComponent>) {}
+  constructor() {}
 
   ngOnInit() {
     this.resize$ = fromEvent(window, 'resize');
@@ -78,7 +77,7 @@ export class TerminalComponent
           window.open('assets/curriculum_vitae.pdf');
         });
       } else if (key === 'N' || key === 'n') {
-        this.dialogRef.close();
+        //this.dialogRef.close();
       }
     });
   }
@@ -101,7 +100,7 @@ export class TerminalComponent
   }
 
   onClose() {
-    this.dialogRef.close();
+    //this.dialogRef.close();
   }
 
   ngAfterViewInit() {
