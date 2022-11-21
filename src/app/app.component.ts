@@ -34,6 +34,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   resizeTimerSub$: Subscription;
   faLinkedin = faLinkedin;
   faMedium = faMedium;
+  terminalWidth = 70;
   AsciiGreeting =
     "                     _     \r\n                    | |    \r\n ___  __ _ _ __ __ _| |__  \r\n/ __|/ _` | '__/ _` | '_ \\ \r\n\\__ \\ (_| | | | (_| | | | |\r\n|___/\\__,_|_|  \\__,_|_| |_|\r\n                           \r\n                           \r\n      _      _   _                          _ _           \r\n     (_)    | | | |                        | | |          \r\n _ __ _  ___| |_| |__  _ __ ___  _   _  ___| | | ___ _ __ \r\n| '__| |/ _ \\ __| '_ \\| '_ ` _ \\| | | |/ _ \\ | |/ _ \\ '__|\r\n| |  | |  __/ |_| | | | | | | | | |_| |  __/ | |  __/ |   \r\n|_|  |_|\\___|\\__|_| |_|_| |_| |_|\\__,_|\\___|_|_|\\___|_|   \r\n                                                          \r\n                                                          ";
 
@@ -96,13 +97,12 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   openTerminalDialog() {
+    const goldenRatio = 1.6;
     let dialogRef = this.terminalDialog.open(TerminalComponent, {
-      height: '64%',
-      width: '40%', // golden ratio
+      height: `${this.terminalWidth * goldenRatio}%`,
+      width: `${this.terminalWidth}%`,
       panelClass: 'terminal-dialog-container',
     });
-    dialogRef.afterClosed().subscribe((result) => {
-      console.log(`Dialog result: ${result}`); // TODO:
-    });
+    dialogRef.afterClosed().subscribe((result) => {});
   }
 }

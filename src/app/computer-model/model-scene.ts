@@ -432,7 +432,7 @@ export class ModelScene extends THREE.Scene {
   }
 
   public resizeView(width: number, height: number) {
-    console.log('resizeView', width, height);
+    this.resetView();
     this.config.renderer.size.width = width;
     this.config.renderer.size.height = height;
     this.initCamera();

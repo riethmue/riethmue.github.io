@@ -74,33 +74,33 @@ export class TerminalComponent
       if (key === 'Y' || key === 'y') {
         this.terminal.write(key);
         this.terminal.write('\r\n[~]');
-        const output =
-          'cd sarah\r\n[~/sarah] cat curriculumvitae.pdf$click on https://www.google.com';
-        this.emulateTyping(output);
+        const output = 'cd sarah\r\n[~/sarah] cat curriculumvitae.pdf%';
+        this.emulateTyping(output, () => {
+          window.open('assets/curriculum_vitae.pdf');
+        });
       } else if (key === 'N' || key === 'n') {
         this.dialogRef.close();
       }
     });
   }
 
-  emulateTyping(output: string) {
+  emulateTyping(output: string, endFunction?: () => void) {
     from(output.split(''))
       .pipe(
-        takeUntil(this.destroyed$), //takeuntil?
+        takeUntil(this.destroyed$),
         concatMap((val) => of(val).pipe(delay(100)))
       )
       .subscribe((i) => {
         if (i === '$') {
           this.terminal.write('\r\n[~]');
+        } else if (i === '%') {
+          endFunction();
         } else {
           this.terminal.write(i);
         }
       });
   }
 
-  onTerminalClick() {
-    console.log('onTerminalClick');
-  }
   onClose() {
     this.dialogRef.close();
   }
