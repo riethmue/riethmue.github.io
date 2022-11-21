@@ -75,7 +75,7 @@ export class TerminalComponent
         this.terminal.write(key);
         this.terminal.write('\r\n[~]');
         const output =
-          'cd sarah\r\n[~/sarah] cat curriculumvitae.pdf$test https://www.google.com';
+          'cd sarah\r\n[~/sarah] cat curriculumvitae.pdf$click on https://www.google.com';
         this.emulateTyping(output);
       } else if (key === 'N' || key === 'n') {
         this.dialogRef.close();
@@ -98,6 +98,9 @@ export class TerminalComponent
       });
   }
 
+  onTerminalClick() {
+    console.log('onTerminalClick');
+  }
   onClose() {
     this.dialogRef.close();
   }
@@ -105,7 +108,7 @@ export class TerminalComponent
   ngAfterViewInit() {
     const xtermjsTheme = {
       foreground: '#72FF72',
-      background: '#000000',
+      background: '#00000083',
       selectionBackground: '#000000',
       black: '#000000',
       brightBlack: '#000000',
@@ -130,6 +133,7 @@ export class TerminalComponent
       cursorStyle: 'underline',
       theme: xtermjsTheme,
       fontSize: 15,
+      allowTransparency: true,
     };
     this.fitAddon = new FitAddon();
     this.terminal.loadAddon(this.fitAddon);

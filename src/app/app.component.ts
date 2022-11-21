@@ -20,6 +20,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { TerminalComponent } from './terminal/terminal.component';
 import { MatIconRegistry } from '@angular/material/icon';
 import { faLinkedin } from '@fortawesome/free-brands-svg-icons';
+import { faMedium } from '@fortawesome/free-brands-svg-icons';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -32,6 +33,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   destroyed$ = new Subject<void>();
   resizeTimerSub$: Subscription;
   faLinkedin = faLinkedin;
+  faMedium = faMedium;
   AsciiGreeting =
     "                     _     \r\n                    | |    \r\n ___  __ _ _ __ __ _| |__  \r\n/ __|/ _` | '__/ _` | '_ \\ \r\n\\__ \\ (_| | | | (_| | | | |\r\n|___/\\__,_|_|  \\__,_|_| |_|\r\n                           \r\n                           \r\n      _      _   _                          _ _           \r\n     (_)    | | | |                        | | |          \r\n _ __ _  ___| |_| |__  _ __ ___  _   _  ___| | | ___ _ __ \r\n| '__| |/ _ \\ __| '_ \\| '_ ` _ \\| | | |/ _ \\ | |/ _ \\ '__|\r\n| |  | |  __/ |_| | | | | | | | | |_| |  __/ | |  __/ |   \r\n|_|  |_|\\___|\\__|_| |_|_| |_| |_|\\__,_|\\___|_|_|\\___|_|   \r\n                                                          \r\n                                                          ";
 

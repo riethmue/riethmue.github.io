@@ -7,6 +7,7 @@ import { DracoModel } from './draco-model';
 import { SceneConfig } from './scene-constants';
 import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
+import { GlitchPass } from 'three/examples/jsm/postprocessing/GlitchPass';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer';
 import { PixelShader } from 'three/examples/jsm/shaders/PixelShader';
 
@@ -18,7 +19,8 @@ export class ModelScene extends THREE.Scene {
   controls: any;
   effectComposer: EffectComposer;
   renderPass: RenderPass;
-  shaderPass: ShaderPass;
+  pixelPass: ShaderPass;
+  glitchPass: GlitchPass;
 
   raycaster: THREE.Raycaster;
   mouse: THREE.Vector2;
@@ -41,12 +43,12 @@ export class ModelScene extends THREE.Scene {
     this.raycaster = new THREE.Raycaster();
     this.mouse = new THREE.Vector2();
 
-    this.background = new THREE.Color(0xffffff);
+    this.background = new THREE.Color(0x000000);
 
     this.initCamera();
     this.initScene();
     this.initRenderer();
-    this.addPixelShader();
+    this.addPass();
     this.initControls();
     this.addLights();
 
@@ -258,19 +260,23 @@ export class ModelScene extends THREE.Scene {
     }
   }
 
-  async addPixelShader() {
+  async addPass() {
     this.effectComposer = new EffectComposer(this.renderer);
     this.effectComposer.addPass(new RenderPass(this, this.camera));
 
-    this.shaderPass = new ShaderPass(PixelShader);
-    this.shaderPass.material.uniforms['resolution'].value = new THREE.Vector2(
+    this.pixelPass = new ShaderPass(PixelShader);
+    this.pixelPass.material.uniforms['resolution'].value = new THREE.Vector2(
       window.innerWidth,
       window.innerHeight
     );
-    this.shaderPass.uniforms['resolution'].value.multiplyScalar(
+    this.pixelPass.uniforms['resolution'].value.multiplyScalar(
       window.devicePixelRatio
     );
-    this.effectComposer.addPass(this.shaderPass);
+    this.pixelPass.uniforms['pixelSize'].value = 8;
+    this.effectComposer.addPass(this.pixelPass);
+
+    this.glitchPass = new GlitchPass();
+    this.effectComposer.addPass(this.glitchPass);
   }
 
   async addGeometries() {
@@ -279,7 +285,6 @@ export class ModelScene extends THREE.Scene {
       new THREE.BoxGeometry(1, 1, 1),
       new THREE.ConeGeometry(1, 1, 32),
       new THREE.TetrahedronGeometry(1),
-      //new THREE.TorusKnotGeometry(1, 0.4),
     ];
 
     const group = new THREE.Group();
@@ -298,12 +303,18 @@ export class ModelScene extends THREE.Scene {
 
       const mesh = new THREE.Mesh(geom, mat);
 
-      const s = 3 + Math.random();
-      mesh.scale.set(s, s, s);
+      const scale = 3 + Math.random();
+      const randomizer = 0.5;
+      const radiusDelta = 500;
+      mesh.scale.set(scale, scale, scale);
       mesh.position
-        .set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5)
+        .set(
+          Math.random() - randomizer,
+          Math.random() - randomizer,
+          Math.random() - randomizer
+        )
         .normalize();
-      mesh.position.multiplyScalar(Math.random() * 200);
+      mesh.position.multiplyScalar(Math.random() * radiusDelta);
       mesh.rotation.set(
         Math.random() * 2,
         Math.random() * 2,
@@ -421,13 +432,14 @@ export class ModelScene extends THREE.Scene {
   }
 
   public resizeView(width: number, height: number) {
+    console.log('resizeView', width, height);
     this.config.renderer.size.width = width;
     this.config.renderer.size.height = height;
     this.initCamera();
     this.addLights();
     this.renderer?.setSize(width, height);
     this.renderer?.render(this, this.camera);
-    this.initControls();
+    //this.initControls();
   }
 
   onZoomChanged(event) {
