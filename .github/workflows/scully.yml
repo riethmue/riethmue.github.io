@@ -12,6 +12,6 @@ jobs:
       - uses: actions/checkout@v1
       - uses: cmgriffing/scully-gh-pages-action@v9
         with:
-          access-token: ${{ secrets.GITHUB_TOKEN }}
+          access-token: ${{ secrets.DEPLOY_PAT }}
           deploy-branch: gh-pages
           build-args: --base-href /riethmue.github.io/
