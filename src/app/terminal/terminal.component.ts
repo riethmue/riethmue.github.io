@@ -7,18 +7,7 @@ import {
 } from '@angular/core';
 import { OnChanges } from '@angular/core';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import {
-  from,
-  of,
-  concatMap,
-  delay,
-  takeUntil,
-  Subject,
-  Observable,
-  fromEvent,
-  Subscription,
-  timer,
-} from 'rxjs';
+import { from, of, concatMap, delay, takeUntil, Subject } from 'rxjs';
 import { Terminal } from 'xterm';
 import { FitAddon } from 'xterm-addon-fit';
 import { WebLinksAddon } from 'xterm-addon-web-links';
@@ -36,31 +25,14 @@ export class TerminalComponent
   terminal: Terminal;
   fitAddon: FitAddon;
   destroyed$ = new Subject<void>();
-  resize$: Observable<Event>;
-  resizeTimerSub$: Subscription;
   constructor() {}
 
-  ngOnInit() {
-    this.resize$ = fromEvent(window, 'resize');
-    this.resize$.pipe(takeUntil(this.destroyed$)).subscribe(() => {
-      if (this.resizeTimerSub$) {
-        this.resizeTimerSub$.unsubscribe();
-      }
-      this.resizeTimerSub$ = timer(200)
-        .pipe(takeUntil(this.destroyed$))
-        .subscribe(() => {
-          this.fitAddon.fit();
-          const proposeDimensions: any = this.fitAddon.proposeDimensions();
-          this.terminal.resize(proposeDimensions.cols, proposeDimensions.rows);
-        });
-    });
-  }
+  ngOnInit() {}
 
   ngOnDestroy() {
     this.terminal.dispose();
     this.destroyed$.next();
     this.destroyed$.complete();
-    //remove eventlistener ?
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -72,7 +44,7 @@ export class TerminalComponent
       if (key === 'Y' || key === 'y') {
         this.terminal.write(key);
         this.terminal.write('\r\n[~]');
-        const output = 'cd sarah\r\n[~/sarah] cat curriculumvitae.pdf%';
+        const output = '\r\n[~] cat curriculumvitae.pdf%';
         this.emulateTyping(output, () => {
           window.open('assets/curriculum_vitae.pdf');
         });
@@ -106,7 +78,7 @@ export class TerminalComponent
   ngAfterViewInit() {
     const xtermjsTheme = {
       foreground: '#72FF72',
-      background: '#00000083',
+      background: '#00000000',
       selectionBackground: '#000000',
       black: '#000000',
       brightBlack: '#000000',
@@ -139,7 +111,7 @@ export class TerminalComponent
     this.terminal.open(this.terminalRef.nativeElement);
     this.fitAddon.fit();
     const greeding =
-      "[~]Hi I'm Sarah.$I'm a software developer and exploring computers since 1996 👶 $Do you want to have a look into my cv? [y/N]$";
+      '[~]I am a fullstack developer,$studied Computational visualistics$and have a passion for cloud-topics$and computer-aided graphics.$Do you want to have a look into my cv? [y/N]$';
     this.emulateTyping(greeding);
     this.readInput();
   }

@@ -1,7 +1,10 @@
 const { fontFamily } = require("tailwindcss/defaultTheme");
 
 module.exports = {
-  content: ["./src/**/*.{ts,html,scss}"],
+  content: [
+    "./src/**/*.{ts,html,scss}",
+    "./node_modules/tw-elements/dist/js/**/*.js",
+  ],
   darkMode: false, // or 'media' or 'class'
   theme: {
     fontFamily: {
@@ -80,5 +83,5 @@ module.exports = {
   variants: {
     extend: {},
   },
-  plugins: [],
+  plugins: [require("tw-elements/dist/plugin")],
 };

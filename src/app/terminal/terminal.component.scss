@@ -1,40 +1,7 @@
 @import "~xterm/css/xterm.css";
-:host {
-  display: block;
-}
 
-.terminal-container {
-  width: 100%;
-  height: 100%;
-}
-
-.close-button {
-  float: right;
-  top: -24px;
-  right: -24px;
-  border: none;
-}
-.close-button:focus,
-.close-button:active:focus,
-.close-button.active:focus {
-  outline: none !important;
-  outline-style: none !important;
-}
-
-.close-icon {
-  transition: 1s ease-in-out;
-}
-
-.close-icon:hover {
-  transform: rotate(180deg);
-}
-
-::ng-deep .icon-outside .close-button {
-  float: right;
-  top: -52px;
-  right: -52px;
-}
-
-::ng-deep .icon-outside .mat-dialog-container {
-  overflow: unset;
+.container {
+  padding: 10px;
+  background-color: rgba(0, 0, 0, 0.514);
+  overflow: auto;
 }

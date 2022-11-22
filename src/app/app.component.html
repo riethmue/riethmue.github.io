@@ -1,5 +1,4 @@
 <div class="app-container">
-  <app-about-me-card></app-about-me-card>
   <div class="model-scene" #model>
     <app-computer-model
       [hidden]="sceneLoaded"
@@ -11,30 +10,31 @@
     <div class="fixed bottom-0 m-5">
       <div class="fab flex justify-center m-2">
         <button
-          (click)="openTerminalDialog()"
+          data-bs-toggle="modal"
+          data-bs-target="#aboutMeModal"
           title="Contact Sale"
-          class="bg-primary-500 w-10 h-10 rounded-full drop-shadow-lg flex justify-center items-center text-white text-4xl hover:bg-primary-400 hover:drop-shadow-2xl hover:animate-bounce duration-300"
+          class="bg-primary-500 w-10 h-10 rounded-full drop-shadow-lg flex justify-center items-center text-white text-4xl"
         >
           <span class="material-icons">terminal</span>
         </button>
         <a
           href="https://github.com/riethmue/website"
           title="Contact Sale"
-          class="bg-primary-500 w-10 h-10 rounded-full drop-shadow-lg flex justify-center items-center text-white text-4xl hover:bg-primary-400 hover:drop-shadow-2xl hover:animate-bounce duration-300"
+          class="bg-primary-500 w-10 h-10 rounded-full drop-shadow-lg flex justify-center items-center text-white text-4xl"
         >
           <fa-icon size="xs" [icon]="faGithub"></fa-icon>
         </a>
         <a
           href="https://www.linkedin.com/in/sarah-riethm%C3%BCller-b18b14137/"
           title="Contact Sale"
-          class="bg-primary-500 w-10 h-10 rounded-full drop-shadow-lg flex justify-center items-center text-white text-4xl hover:bg-primary-400 hover:drop-shadow-2xl hover:animate-bounce duration-300"
+          class="bg-primary-500 w-10 h-10 rounded-full drop-shadow-lg flex justify-center items-center text-white text-4xl"
         >
           <fa-icon size="xs" [icon]="faLinkedin"></fa-icon>
         </a>
         <a
           href="https://medium.com/@sriethmueller_41398"
           title="Contact Sale"
-          class="bg-primary-500 w-10 h-10 rounded-full drop-shadow-lg flex justify-center items-center text-white text-4xl hover:bg-primary-400 hover:drop-shadow-2xl hover:animate-bounce duration-300"
+          class="bg-primary-500 w-10 h-10 rounded-full drop-shadow-lg flex justify-center items-center text-white text-4xl"
         >
           <fa-icon size="xs" [icon]="faMedium"></fa-icon>
         </a>
@@ -47,3 +47,34 @@
   </div>
 </div>
 <router-outlet></router-outlet>
+
+<div
+  class="glass modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto"
+  id="aboutMeModal"
+  tabindex="-1"
+  aria-labelledby="aboutMeModal"
+  aria-modal="true"
+  role="dialog"
+>
+  <div
+    class="modal-dialog modal-dialog-centered modal-dialog-scrollable relative w-autoe"
+  >
+    <div
+      class="modal-content border-none shadow-lg relative flex flex-col w-full bg-transparent bg-clip-padding rounded-md outline-none text-current"
+    >
+      <div
+        class="modal-header flex flex-shrink-0 items-center justify-end p-4 border-b border-accent-900 rounded-t-md"
+      >
+        <button
+          class="hover:animate-spin text-primary-500"
+          data-bs-dismiss="modal"
+        >
+          <span class="material-icons">close</span>
+        </button>
+      </div>
+      <div class="modal-body relative">
+        <app-about-me-card class="w-full h-full"></app-about-me-card>
+      </div>
+    </div>
+  </div>
+</div>
