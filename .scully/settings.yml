@@ -1,0 +1,11 @@
+identifier: l6adsbebx8u980qf
+appPort: 1864
+staticPort: 1668
+reloadPort: 2667
+hostName: localhost
+projectName: web
+homeFolder: /Users/riethmue/src/website
+distFolder: ./dist/web
+outDir: /Users/riethmue/src/website/dist/static
+handle404: ''
+allowErrorCollect: true

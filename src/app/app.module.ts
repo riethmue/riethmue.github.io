@@ -7,6 +7,7 @@ import { TerminalComponent } from './terminal/terminal.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { AboutMeCardComponent } from './about-me-card/about-me-card.component';
+import { ScullyLibModule } from '@scullyio/ng-lib';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { AboutMeCardComponent } from './about-me-card/about-me-card.component';
     AppRoutingModule,
     BrowserAnimationsModule,
     FontAwesomeModule,
+    ScullyLibModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
