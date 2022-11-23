@@ -4,12 +4,6 @@ on:
   push:
     branches:
       - master
-name: Scully Publish
-
-on:
-  push:
-    branches:
-      - master
 
 jobs:
   build:
