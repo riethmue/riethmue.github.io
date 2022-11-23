@@ -43,6 +43,5 @@ Thumbs.db
 *.log
 
 #scully
-/scully/plugins.js
-/scully/plugins.js.map
-scully.log
+plugins.js
+plugins.js.map
