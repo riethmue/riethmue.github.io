@@ -183,12 +183,11 @@ export class ModelScene extends THREE.Scene {
     this.renderer = new THREE.WebGLRenderer(
       this.config.renderer.rendererParamter
     );
-    if (this.config.renderer.size) {
-      this.renderer?.setSize(
-        this.config.renderer.size.width,
-        this.config.renderer.size.height
-      );
-    }
+    this.renderer?.setSize(
+      this.config.renderer.size.width,
+      this.config.renderer.size.height
+    );
+
     if (this.config.renderer.devicePixelRatio) {
       this.renderer?.setPixelRatio(this.config.renderer.devicePixelRatio);
     }
@@ -432,14 +431,12 @@ export class ModelScene extends THREE.Scene {
   }
 
   public resizeView(width: number, height: number) {
-    this.resetView();
     this.config.renderer.size.width = width;
     this.config.renderer.size.height = height;
-    this.initCamera();
-    this.addLights();
+    this.camera.aspect = this.calculateAspectRatio();
+    this.camera.updateProjectionMatrix();
     this.renderer?.setSize(width, height);
     this.renderer?.render(this, this.camera);
-    //this.initControls();
   }
 
   onZoomChanged(event) {
@@ -516,12 +513,6 @@ export class ModelScene extends THREE.Scene {
   }
 
   private calculateAspectRatio() {
-    if (this.config.renderer.size) {
-      return this.config.renderer.size.width / this.config.renderer.size.height;
-    }
-    return (
-      this.htmlElement.nativeElement.offsetWidth /
-      this.htmlElement.nativeElement.offsetHeight
-    );
+    return this.config.renderer.size.width / this.config.renderer.size.height;
   }
 }
