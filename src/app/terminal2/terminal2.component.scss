@@ -1,0 +1,31 @@
+#terminal {
+  color: #72ff72;
+  caret-color: transparent;
+  white-space: pre-line;
+}
+
+.container {
+  font-family: monospace;
+  padding: 10px;
+  background-color: rgba(0, 0, 0, 0.514);
+  overflow: auto;
+}
+
+[contenteditable] {
+  outline: 0px solid transparent;
+}
+
+.caret-underscore > span {
+  animation: blink 1s step-end infinite;
+  border-bottom: 2px solid #72ff72;
+}
+
+@keyframes blink {
+  from,
+  to {
+    border-color: transparent;
+  }
+  50% {
+    border-color: #72ff72;
+  }
+}

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { BehaviorSubject } from 'rxjs';
-import { InitialSceneConfig } from '../computer-model/scene-constants';
+import { InitialSceneConfig } from 'src/app/computer-model/scene-constants';
 
 @Injectable({
   providedIn: 'root',

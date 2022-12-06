@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 @Component({
   selector: 'app-about-me-card',
@@ -7,6 +7,8 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 })
 export class AboutMeCardComponent implements OnInit {
   isLandscape: boolean = false;
+  @Output()
+  terminalExited = new EventEmitter<any>();
   constructor(public breakpointObserver: BreakpointObserver) {
     this.breakpointObserver
       .observe(['(max-height: 500px)'])
@@ -17,6 +19,10 @@ export class AboutMeCardComponent implements OnInit {
           this.isLandscape = false;
         }
       });
+  }
+
+  onTerminalExited() {
+    this.terminalExited.emit();
   }
 
   ngOnInit(): void {}

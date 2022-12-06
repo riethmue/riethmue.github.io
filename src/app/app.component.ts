@@ -6,12 +6,15 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
+import {
+  faGithub,
+  faLinkedin,
+  faMedium,
+} from '@fortawesome/free-brands-svg-icons';
 import { fromEvent, Observable, Subject, takeUntil } from 'rxjs';
 import { InitialSceneConfig } from './computer-model/scene-constants';
-import { ModelInteractionService } from './services/model-interaction.service';
-import { faLinkedin } from '@fortawesome/free-brands-svg-icons';
-import { faMedium } from '@fortawesome/free-brands-svg-icons';
-import { faGithub } from '@fortawesome/free-brands-svg-icons';
+import { ModalComponent } from './modal/modal.component';
+import { ModelInteractionService } from './services/model-interaction/model-interaction.service';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -20,6 +23,8 @@ import { faGithub } from '@fortawesome/free-brands-svg-icons';
 export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   sceneLoaded = false;
   @ViewChild('model') modelRef: ElementRef;
+  @ViewChild('aboutMeModal') modalRef: ElementRef;
+  @ViewChild('modalComponent') modal: ModalComponent<AppComponent> | undefined;
   resize$: Observable<Event>;
   destroyed$ = new Subject<void>();
   faLinkedin = faLinkedin;
@@ -42,6 +47,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
       this.resizeView();
     });
   }
+
+  onTerminalExited = () => console.log('onTerminalExited');
 
   ngAfterViewInit() {
     const config: InitialSceneConfig = {
