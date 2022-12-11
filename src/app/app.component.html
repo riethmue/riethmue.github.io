@@ -10,10 +10,8 @@
     <div class="fixed bottom-0 m-5">
       <div class="fab flex flex-wrap justify-center m-2">
         <button
-          data-bs-toggle="modal"
-          data-bs-target="#aboutMeModal"
-          title="AboutMe"
           class="m-0.5 bg-primary-500 w-10 h-10 rounded-full drop-shadow-lg flex justify-center items-center text-white text-4xl"
+          (click)="onTerminalButtonClicked()"
         >
           <span class="material-icons">terminal</span>
         </button>
@@ -24,13 +22,13 @@
         >
           <fa-icon size="xs" [icon]="faGithub"></fa-icon>
         </a>
-        <!-- <a
-          href="https://www.linkedin.com/in/sarah-riethm%C3%BCller-b18b14137/"
-          title="LinkedIn"
+        <a
+          href="https://twitter.com/riethmue93"
+          title="Twitter"
           class="m-0.5 bg-primary-500 w-10 h-10 rounded-full drop-shadow-lg flex justify-center items-center text-white text-4xl"
         >
-          <fa-icon size="xs" [icon]="faLinkedin"></fa-icon>
-        </a> -->
+          <fa-icon size="xs" [icon]="faTwitter"></fa-icon>
+        </a>
         <a
           href="https://medium.com/@sriethmueller_41398"
           title="Medium"
@@ -40,8 +38,9 @@
         </a>
       </div>
       <div class="font-mono text-xs text-center text-white">
-        &lt;Sarah Riethmüller&gt; &lt;👩🏻‍💻 Software Developer&gt; &lt;anno
-        2022&gt;
+        &lt;Sarah Riethmüller&gt; &lt;👩🏻‍💻 Software Developer&gt; &lt;{{
+          currentYear
+        }}&gt;
       </div>
     </div>
   </div>

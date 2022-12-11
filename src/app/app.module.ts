@@ -10,7 +10,7 @@ import { AboutMeCardComponent } from './about-me-card/about-me-card.component';
 import { ScullyLibModule } from '@scullyio/ng-lib';
 import { Terminal2Component } from './terminal2/terminal2.component';
 import { CommonModule } from '@angular/common';
-
+import { DialogModule } from '@angular/cdk/dialog';
 @NgModule({
   declarations: [
     AppComponent,
@@ -26,6 +26,7 @@ import { CommonModule } from '@angular/common';
     BrowserAnimationsModule,
     FontAwesomeModule,
     ScullyLibModule,
+    DialogModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

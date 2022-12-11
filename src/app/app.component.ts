@@ -8,12 +8,15 @@ import {
 } from '@angular/core';
 import {
   faGithub,
-  faLinkedin,
+  faTwitter,
   faMedium,
 } from '@fortawesome/free-brands-svg-icons';
 import { fromEvent, Observable, Subject, takeUntil } from 'rxjs';
 import { InitialSceneConfig } from './computer-model/scene-constants';
 import { ModelInteractionService } from './services/model-interaction/model-interaction.service';
+
+import { Dialog, DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
+import { AboutMeCardComponent } from './about-me-card/about-me-card.component';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -24,14 +27,18 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('model') modelRef: ElementRef;
   resize$: Observable<Event>;
   destroyed$ = new Subject<void>();
-  faLinkedin = faLinkedin;
+  faTwitter = faTwitter;
   faMedium = faMedium;
   faGithub = faGithub;
   terminalWidth = 70;
+  currentYear = new Date().getFullYear();
   AsciiGreeting =
     "                     _     \r\n                    | |    \r\n ___  __ _ _ __ __ _| |__  \r\n/ __|/ _` | '__/ _` | '_ \\ \r\n\\__ \\ (_| | | | (_| | | | |\r\n|___/\\__,_|_|  \\__,_|_| |_|\r\n                           \r\n                           \r\n      _      _   _                          _ _           \r\n     (_)    | | | |                        | | |          \r\n _ __ _  ___| |_| |__  _ __ ___  _   _  ___| | | ___ _ __ \r\n| '__| |/ _ \\ __| '_ \\| '_ ` _ \\| | | |/ _ \\ | |/ _ \\ '__|\r\n| |  | |  __/ |_| | | | | | | | | |_| |  __/ | |  __/ |   \r\n|_|  |_|\\___|\\__|_| |_|_| |_| |_|\\__,_|\\___|_|_|\\___|_|   \r\n                                                          \r\n                                                          ";
 
-  constructor(private modelInteractionService: ModelInteractionService) {}
+  constructor(
+    private modelInteractionService: ModelInteractionService,
+    public dialog: Dialog
+  ) {}
 
   ngOnDestroy() {
     this.destroyed$.next();
@@ -64,6 +71,14 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   onModelClicked() {}
+
+  onTerminalButtonClicked() {
+    const dialogRef = this.dialog.open(AboutMeCardComponent, {
+      height: '100%',
+      width: '100%',
+      panelClass: 'dialog',
+    });
+  }
 
   resizeView() {
     this.modelInteractionService.onScreenSizeChanged$.next([
