@@ -13,7 +13,6 @@ import {
 } from '@fortawesome/free-brands-svg-icons';
 import { fromEvent, Observable, Subject, takeUntil } from 'rxjs';
 import { InitialSceneConfig } from './computer-model/scene-constants';
-import { ModalComponent } from './modal/modal.component';
 import { ModelInteractionService } from './services/model-interaction/model-interaction.service';
 @Component({
   selector: 'app-root',
@@ -23,8 +22,6 @@ import { ModelInteractionService } from './services/model-interaction/model-inte
 export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   sceneLoaded = false;
   @ViewChild('model') modelRef: ElementRef;
-  @ViewChild('aboutMeModal') modalRef: ElementRef;
-  @ViewChild('modalComponent') modal: ModalComponent<AppComponent> | undefined;
   resize$: Observable<Event>;
   destroyed$ = new Subject<void>();
   faLinkedin = faLinkedin;
