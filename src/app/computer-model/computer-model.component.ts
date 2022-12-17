@@ -14,7 +14,7 @@ import * as THREE from 'three';
 
 import { InitialSceneConfig } from './scene-constants';
 import { ModelScene } from './model-scene';
-import { ModelInteractionService } from '../services/model-interaction/model-interaction/model-interaction.service';
+import { ModelInteractionService } from '../services/model-interaction/model-interaction.service';
 
 @Component({
   selector: 'app-computer-model',

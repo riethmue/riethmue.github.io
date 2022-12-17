@@ -14,9 +14,9 @@ import {
 } from '@fortawesome/free-brands-svg-icons';
 import { Observable, Subject, fromEvent, takeUntil } from 'rxjs';
 import { InitialSceneConfig } from './computer-model/scene-constants';
-import { ModelInteractionService } from './services/model-interaction/model-interaction/model-interaction.service';
-import { ModalService } from './services/model-interaction/modal/modal.service';
+import { ModalService } from './services/modal/modal.service';
 import { AboutMeCardComponent } from './about-me-card/about-me-card.component';
+import { ModelInteractionService } from './services/model-interaction/model-interaction.service';
 
 @Component({
   selector: 'app-root',
