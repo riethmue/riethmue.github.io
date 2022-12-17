@@ -1,5 +1,12 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+import { ModalComponent } from '../modal/modal.component';
 @Component({
   selector: 'app-about-me-card',
   templateUrl: './about-me-card.component.html',
@@ -7,6 +14,9 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 })
 export class AboutMeCardComponent implements OnInit {
   isLandscape: boolean = false;
+  @ViewChild('modalComponent') modal:
+    | ModalComponent<AboutMeCardComponent>
+    | undefined;
   @Output()
   terminalExited = new EventEmitter<any>();
   constructor(public breakpointObserver: BreakpointObserver) {
@@ -22,7 +32,8 @@ export class AboutMeCardComponent implements OnInit {
   }
 
   onTerminalExited() {
-    this.terminalExited.emit();
+    console.log('onTerminalExited', this.modal);
+    this.modal?.close();
   }
 
   ngOnInit(): void {}

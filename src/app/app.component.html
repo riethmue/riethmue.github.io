@@ -1,4 +1,4 @@
-<div class="app-container">
+<div #appContainer class="app-container">
   <div class="model-scene" #model>
     <app-computer-model
       [hidden]="sceneLoaded"
@@ -9,12 +9,12 @@
   <div class="bg-black flex justify-center">
     <div class="fixed bottom-0 m-5">
       <div class="fab flex flex-wrap justify-center m-2">
-        <!-- <button
+        <button
           class="m-0.5 bg-primary-500 w-10 h-10 rounded-full drop-shadow-lg flex justify-center items-center text-white text-4xl"
           (click)="onTerminalButtonClicked()"
         >
           <span class="material-icons">terminal</span>
-        </button> -->
+        </button>
         <a
           href="https://github.com/riethmue/website"
           title="Github"

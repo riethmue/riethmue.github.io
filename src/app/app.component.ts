@@ -5,26 +5,29 @@ import {
   OnDestroy,
   OnInit,
   ViewChild,
+  ViewContainerRef,
 } from '@angular/core';
 import {
   faGithub,
-  faTwitter,
   faMedium,
+  faTwitter,
 } from '@fortawesome/free-brands-svg-icons';
-import { fromEvent, Observable, Subject, takeUntil } from 'rxjs';
+import { Observable, Subject, fromEvent, takeUntil } from 'rxjs';
 import { InitialSceneConfig } from './computer-model/scene-constants';
-import { ModelInteractionService } from './services/model-interaction/model-interaction.service';
-
-import { Dialog, DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
+import { ModelInteractionService } from './services/model-interaction/model-interaction/model-interaction.service';
+import { ModalService } from './services/model-interaction/modal/modal.service';
 import { AboutMeCardComponent } from './about-me-card/about-me-card.component';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
-  sceneLoaded = false;
   @ViewChild('model') modelRef: ElementRef;
+  @ViewChild('appContainer', { read: ViewContainerRef })
+  container: ViewContainerRef;
+  sceneLoaded = false;
   resize$: Observable<Event>;
   destroyed$ = new Subject<void>();
   faTwitter = faTwitter;
@@ -37,7 +40,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
   constructor(
     private modelInteractionService: ModelInteractionService,
-    public dialog: Dialog
+    private modalService: ModalService<AboutMeCardComponent>
   ) {}
 
   ngOnDestroy() {
@@ -72,12 +75,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
   onModelClicked() {}
 
-  onTerminalButtonClicked() {
-    const dialogRef = this.dialog.open(AboutMeCardComponent, {
-      height: '100%',
-      width: '100%',
-      panelClass: 'dialog',
-    });
+  async onTerminalButtonClicked() {
+    await this.modalService.open(AboutMeCardComponent);
   }
 
   resizeView() {
