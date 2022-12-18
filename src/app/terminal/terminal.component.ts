@@ -38,6 +38,7 @@ export class TerminalComponent implements OnInit {
           const output = ' cat curriculumvitae.pdf%';
           this.emulateTyping(output, () => {
             window.open('assets/curriculum_vitae.pdf');
+            this.exit.emit();
           });
           break;
         case 'n' || 'N':
