@@ -1,4 +1,11 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { concatMap, delay, from, of, Subject, takeUntil } from 'rxjs';
 
 @Component({
@@ -9,12 +16,15 @@ import { concatMap, delay, from, of, Subject, takeUntil } from 'rxjs';
 export class Terminal2Component implements OnInit {
   output = '[~] ';
   destroyed$ = new Subject<void>();
+  @ViewChild('terminal') terminal: ElementRef;
   @Output()
   exit = new EventEmitter<any>();
   ngOnInit(): void {
     const greeding =
-      'I am a fullstack developer, studied Computational visualistics and have a passion for cloud-topics and computer-aided graphics. Do you want to have a look into my cv? [y/N]$';
-    this.emulateTyping(greeding);
+      'I am a fullstack developer, studied Computational visualistics and have a passion for cloud-topics and computer-aided graphics. Do you want to have a look into my cv? [y/N]$%';
+    this.emulateTyping(greeding, () => {
+      this.terminal.nativeElement.focus();
+    });
     window.location.hash = '#terminal';
   }
 
@@ -25,7 +35,7 @@ export class Terminal2Component implements OnInit {
 
       switch (keyValue) {
         case 'y' || 'Y':
-          const output = '$ cat curriculumvitae.pdf%';
+          const output = ' cat curriculumvitae.pdf%';
           this.emulateTyping(output, () => {
             window.open('assets/curriculum_vitae.pdf');
           });
@@ -49,7 +59,7 @@ export class Terminal2Component implements OnInit {
     from(output.split(''))
       .pipe(
         takeUntil(this.destroyed$),
-        concatMap((val) => of(val).pipe(delay(10)))
+        concatMap((val) => of(val).pipe(delay(50)))
       )
       .subscribe((i) => {
         switch (i) {
