@@ -1,118 +1,78 @@
 import {
-  AfterViewInit,
+  Component,
   ElementRef,
-  OnDestroy,
-  SimpleChanges,
-  ViewEncapsulation,
+  EventEmitter,
+  OnInit,
+  Output,
+  ViewChild,
 } from '@angular/core';
-import { OnChanges } from '@angular/core';
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { from, of, concatMap, delay, takeUntil, Subject } from 'rxjs';
-import { Terminal } from 'xterm';
-import { FitAddon } from 'xterm-addon-fit';
-import { WebLinksAddon } from 'xterm-addon-web-links';
+import { concatMap, delay, from, of, Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-terminal',
   templateUrl: './terminal.component.html',
   styleUrls: ['./terminal.component.scss'],
-  encapsulation: ViewEncapsulation.None,
 })
-export class TerminalComponent
-  implements AfterViewInit, OnInit, OnChanges, OnDestroy
-{
-  @ViewChild('terminal') terminalRef: ElementRef;
-  terminal: Terminal;
-  fitAddon: FitAddon;
+export class TerminalComponent implements OnInit {
+  output = '[~] ';
   destroyed$ = new Subject<void>();
-  constructor() {}
-
-  ngOnInit() {}
-
-  ngOnDestroy() {
-    this.terminal.dispose();
-    this.destroyed$.next();
-    this.destroyed$.complete();
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    this.fitAddon.fit();
-  }
-
-  readInput() {
-    this.terminal.onKey(({ key, domEvent }) => {
-      if (key === 'Y' || key === 'y') {
-        this.terminal.write(key);
-        this.terminal.write('\r\n[~]');
-        const output = '\r\n[~] cat curriculumvitae.pdf%';
-        this.emulateTyping(output, () => {
-          window.open('assets/curriculum_vitae.pdf');
-        });
-      } else if (key === 'N' || key === 'n') {
-        //this.dialogRef.close();
-      }
+  @ViewChild('terminal') terminal: ElementRef;
+  @Output()
+  exit = new EventEmitter<any>();
+  ngOnInit(): void {
+    const greeding =
+      'I am a fullstack developer, studied Computational visualistics and have a passion for cloud-topics and computer-aided graphics. Do you want to have a look into my cv? [y/N]$%';
+    this.emulateTyping(greeding, () => {
+      this.terminal.nativeElement.focus();
     });
+    window.location.hash = '#terminal';
   }
 
+  onkeyPress = (e) => {
+    const keyboard = (window.navigator as any).keyboard;
+    keyboard.getLayoutMap().then((keyboardLayoutMap: any) => {
+      const keyValue = keyboardLayoutMap.get(e.code);
+
+      switch (keyValue) {
+        case 'y' || 'Y':
+          const output = ' cat curriculumvitae.pdf%';
+          this.emulateTyping(output, () => {
+            window.open('assets/curriculum_vitae.pdf');
+          });
+          break;
+        case 'n' || 'N':
+          console.log('case n');
+          this.exit.emit();
+          break;
+        default:
+          this.output += '\r\n[~]';
+          this.output += 'command not found';
+          break;
+      }
+
+      console.log(
+        `code: ${e.code}  <->  key: ${e.key}  <->  result: ${keyValue}`
+      );
+    });
+  };
   emulateTyping(output: string, endFunction?: () => void) {
     from(output.split(''))
       .pipe(
         takeUntil(this.destroyed$),
-        concatMap((val) => of(val).pipe(delay(100)))
+        concatMap((val) => of(val).pipe(delay(50)))
       )
       .subscribe((i) => {
-        if (i === '$') {
-          this.terminal.write('\r\n[~]');
-        } else if (i === '%') {
-          endFunction();
-        } else {
-          this.terminal.write(i);
+        switch (i) {
+          case '$':
+            this.output += '\r\n[~]';
+            break;
+          case '%':
+            endFunction();
+            break;
+          default:
+            this.output += i;
+            break;
         }
       });
-  }
-
-  onClose() {
-    //this.dialogRef.close();
-  }
-
-  ngAfterViewInit() {
-    const xtermjsTheme = {
-      foreground: '#72FF72',
-      background: '#00000000',
-      selectionBackground: '#000000',
-      black: '#000000',
-      brightBlack: '#000000',
-      red: '#ea00d9',
-      brightRed: '#ea00d9',
-      green: '#72FF72',
-      brightGreen: '#72FF72',
-      yellow: '#FFFF72',
-      brightYellow: '#FFFF72',
-      blue: '#133e7c',
-      brightBlue: '#133e7c',
-      magenta: '#711c91',
-      brightMagenta: '#711c91',
-      cyan: '#0abdc6',
-      brightCyan: '#0abdc6',
-      white: '#FFFFFF',
-      brightWhite: '#FFFFFF',
-    };
-    this.terminal = new Terminal();
-    this.terminal.options = {
-      cursorBlink: true,
-      cursorStyle: 'underline',
-      theme: xtermjsTheme,
-      fontSize: 15,
-      allowTransparency: true,
-    };
-    this.fitAddon = new FitAddon();
-    this.terminal.loadAddon(this.fitAddon);
-    this.terminal.loadAddon(new WebLinksAddon());
-    this.terminal.open(this.terminalRef.nativeElement);
-    this.fitAddon.fit();
-    const greeding =
-      '[~]I am a fullstack developer,$studied Computational visualistics$and have a passion for cloud-topics$and computer-aided graphics.$Do you want to have a look into my cv? [y/N]$';
-    this.emulateTyping(greeding);
-    this.readInput();
   }
 }

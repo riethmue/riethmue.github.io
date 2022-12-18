@@ -1,6 +1,16 @@
-<div class="container" #terminal>
-  <div class="flex">
-    <h3 class="text-white pl-2">guest@sarahs-webpage:~</h3>
+<div class="p-5 container w-full">
+  <div class="">
+    <div class="text-white mb-1">guest@sarahs-webpage:~</div>
   </div>
-  <div class="px-2"></div>
+  <div
+    #terminal
+    class="caret-underscore"
+    id="terminal"
+    contenteditable="true"
+    spellcheck="false"
+    (keypress)="onkeyPress($event)"
+  >
+    {{ output }}
+    <span>&nbsp;</span>
+  </div>
 </div>
