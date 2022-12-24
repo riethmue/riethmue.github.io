@@ -1,4 +1,4 @@
-<div class="p-5 container w-full">
+<div class="p-5 container w-full m-5">
   <div class="">
     <div class="text-white mb-1">guest@sarahs-webpage:~</div>
   </div>
@@ -8,7 +8,7 @@
     id="terminal"
     contenteditable="true"
     spellcheck="false"
-    (keypress)="onkeyPress($event)"
+    (keydown)="onkeyPress($event)"
   >
     {{ output }}
     <span>&nbsp;</span>

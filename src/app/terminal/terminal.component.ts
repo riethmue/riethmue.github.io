@@ -42,7 +42,6 @@ export class TerminalComponent implements OnInit {
           });
           break;
         case 'n' || 'N':
-          console.log('case n');
           this.exit.emit();
           break;
         default:
@@ -50,10 +49,6 @@ export class TerminalComponent implements OnInit {
           this.output += 'command not found';
           break;
       }
-
-      console.log(
-        `code: ${e.code}  <->  key: ${e.key}  <->  result: ${keyValue}`
-      );
     });
   };
   emulateTyping(output: string, endFunction?: () => void) {

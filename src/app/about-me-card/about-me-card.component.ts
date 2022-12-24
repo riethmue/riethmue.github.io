@@ -32,7 +32,6 @@ export class AboutMeCardComponent implements OnInit {
   }
 
   onTerminalExited() {
-    console.log('onTerminalExited', this.modal);
     this.modal?.close();
   }
 

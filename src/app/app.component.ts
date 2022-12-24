@@ -55,14 +55,11 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     this.destroyed$.complete();
   }
   ngOnInit() {
-    console.log(this.AsciiGreeting);
     this.resize$ = fromEvent(window, 'resize');
     this.resize$.pipe(takeUntil(this.destroyed$)).subscribe(() => {
       this.resizeView();
     });
   }
-
-  onTerminalExited = () => console.log('onTerminalExited');
 
   ngAfterViewInit() {
     const config: InitialSceneConfig = {
