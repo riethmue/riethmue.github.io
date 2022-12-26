@@ -29,7 +29,11 @@ export class TerminalComponent implements OnInit {
   }
 
   onkeyPress = (e) => {
-    if (/Mobi|Android/i.test(navigator.userAgent)) {
+    if (
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent
+      )
+    ) {
       if (e.key === 'y' || e.key === 'Y') {
         const output = ' cat curriculumvitae.pdf%';
         this.emulateTyping(output, () => {
