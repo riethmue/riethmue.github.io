@@ -29,27 +29,42 @@ export class TerminalComponent implements OnInit {
   }
 
   onkeyPress = (e) => {
-    const keyboard = (window.navigator as any).keyboard;
-    keyboard.getLayoutMap().then((keyboardLayoutMap: any) => {
-      const keyValue = keyboardLayoutMap.get(e.code);
-
-      switch (keyValue) {
-        case 'y' || 'Y':
-          const output = ' cat curriculumvitae.pdf%';
-          this.emulateTyping(output, () => {
-            window.open('assets/curriculum_vitae.pdf');
-            this.exit.emit();
-          });
-          break;
-        case 'n' || 'N':
+    if (/Mobi|Android/i.test(navigator.userAgent)) {
+      if (e.key === 'y' || e.key === 'Y') {
+        const output = ' cat curriculumvitae.pdf%';
+        this.emulateTyping(output, () => {
+          window.open('assets/curriculum_vitae.pdf');
           this.exit.emit();
-          break;
-        default:
-          this.output += '\r\n[~]';
-          this.output += 'command not found';
-          break;
+        });
+      } else if (e.key === 'n' || e.key === 'N') {
+        this.exit.emit();
+      } else {
+        this.output += '\r\n[~]';
+        this.output += 'command not found';
       }
-    });
+    } else {
+      const keyboard = (window.navigator as any).keyboard;
+      keyboard.getLayoutMap().then((keyboardLayoutMap: any) => {
+        const keyValue = keyboardLayoutMap.get(e.code);
+
+        switch (keyValue) {
+          case 'y' || 'Y':
+            const output = ' cat curriculumvitae.pdf%';
+            this.emulateTyping(output, () => {
+              window.open('assets/curriculum_vitae.pdf');
+              this.exit.emit();
+            });
+            break;
+          case 'n' || 'N':
+            this.exit.emit();
+            break;
+          default:
+            this.output += '\r\n[~]';
+            this.output += 'command not found';
+            break;
+        }
+      });
+    }
   };
   emulateTyping(output: string, endFunction?: () => void) {
     from(output.split(''))
