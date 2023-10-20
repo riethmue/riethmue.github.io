@@ -19,8 +19,7 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "assets": ["src/favicon.ico", "src/assets"],
-            "styles": ["src/styles.scss"],
-            "scripts": ["node_modules/tw-elements/dist/js/index.min.js"]
+            "styles": ["src/styles.scss"]
           },
           "configurations": {
             "production": {
