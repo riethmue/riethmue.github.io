@@ -12,5 +12,5 @@ jobs:
       - uses: actions/checkout@v1
       - uses: cmgriffing/scully-gh-pages-action@v10
         with:
-          access-token: ${{ secrets.DEPLOY_PAT }}
+          access-token: ${{ secrets.application_web }}
           deploy-branch: gh-pages
