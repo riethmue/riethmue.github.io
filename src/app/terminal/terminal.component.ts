@@ -21,7 +21,7 @@ export class TerminalComponent implements OnInit {
   exit = new EventEmitter<any>();
   ngOnInit(): void {
     const greeding =
-      'I am a fullstack developer, studied Computational visualistics and have a passion for cloud-topics and computer-aided graphics. Do you want to have a look into my cv? [y/N]$%';
+      'I am a fullstack developer, studied Computational visualistics and have a passion for cloud-related topics and computer-aided graphics. Do you want to have a look into my cv? [y/N]$%';
     this.emulateTyping(greeding, () => {
       this.terminal.nativeElement.focus();
     });
