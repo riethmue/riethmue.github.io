@@ -13,7 +13,7 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '20'
-      - uses: cmgriffing/scully-gh-pages-action@v11
+      - uses: cmgriffing/scully-gh-pages-action@v10
         with:
           access-token: ${{ secrets.DEPLOY_PAT }}
           deploy-branch: gh-pages
