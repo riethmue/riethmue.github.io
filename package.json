@@ -24,7 +24,7 @@
     "@fortawesome/free-brands-svg-icons": "^6.4.0",
     "@material/fab": "^14.0.0",
     "@scullyio/ng-lib": "^2.1.41",
-    "@scullyio/scully": "^2.1.41",
+    "@scullyio/scully": "^2.1.18",
     "@scullyio/scully-plugin-puppeteer": "^2.1.41",
     "material-icons": "^1.13.8",
     "rxjs": "^7.8.1",
@@ -34,7 +34,7 @@
     "zone.js": "^0.13.1"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^16.1.1",
+    "@angular-devkit/build-angular": "^19.2.0",
     "@angular/cli": "^16.1.1",
     "@angular/compiler-cli": "^16.1.2",
     "@types/jasmine": "^4.3.4",
