@@ -17,9 +17,10 @@ import { ModelScene } from './model-scene';
 import { ModelInteractionService } from '../services/model-interaction/model-interaction.service';
 
 @Component({
-  selector: 'app-computer-model',
-  templateUrl: './computer-model.component.html',
-  styleUrls: ['./computer-model.component.scss'],
+    selector: 'app-computer-model',
+    templateUrl: './computer-model.component.html',
+    styleUrls: ['./computer-model.component.scss'],
+    standalone: false
 })
 export class ComputerModelComponent implements OnInit {
   @ViewChild('renderContainer', { static: true }) renderContainer: ElementRef;

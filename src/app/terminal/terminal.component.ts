@@ -9,9 +9,10 @@ import {
 import { concatMap, delay, from, of, Subject, takeUntil } from 'rxjs';
 
 @Component({
-  selector: 'app-terminal',
-  templateUrl: './terminal.component.html',
-  styleUrls: ['./terminal.component.scss'],
+    selector: 'app-terminal',
+    templateUrl: './terminal.component.html',
+    styleUrls: ['./terminal.component.scss'],
+    standalone: false
 })
 export class TerminalComponent implements OnInit {
   output = '[~] ';
