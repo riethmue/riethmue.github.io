@@ -23,7 +23,7 @@ import { InitialSceneConfig } from './scene-constants';
 })
 export class ComputerModelComponent implements OnInit {
   @ViewChild('renderContainer', { static: true }) renderContainer: ElementRef;
-  scene: ModelScene;
+  scene: ModelScene | null = null;
   public get hoverModel() {
     return this.scene ? this.scene.hoverModel : false;
   }
