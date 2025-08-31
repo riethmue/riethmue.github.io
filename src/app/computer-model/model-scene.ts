@@ -192,7 +192,6 @@ export class ModelScene {
   }
 
   initRenderer() {
-    console.log('initRenderer', this.config);
     this.renderer = new THREE.WebGLRenderer(
       this.config.renderer.rendererParameter
     );
