@@ -50,7 +50,7 @@ export class ComputerModelComponent implements OnInit {
       .pipe(skip(1), takeUntil(this.destroyed$))
       .subscribe(() => this.scene?.resetView());
     this.modelInteractionService.onSceneInitialized$
-      .pipe(skip(1), takeUntil(this.initialized$), takeUntil(this.destroyed$))
+      .pipe(takeUntil(this.initialized$), takeUntil(this.destroyed$))
       .subscribe((config) => {
         this.initialize(config);
       });
