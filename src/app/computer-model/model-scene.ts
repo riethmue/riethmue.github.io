@@ -41,7 +41,7 @@ export class ModelScene {
     this.onMouseDownClick = this.onMouseDown.bind(this);
     this.onMouseMove = this.onMouseHover.bind(this);
     document.addEventListener('pointerdown', this.onMouseDownClick, false);
-    document.addEventListener('mousemove', this.onMouseMove, false);
+    document.addEventListener('pointermove', this.onMouseMove, false);
     this.raycaster = new THREE.Raycaster();
     this.mouse = new THREE.Vector2();
 
@@ -460,9 +460,19 @@ export class ModelScene {
     this.config.renderer.size.width = width;
     this.config.renderer.size.height = height;
     this.camera.aspect = this.calculateAspectRatio();
+    console.log('resizeView', width, height, this.calculateAspectRatio());
+
     this.camera.updateProjectionMatrix();
     this.renderer?.setSize(width, height);
-    this.renderer?.render(this, this.camera);
+    this.renderer?.render(this.scene, this.camera);
+  }
+
+  private getPointerNDC(ev: PointerEvent): THREE.Vector2 {
+    // Use bounding rect to convert client coords to NDC [-1, 1]
+    const rect = this.renderer.domElement.getBoundingClientRect();
+    const ndcX = ((ev.clientX - rect.left) / rect.width) * 2 - 1;
+    const ndcY = -((ev.clientY - rect.top) / rect.height) * 2 + 1;
+    return new THREE.Vector2(ndcX, ndcY);
   }
 
   onZoomChanged(event) {
@@ -478,65 +488,30 @@ export class ModelScene {
     }
   }
 
-  onMouseDown(event) {
-    const canvas = this.renderer.domElement;
-    const rect = this.renderer.domElement.getBoundingClientRect();
-    const mouse = {
-      x: ((event.clientX - rect.left) * canvas.width) / rect.width,
-      y: ((event.clientY - rect.top) * canvas.height) / rect.height,
-    };
-
-    mouse.x = (mouse.x / canvas.width) * 2 - 1;
-    mouse.y = -(mouse.y / canvas.height) * 2 + 1;
-
-    this.raycaster.setFromCamera(mouse, this.camera);
-
-    const intersects = this.raycaster.intersectObjects(
-      this.scene.children,
-      true
-    );
-    if (intersects.length > 0) {
-      this.modelClicked.emit();
-    }
-  }
-
-  onMouseHover(event) {
-    const canvas = this.renderer.domElement;
-    const rect = this.renderer.domElement.getBoundingClientRect();
-    const mouse = {
-      x: ((event.clientX - rect.left) * canvas.width) / rect.width,
-      y: ((event.clientY - rect.top) * canvas.height) / rect.height,
-    };
-
-    mouse.x = (mouse.x / canvas.width) * 2 - 1;
-    mouse.y = -(mouse.y / canvas.height) * 2 + 1;
-
-    this.raycaster.setFromCamera(mouse, this.camera);
-
-    const intersects = this.raycaster.intersectObjects(
-      this.scene.children,
-      true
-    );
-    if (intersects.length > 0) {
-      const child = intersects[0].object as THREE.Mesh;
-      if (child?.name) {
-        (child?.material as THREE.MeshStandardMaterial)?.color.set(
+  onMouseDown = (ev: PointerEvent) => {
+    const ndc = this.getPointerNDC(ev);
+    this.raycaster.setFromCamera(ndc, this.camera);
+    const hits = this.raycaster.intersectObjects(this.scene.children, true);
+    if (hits.length) this.modelClicked.emit();
+  };
+  onMouseHover = (ev: PointerEvent) => {
+    const ndc = this.getPointerNDC(ev);
+    this.raycaster.setFromCamera(ndc, this.camera);
+    const hits = this.raycaster.intersectObjects(this.scene.children, true);
+    if (hits.length) {
+      const m = hits[0].object as THREE.Mesh;
+      if (m?.name)
+        (m.material as THREE.MeshStandardMaterial)?.color.set(
           Math.random() * 0xffffff
         );
-      }
     } else {
       this.hoverModel = false;
-      this.scene.traverse((child: any) => {
-        if (child.isMesh) {
-          if (child?.name) {
-            (child?.material as THREE.MeshStandardMaterial)?.color.set(
-              0xffffff
-            );
-          }
-        }
+      this.scene.traverse((c: any) => {
+        if (c.isMesh && c?.name)
+          (c.material as THREE.MeshStandardMaterial)?.color.set(0xffffff);
       });
     }
-  }
+  };
 
   animation(renderer, scene, camera, controls) {
     //renderer.render(scene, camera);

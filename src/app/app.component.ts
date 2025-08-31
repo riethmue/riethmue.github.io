@@ -98,7 +98,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   onSceneLoaded() {
-    console.log('loaded');
     this.sceneLoaded = true;
     this.cd.markForCheck();
   }
