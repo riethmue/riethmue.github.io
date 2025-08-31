@@ -1,13 +1,10 @@
 // see: https://material.angular.io/guide/theming
-@use "styles/variables";
-@use "@material/fab";
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@use 'styles/variables';
+@use '@material/fab';
+@use 'tailwindcss';
 
 @include fab.core-styles;
-@import "material-icons/iconfont/material-icons.css";
+@import 'material-icons/iconfont/material-icons.css';
 
 /* html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; } */

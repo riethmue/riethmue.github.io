@@ -1,14 +1,19 @@
-const { fontFamily } = require('tailwindcss/defaultTheme');
+import type { Config } from 'tailwindcss';
+import defaultTheme from 'tailwindcss/defaultTheme';
 
-module.exports = {
+export default {
   content: ['./src/**/*.{ts,html,scss}'],
   darkMode: 'media',
   theme: {
-    fontFamily: {
-      ...fontFamily,
-      sans: ['Roboto', 'Helvetica Neue', 'sans-serif', ...fontFamily.sans],
-    },
     extend: {
+      fontFamily: {
+        sans: [
+          'Roboto',
+          'Helvetica Neue',
+          'sans-serif',
+          ...defaultTheme.fontFamily.sans,
+        ],
+      },
       colors: {
         primary: {
           50: 'var(--primary-50)',
@@ -77,7 +82,4 @@ module.exports = {
       },
     },
   },
-  variants: {
-    extend: {},
-  },
-};
+} satisfies Config;
