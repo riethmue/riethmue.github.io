@@ -6,11 +6,11 @@ import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer
 import { GlitchPass } from 'three/examples/jsm/postprocessing/GlitchPass.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
-// import { PixelShader } from 'three/examples/jsm/shaders/PixelShader.js';
 import { CustomControls } from './custom-controls';
 import { DracoModel } from './draco-model';
 import { SceneConfig } from './scene-constants';
 import { environment } from '../../environments/environment';
+import { PixelArtShader } from './shader/pixel-art-shader';
 
 export class ModelScene {
   modelClicked = new EventEmitter<void>();
@@ -204,7 +204,9 @@ export class ModelScene {
     if (this.config.renderer.devicePixelRatio) {
       this.renderer?.setPixelRatio(this.config.renderer.devicePixelRatio);
     }
-    this.renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
+    this.renderer.outputColorSpace = THREE.SRGBColorSpace;
+    this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    this.renderer.toneMappingExposure = 1.0;
     if ((this.renderer as any).debug) {
       (this.renderer as any).debug.checkShaderErrors = !environment.production;
     }
@@ -278,16 +280,17 @@ export class ModelScene {
     this.effectComposer = new EffectComposer(this.renderer);
     this.effectComposer.addPass(new RenderPass(this.scene, this.camera));
 
-    // this.pixelPass = new ShaderPass(PixelShader);
-    // this.pixelPass.material.uniforms['resolution'].value = new THREE.Vector2(
-    //   window.innerWidth,
-    //   window.innerHeight
-    // );
-    // this.pixelPass.uniforms['resolution'].value.multiplyScalar(
-    //   window.devicePixelRatio
-    // );
-    // this.pixelPass.uniforms['pixelSize'].value = 8;
-    // this.effectComposer.addPass(this.pixelPass);
+    this.pixelPass = new ShaderPass(PixelArtShader);
+    this.pixelPass.material.transparent = false;
+    this.pixelPass.material.uniforms['resolution'].value = new THREE.Vector2(
+      window.innerWidth,
+      window.innerHeight
+    );
+    this.pixelPass.uniforms['resolution'].value.multiplyScalar(
+      window.devicePixelRatio
+    );
+    this.pixelPass.uniforms['pixelSize'].value = 8;
+    this.effectComposer.addPass(this.pixelPass);
 
     this.glitchPass = new GlitchPass();
     this.effectComposer.addPass(this.glitchPass);

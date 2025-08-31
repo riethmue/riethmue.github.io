@@ -86,10 +86,10 @@ export class ComputerModelComponent implements OnInit {
       },
       lights: [
         {
-          light: new THREE.AmbientLight(0xffffff, 0.3),
+          light: new THREE.AmbientLight(0xffffff, 0.4),
         },
         {
-          light: new THREE.DirectionalLight(0xffffff, 0.6),
+          light: new THREE.DirectionalLight(0xffffff, 1.0),
         },
       ],
     });
