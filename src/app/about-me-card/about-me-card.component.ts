@@ -7,11 +7,13 @@ import {
 } from '@angular/core';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { ModalComponent } from '../modal/modal.component';
+import { TerminalComponent } from '../terminal/terminal.component';
 @Component({
-    selector: 'app-about-me-card',
-    templateUrl: './about-me-card.component.html',
-    styleUrls: ['./about-me-card.component.scss'],
-    standalone: false
+  selector: 'app-about-me-card',
+  templateUrl: './about-me-card.component.html',
+  styleUrls: ['./about-me-card.component.scss'],
+  standalone: true,
+  imports: [TerminalComponent, ModalComponent],
 })
 export class AboutMeCardComponent implements OnInit {
   isLandscape: boolean = false;

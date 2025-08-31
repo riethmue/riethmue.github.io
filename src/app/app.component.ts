@@ -1,4 +1,4 @@
-import { isPlatformBrowser } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -12,6 +12,8 @@ import {
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
   faGithub,
   faMedium,
@@ -19,16 +21,24 @@ import {
 } from '@fortawesome/free-brands-svg-icons';
 import { fromEvent, Subject, takeUntil } from 'rxjs';
 import { AboutMeCardComponent } from './about-me-card/about-me-card.component';
+import { ComputerModelComponent } from './computer-model/computer-model.component';
 import { InitialSceneConfig } from './computer-model/scene-constants';
+import { ModalComponent } from './modal/modal.component';
 import { ModalService } from './services/modal/modal.service';
 import { ModelInteractionService } from './services/model-interaction/model-interaction.service';
-
+import { TerminalComponent } from './terminal/terminal.component';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterModule,
+    FontAwesomeModule,
+    ComputerModelComponent,
+  ],
 })
 export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('model', { static: false }) modelRef?: ElementRef<HTMLElement>;

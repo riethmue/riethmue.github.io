@@ -12,7 +12,7 @@ import { concatMap, delay, from, of, Subject, takeUntil } from 'rxjs';
   selector: 'app-terminal',
   templateUrl: './terminal.component.html',
   styleUrls: ['./terminal.component.scss'],
-  standalone: false,
+  standalone: true,
 })
 export class TerminalComponent implements OnInit {
   output = '[~] ';
@@ -56,7 +56,7 @@ export class TerminalComponent implements OnInit {
     }
   };
 
-  emulateTyping(output: string, endFunction?: () => void) {
+  emulateTyping(output: string, endFunction: () => void) {
     from(output.split(''))
       .pipe(
         takeUntil(this.destroyed$),

@@ -19,7 +19,7 @@ import { InitialSceneConfig } from './scene-constants';
   selector: 'app-computer-model',
   templateUrl: './computer-model.component.html',
   styleUrls: ['./computer-model.component.scss'],
-  standalone: false,
+  standalone: true,
 })
 export class ComputerModelComponent implements OnInit {
   @ViewChild('renderContainer', { static: true }) renderContainer: ElementRef;

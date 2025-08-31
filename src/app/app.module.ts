@@ -1,5 +1,9 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule, provideClientHydration, withEventReplay } from '@angular/platform-browser';
+import {
+  BrowserModule,
+  provideClientHydration,
+  withEventReplay,
+} from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ComputerModelComponent } from './computer-model/computer-model.component';
@@ -10,23 +14,19 @@ import { OverlayModule } from '@angular/cdk/overlay';
 import { ModalComponent } from './modal/modal.component';
 import { TerminalComponent } from './terminal/terminal.component';
 @NgModule({
-  declarations: [
+  imports: [
     AppComponent,
     ComputerModelComponent,
     TerminalComponent,
     AboutMeCardComponent,
     ModalComponent,
-  ],
-  imports: [
     CommonModule,
     BrowserModule,
     AppRoutingModule,
     FontAwesomeModule,
     OverlayModule,
   ],
-  providers: [
-    provideClientHydration(withEventReplay())
-  ],
+  providers: [provideClientHydration(withEventReplay())],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
