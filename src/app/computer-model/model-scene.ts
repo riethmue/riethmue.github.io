@@ -125,6 +125,7 @@ export class ModelScene {
     this.controls.saveState();
   }
 
+  // check latest doc when start to use this
   initControlsOrbit() {
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.controls.addEventListener('start', () => {
@@ -275,7 +276,7 @@ export class ModelScene {
 
     this.pixelPass = new ShaderPass(PixelArtShader);
     this.pixelPass.material.transparent = false;
-    this.pixelPass.material.uniforms['resolution'].value = new THREE.Vector2(
+    this.pixelPass.uniforms['resolution'].value = new THREE.Vector2(
       window.innerWidth,
       window.innerHeight
     );
@@ -451,22 +452,61 @@ export class ModelScene {
   }
 
   public resizeView(width: number, height: number) {
-    this.config.renderer.size.width = width;
-    this.config.renderer.size.height = height;
+    width = Math.max(1, Math.round(width));
+    height = Math.max(1, Math.round(height));
+
+    const dpr = window.devicePixelRatio || 1;
+    this.renderer.setPixelRatio(dpr);
 
     this.camera.aspect = width / height;
     this.camera.updateProjectionMatrix();
 
     this.renderer.setSize(width, height);
 
-    this.effectComposer?.setSize(width, height);
-
-    if (this.pixelPass) {
-      const res = this.pixelPass.uniforms['resolution'].value as THREE.Vector2;
-      res.set(width, height).multiplyScalar(window.devicePixelRatio || 1);
+    const anyComposer = this.effectComposer as any;
+    if (typeof anyComposer?.setPixelRatio === 'function') {
+      anyComposer.setPixelRatio(dpr);
+      this.effectComposer.setSize(width, height);
+    } else {
+      this.effectComposer.setSize(width * dpr, height * dpr);
     }
 
-    this.renderer.render(this.scene, this.camera);
+    // set resolution uniform the SAME way as in addPass()
+    if (this.pixelPass?.uniforms?.['resolution']) {
+      (this.pixelPass.uniforms['resolution'].value as THREE.Vector2)
+        .set(width, height)
+        .multiplyScalar(dpr);
+    }
+
+    this.effectComposer.render();
+    this.controls?.update?.();
+  }
+
+  private debugResizeTag(tag: string) {
+    // EN: Compare DOM client size, renderer size, DPR, drawing buffer size
+    const rect = this.renderer.domElement.getBoundingClientRect();
+    const rs = new THREE.Vector2();
+    const db = new THREE.Vector2();
+    this.renderer.getSize(rs);
+    this.renderer.getDrawingBufferSize(db);
+
+    console.log(
+      `[${tag}]`,
+      {
+        client: { w: Math.round(rect.width), h: Math.round(rect.height) },
+        rendererSize: { w: rs.x, h: rs.y },
+        drawingBuffer: { w: db.x, h: db.y },
+        dpr: this.renderer.getPixelRatio?.(),
+      },
+      'composer?',
+      !!this.effectComposer,
+      'pixelPass?',
+      !!this.pixelPass,
+      'loop?',
+      typeof (this.renderer as any).getAnimationLoop === 'function'
+        ? !!this.renderer.getAnimationLoop()
+        : 'unknown'
+    );
   }
 
   private getPointerNDC(ev: PointerEvent): THREE.Vector2 {
