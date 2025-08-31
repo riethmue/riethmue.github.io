@@ -20,7 +20,7 @@ jobs:
       - name: Install
         run: npm ci
 
-      - name: Build & Prerender
+      - name: Build
         run: |
           npx ng build --configuration production
 

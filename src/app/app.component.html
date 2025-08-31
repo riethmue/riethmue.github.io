@@ -1,11 +1,19 @@
 <div #appContainer class="app-container">
-  <div class="model-scene" #model>
-    <app-computer-model
-      [hidden]="sceneLoaded"
-      (loaded)="onSceneLoaded()"
-      (modelClicked)="onModelClicked()"
-    ></app-computer-model>
-  </div>
+  <ng-container *ngIf="isBrowserEnv">
+    <div class="model-scene relative" #model>
+      <app-computer-model
+        (loaded)="onSceneLoaded()"
+        (modelClicked)="onModelClicked()"
+      ></app-computer-model>
+
+      <div
+        *ngIf="!sceneLoaded"
+        class="absolute inset-0 flex items-center justify-center bg-black/60"
+      >
+        <div class="text-white font-mono">loading 3D scene…</div>
+      </div>
+    </div>
+  </ng-container>
   <div class="bg-black flex justify-center">
     <div class="fixed bottom-0 m-5">
       <div class="fab flex flex-wrap justify-center m-2">

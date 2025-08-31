@@ -1,5 +1,8 @@
+import { isPlatformBrowser } from '@angular/common';
 import {
   AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   inject,
@@ -14,26 +17,26 @@ import {
   faMedium,
   faXTwitter,
 } from '@fortawesome/free-brands-svg-icons';
-import { Observable, Subject, fromEvent, takeUntil } from 'rxjs';
+import { fromEvent, Subject, takeUntil } from 'rxjs';
+import { AboutMeCardComponent } from './about-me-card/about-me-card.component';
 import { InitialSceneConfig } from './computer-model/scene-constants';
 import { ModalService } from './services/modal/modal.service';
-import { AboutMeCardComponent } from './about-me-card/about-me-card.component';
 import { ModelInteractionService } from './services/model-interaction/model-interaction.service';
-import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
 export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
-  @ViewChild('model') modelRef: ElementRef;
-  @ViewChild('appContainer', { read: ViewContainerRef })
-  platformId = inject(PLATFORM_ID);
-  container: ViewContainerRef;
+  @ViewChild('model', { static: false }) modelRef?: ElementRef<HTMLElement>;
+  @ViewChild('appContainer', { read: ViewContainerRef, static: false })
+  container?: ViewContainerRef;
+  private platformId = inject(PLATFORM_ID);
+  isBrowserEnv = isPlatformBrowser(this.platformId);
   sceneLoaded = false;
-  resize$: Observable<Event>;
   destroyed$ = new Subject<void>();
   faXTwitter = faXTwitter;
   faMedium = faMedium;
@@ -52,40 +55,41 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
   constructor(
     private modelInteractionService: ModelInteractionService,
-    private modalService: ModalService<AboutMeCardComponent>
+    private modalService: ModalService<AboutMeCardComponent>,
+    private cd: ChangeDetectorRef
   ) {}
-
-  isBrowser() {
-    return isPlatformBrowser(this.platformId);
-  }
 
   ngOnDestroy() {
     this.destroyed$.next();
     this.destroyed$.complete();
   }
-  ngOnInit() {
-    if (this.isBrowser()) {
-      this.resize$ = fromEvent(window, 'resize');
-      this.resize$
+  ngOnInit(): void {
+    if (this.isBrowserEnv) {
+      // only subscribe if window exists
+      fromEvent(window, 'resize')
         .pipe(takeUntil(this.destroyed$))
         .subscribe(() => this.resizeView());
     }
   }
+  ngAfterViewInit(): void {
+    if (!this.isBrowserEnv || !this.modelRef) return;
 
-  ngAfterViewInit() {
+    const el = this.modelRef.nativeElement;
     const config: InitialSceneConfig = {
-      size: {
-        width: this.modelRef.nativeElement.offsetWidth,
-        height: this.modelRef.nativeElement.offsetHeight,
-      },
+      size: { width: el.offsetWidth, height: el.offsetHeight },
       devicePixelRatio: window.devicePixelRatio,
     };
 
-    this.modelInteractionService.onSceneInitialized$.next(config);
+    // defer emit to next macrotask so child subscriptions are active
+    setTimeout(() => {
+      this.modelInteractionService.onSceneInitialized$.next(config);
+      this.resizeView();
+    });
   }
 
   onSceneLoaded() {
     this.sceneLoaded = true;
+    this.cd.markForCheck();
   }
 
   onModelClicked() {}
@@ -94,10 +98,12 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     await this.modalService.open(AboutMeCardComponent);
   }
 
-  resizeView() {
+  resizeView(): void {
+    if (!this.isBrowserEnv || !this.modelRef) return;
+    const el = this.modelRef.nativeElement;
     this.modelInteractionService.onScreenSizeChanged$.next([
-      this.modelRef.nativeElement.offsetWidth,
-      this.modelRef.nativeElement.offsetHeight,
+      el.offsetWidth,
+      el.offsetHeight,
     ]);
   }
 
