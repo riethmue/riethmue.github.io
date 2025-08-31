@@ -11,6 +11,7 @@ import { DracoModel } from './draco-model';
 import { SceneConfig } from './scene-constants';
 import { environment } from '../../environments/environment';
 import { PixelArtShader } from './shader/pixel-art-shader';
+import { DebugPerf } from './debug-perf';
 
 export class ModelScene {
   modelClicked = new EventEmitter<void>();
@@ -35,6 +36,7 @@ export class ModelScene {
   onMouseMove: any;
   initialModelMaterialColor: any;
   public hoverModel = false;
+  perf = new DebugPerf();
 
   constructor(public htmlElement: ElementRef, public config: SceneConfig) {
     this.scene.background = new THREE.Color(0x000000);
@@ -56,8 +58,14 @@ export class ModelScene {
     this.initControls();
     this.addLights();
 
-    this.renderer.setAnimationLoop(() => {
+    this.perf.init(this.renderer);
+
+    this.renderer.setAnimationLoop((ts: number) => {
+      this.perf.beginFrame(this.renderer);
+
       this.animation(this.renderer, this.scene, this.camera, this.controls);
+
+      this.perf.endFrame(this.renderer, ts);
     });
   }
 
