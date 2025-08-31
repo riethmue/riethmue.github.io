@@ -6,7 +6,6 @@ import { ComputerModelComponent } from './computer-model/computer-model.componen
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { AboutMeCardComponent } from './about-me-card/about-me-card.component';
-import { ScullyLibModule } from '@scullyio/ng-lib';
 import { CommonModule } from '@angular/common';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { ModalComponent } from './modal/modal.component';
@@ -25,7 +24,6 @@ import { TerminalComponent } from './terminal/terminal.component';
     AppRoutingModule,
     BrowserAnimationsModule,
     FontAwesomeModule,
-    ScullyLibModule,
     OverlayModule,
   ],
   providers: [],
