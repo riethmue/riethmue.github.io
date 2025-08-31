@@ -72,6 +72,7 @@ export class ComputerModelComponent implements OnInit {
       renderer: {
         rendererParameter: {
           antialias: true,
+          alpha: true,
         },
         devicePixelRatio: config.devicePixelRatio,
         size: config.size,

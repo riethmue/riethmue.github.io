@@ -10,6 +10,7 @@ import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
 import { CustomControls } from './custom-controls';
 import { DracoModel } from './draco-model';
 import { SceneConfig } from './scene-constants';
+import { environment } from '../../environments/environment';
 
 export class ModelScene {
   modelClicked = new EventEmitter<void>();
@@ -52,7 +53,7 @@ export class ModelScene {
     this.addLights();
 
     this.renderer.setAnimationLoop(() => {
-      this.animation(this.renderer, this, this.camera, this.controls);
+      this.animation(this.renderer, this.scene, this.camera, this.controls);
     });
   }
 
@@ -86,12 +87,20 @@ export class ModelScene {
     this.controls.enableZoom = true;
     this.controls.zoomSpeed = 0.5;
 
-    this.controls.touches.ONE = 5; // ROTATE_PAN
-    this.controls.touches.TWO = 4; // DOLLY
+    if (this.controls.touches) {
+      this.controls.touches = {
+        ONE: THREE.TOUCH.ROTATE,
+        TWO: THREE.TOUCH.DOLLY_PAN,
+      };
+    }
 
-    this.controls.mouseButtons.LEFT = THREE.MOUSE.PAN;
-    this.controls.mouseButtons.MIDDLE = THREE.MOUSE.DOLLY;
-    this.controls.mouseButtons.RIGHT = THREE.MOUSE.ROTATE;
+    if (this.controls.mouseButtons) {
+      this.controls.mouseButtons = {
+        LEFT: THREE.MOUSE.PAN,
+        MIDDLE: THREE.MOUSE.DOLLY,
+        RIGHT: THREE.MOUSE.ROTATE,
+      };
+    }
 
     this.controls.screenSpacePanning = false;
     this.controls.enablePan = false;
@@ -130,12 +139,16 @@ export class ModelScene {
     this.controls.enableZoom = true;
     this.controls.zoomSpeed = 0.5;
 
-    this.controls.touches.ONE = 5; // ROTATE_PAN
-    this.controls.touches.TWO = 4; // DOLLY
+    this.controls.touches = {
+      ONE: THREE.TOUCH.ROTATE,
+      TWO: THREE.TOUCH.DOLLY_PAN,
+    };
 
-    this.controls.mouseButtons.LEFT = THREE.MOUSE.PAN;
-    this.controls.mouseButtons.MIDDLE = THREE.MOUSE.DOLLY;
-    this.controls.mouseButtons.RIGHT = THREE.MOUSE.ROTATE;
+    this.controls.mouseButtons = {
+      LEFT: THREE.MOUSE.PAN,
+      MIDDLE: THREE.MOUSE.DOLLY,
+      RIGHT: THREE.MOUSE.ROTATE,
+    };
 
     this.controls.screenSpacePanning = false;
     this.controls.enablePan = false;
@@ -192,10 +205,12 @@ export class ModelScene {
       this.renderer?.setPixelRatio(this.config.renderer.devicePixelRatio);
     }
     this.renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
-    //this.renderer.debug.checkShaderErrors = !environment.production;
-    this.renderer.debug.checkShaderErrors = true;
+    if ((this.renderer as any).debug) {
+      (this.renderer as any).debug.checkShaderErrors = !environment.production;
+    }
+
     this.htmlElement.nativeElement.appendChild(this.renderer.domElement);
-    this.renderer.render(this, this.camera);
+    this.renderer.render(this.scene, this.camera);
   }
 
   vertexShader() {
@@ -261,7 +276,7 @@ export class ModelScene {
 
   async addPass() {
     this.effectComposer = new EffectComposer(this.renderer);
-    this.effectComposer.addPass(new RenderPass(this, this.camera));
+    this.effectComposer.addPass(new RenderPass(this.scene, this.camera));
 
     // this.pixelPass = new ShaderPass(PixelShader);
     // this.pixelPass.material.uniforms['resolution'].value = new THREE.Vector2(
