@@ -29,32 +29,21 @@ export class TerminalComponent implements OnInit {
     window.location.hash = '#terminal';
   }
 
-  onkeyPress = (e) => {
-    const isMobile =
-      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-        navigator.userAgent
-      );
+  onKeyPress(e: KeyboardEvent) {
+    const key = e.key.toLowerCase();
 
-    const isYKey =
-      (isMobile && (e.keyCode === 121 || e.keyCode === 89)) ||
-      (!isMobile && (e.key === 'y' || e.key === 'Y'));
-
-    const isNKey =
-      (isMobile && (e.keyCode === 110 || e.keyCode === 78)) ||
-      (!isMobile && (e.key === 'n' || e.key === 'N'));
-
-    if (isYKey) {
+    if (key === 'y') {
       const output = ' cat curriculumvitae.pdf%';
       this.emulateTyping(output, () => {
         window.open('assets/curriculum_vitae.pdf');
         this.exit.emit();
       });
-    } else if (isNKey) {
+    } else if (key === 'n') {
       this.exit.emit();
     } else {
       this.output += '\r\n[~] command not found';
     }
-  };
+  }
 
   emulateTyping(output: string, endFunction: () => void) {
     from(output.split(''))
