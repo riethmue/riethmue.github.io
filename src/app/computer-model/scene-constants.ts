@@ -13,7 +13,7 @@ export interface SceneConfig {
     position: THREE.Vector3;
   };
   renderer: {
-    rendererParamter: THREE.WebGLRendererParameters;
+    rendererParameter: THREE.WebGLRendererParameters;
     devicePixelRatio?: number;
     size: {
       width: number;

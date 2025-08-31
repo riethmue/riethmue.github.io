@@ -2,7 +2,6 @@ import {
   Component,
   ElementRef,
   EventEmitter,
-  OnDestroy,
   OnInit,
   Output,
   ViewChild,
@@ -12,14 +11,15 @@ import { Subject } from 'rxjs';
 import { skip, takeUntil } from 'rxjs/operators';
 import * as THREE from 'three';
 
-import { InitialSceneConfig } from './scene-constants';
-import { ModelScene } from './model-scene';
 import { ModelInteractionService } from '../services/model-interaction/model-interaction.service';
+import { ModelScene } from './model-scene';
+import { InitialSceneConfig } from './scene-constants';
 
 @Component({
   selector: 'app-computer-model',
   templateUrl: './computer-model.component.html',
   styleUrls: ['./computer-model.component.scss'],
+  standalone: false,
 })
 export class ComputerModelComponent implements OnInit {
   @ViewChild('renderContainer', { static: true }) renderContainer: ElementRef;
@@ -70,8 +70,9 @@ export class ComputerModelComponent implements OnInit {
         position: new THREE.Vector3(0, 0, 0),
       },
       renderer: {
-        rendererParamter: {
+        rendererParameter: {
           antialias: true,
+          alpha: true,
         },
         devicePixelRatio: config.devicePixelRatio,
         size: config.size,
@@ -85,10 +86,10 @@ export class ComputerModelComponent implements OnInit {
       },
       lights: [
         {
-          light: new THREE.AmbientLight(0xffffff, 0.3),
+          light: new THREE.AmbientLight(0xffffff, 0.6),
         },
         {
-          light: new THREE.DirectionalLight(0xffffff, 0.6),
+          light: new THREE.DirectionalLight(0xffffff, 2.0),
         },
       ],
     });

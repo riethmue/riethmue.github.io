@@ -12,6 +12,7 @@ import { concatMap, delay, from, of, Subject, takeUntil } from 'rxjs';
   selector: 'app-terminal',
   templateUrl: './terminal.component.html',
   styleUrls: ['./terminal.component.scss'],
+  standalone: false,
 })
 export class TerminalComponent implements OnInit {
   output = '[~] ';
@@ -21,7 +22,7 @@ export class TerminalComponent implements OnInit {
   exit = new EventEmitter<any>();
   ngOnInit(): void {
     const greeding =
-      'I am a fullstack developer, studied Computational visualistics and have a passion for cloud-related topics and computer-aided graphics. Do you want to have a look into my cv? [y/N]$%';
+      'I am a fullstack developer, devops engineer and cloud architect. I studied Computational visualistics and have a passion for all cloud-related topics and computer-aided graphics. Do you want to have a look into my cv? [y/N]$%';
     this.emulateTyping(greeding, () => {
       this.terminal.nativeElement.focus();
     });

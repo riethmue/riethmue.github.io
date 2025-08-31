@@ -1,19 +1,21 @@
 import { ElementRef, EventEmitter } from '@angular/core';
 
 import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
+import { GlitchPass } from 'three/examples/jsm/postprocessing/GlitchPass.js';
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
+import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
 import { CustomControls } from './custom-controls';
 import { DracoModel } from './draco-model';
 import { SceneConfig } from './scene-constants';
-import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass';
-import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
-import { GlitchPass } from 'three/examples/jsm/postprocessing/GlitchPass';
-import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer';
-import { PixelShader } from 'three/examples/jsm/shaders/PixelShader';
+import { environment } from '../../environments/environment';
+import { PixelArtShader } from './shader/pixel-art-shader';
 
-export class ModelScene extends THREE.Scene {
+export class ModelScene {
   modelClicked = new EventEmitter<void>();
   sceneLoaded = new EventEmitter<any>();
+  scene = new THREE.Scene();
   renderer: THREE.WebGLRenderer;
   camera: THREE.PerspectiveCamera;
   controls: any;
@@ -35,15 +37,13 @@ export class ModelScene extends THREE.Scene {
   public hoverModel = false;
 
   constructor(public htmlElement: ElementRef, public config: SceneConfig) {
-    super();
+    this.scene.background = new THREE.Color(0x000000);
     this.onMouseDownClick = this.onMouseDown.bind(this);
     this.onMouseMove = this.onMouseHover.bind(this);
     document.addEventListener('pointerdown', this.onMouseDownClick, false);
     document.addEventListener('mousemove', this.onMouseMove, false);
     this.raycaster = new THREE.Raycaster();
     this.mouse = new THREE.Vector2();
-
-    this.background = new THREE.Color(0x000000);
 
     this.initCamera();
     this.initScene();
@@ -53,7 +53,7 @@ export class ModelScene extends THREE.Scene {
     this.addLights();
 
     this.renderer.setAnimationLoop(() => {
-      this.animation(this.renderer, this, this.camera, this.controls);
+      this.animation(this.renderer, this.scene, this.camera, this.controls);
     });
   }
 
@@ -87,12 +87,20 @@ export class ModelScene extends THREE.Scene {
     this.controls.enableZoom = true;
     this.controls.zoomSpeed = 0.5;
 
-    this.controls.touches.ONE = 5; // ROTATE_PAN
-    this.controls.touches.TWO = 4; // DOLLY
+    if (this.controls.touches) {
+      this.controls.touches = {
+        ONE: THREE.TOUCH.ROTATE,
+        TWO: THREE.TOUCH.DOLLY_PAN,
+      };
+    }
 
-    this.controls.mouseButtons.LEFT = THREE.MOUSE.PAN;
-    this.controls.mouseButtons.MIDDLE = THREE.MOUSE.DOLLY;
-    this.controls.mouseButtons.RIGHT = THREE.MOUSE.ROTATE;
+    if (this.controls.mouseButtons) {
+      this.controls.mouseButtons = {
+        LEFT: THREE.MOUSE.PAN,
+        MIDDLE: THREE.MOUSE.DOLLY,
+        RIGHT: THREE.MOUSE.ROTATE,
+      };
+    }
 
     this.controls.screenSpacePanning = false;
     this.controls.enablePan = false;
@@ -131,12 +139,16 @@ export class ModelScene extends THREE.Scene {
     this.controls.enableZoom = true;
     this.controls.zoomSpeed = 0.5;
 
-    this.controls.touches.ONE = 5; // ROTATE_PAN
-    this.controls.touches.TWO = 4; // DOLLY
+    this.controls.touches = {
+      ONE: THREE.TOUCH.ROTATE,
+      TWO: THREE.TOUCH.DOLLY_PAN,
+    };
 
-    this.controls.mouseButtons.LEFT = THREE.MOUSE.PAN;
-    this.controls.mouseButtons.MIDDLE = THREE.MOUSE.DOLLY;
-    this.controls.mouseButtons.RIGHT = THREE.MOUSE.ROTATE;
+    this.controls.mouseButtons = {
+      LEFT: THREE.MOUSE.PAN,
+      MIDDLE: THREE.MOUSE.DOLLY,
+      RIGHT: THREE.MOUSE.ROTATE,
+    };
 
     this.controls.screenSpacePanning = false;
     this.controls.enablePan = false;
@@ -176,12 +188,12 @@ export class ModelScene extends THREE.Scene {
     );
     this.camera.updateProjectionMatrix();
 
-    this.add(this.camera);
+    this.scene.add(this.camera);
   }
 
   initRenderer() {
     this.renderer = new THREE.WebGLRenderer(
-      this.config.renderer.rendererParamter
+      this.config.renderer.rendererParameter
     );
     this.renderer?.setSize(
       this.config.renderer.size.width,
@@ -191,11 +203,15 @@ export class ModelScene extends THREE.Scene {
     if (this.config.renderer.devicePixelRatio) {
       this.renderer?.setPixelRatio(this.config.renderer.devicePixelRatio);
     }
-    this.renderer.outputEncoding = THREE.sRGBEncoding;
-    //this.renderer.debug.checkShaderErrors = !environment.production;
-    this.renderer.debug.checkShaderErrors = true;
+    this.renderer.outputColorSpace = THREE.SRGBColorSpace;
+    this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    this.renderer.toneMappingExposure = 1.0;
+    if ((this.renderer as any).debug) {
+      (this.renderer as any).debug.checkShaderErrors = !environment.production;
+    }
+
     this.htmlElement.nativeElement.appendChild(this.renderer.domElement);
-    this.renderer.render(this, this.camera);
+    this.renderer.render(this.scene, this.camera);
   }
 
   vertexShader() {
@@ -249,9 +265,9 @@ export class ModelScene extends THREE.Scene {
           child.material.side = THREE.DoubleSide;
         }
       });
-      this.add(gltfScene);
+      this.scene.add(gltfScene);
       this.addGeometries();
-      this.updateMatrixWorld(true);
+      this.scene.updateMatrixWorld(true);
       //this.prepareMaterials();
       this.sceneLoaded.emit();
     } catch (error) {
@@ -261,9 +277,10 @@ export class ModelScene extends THREE.Scene {
 
   async addPass() {
     this.effectComposer = new EffectComposer(this.renderer);
-    this.effectComposer.addPass(new RenderPass(this, this.camera));
+    this.effectComposer.addPass(new RenderPass(this.scene, this.camera));
 
-    this.pixelPass = new ShaderPass(PixelShader);
+    this.pixelPass = new ShaderPass(PixelArtShader);
+    this.pixelPass.material.transparent = false;
     this.pixelPass.material.uniforms['resolution'].value = new THREE.Vector2(
       window.innerWidth,
       window.innerHeight
@@ -322,7 +339,7 @@ export class ModelScene extends THREE.Scene {
       group.add(mesh);
     }
 
-    this.add(group);
+    this.scene.add(group);
   }
 
   // this method is based on threejs version 0.134.0:
@@ -422,11 +439,13 @@ export class ModelScene extends THREE.Scene {
   public resetView() {
     // reset orbitcontrols
     this.controls?.reset();
-    this.getObjectByName('Scene')?.position.set(
-      this.config.model.position.x,
-      this.config.model.position.y,
-      this.config.model.position.z
-    );
+    this.scene
+      .getObjectByName('Scene')
+      ?.position.set(
+        this.config.model.position.x,
+        this.config.model.position.y,
+        this.config.model.position.z
+      );
     this.controls.autoRotate = true;
   }
 
@@ -465,7 +484,10 @@ export class ModelScene extends THREE.Scene {
 
     this.raycaster.setFromCamera(mouse, this.camera);
 
-    const intersects = this.raycaster.intersectObjects(this.children, true);
+    const intersects = this.raycaster.intersectObjects(
+      this.scene.children,
+      true
+    );
     if (intersects.length > 0) {
       this.modelClicked.emit();
     }
@@ -484,7 +506,10 @@ export class ModelScene extends THREE.Scene {
 
     this.raycaster.setFromCamera(mouse, this.camera);
 
-    const intersects = this.raycaster.intersectObjects(this.children, true);
+    const intersects = this.raycaster.intersectObjects(
+      this.scene.children,
+      true
+    );
     if (intersects.length > 0) {
       const child = intersects[0].object as THREE.Mesh;
       if (child?.name) {
@@ -494,7 +519,7 @@ export class ModelScene extends THREE.Scene {
       }
     } else {
       this.hoverModel = false;
-      this.traverse((child: any) => {
+      this.scene.traverse((child: any) => {
         if (child.isMesh) {
           if (child?.name) {
             (child?.material as THREE.MeshStandardMaterial)?.color.set(

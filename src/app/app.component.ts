@@ -19,9 +19,10 @@ import { AboutMeCardComponent } from './about-me-card/about-me-card.component';
 import { ModelInteractionService } from './services/model-interaction/model-interaction.service';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss'],
+    standalone: false
 })
 export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('model') modelRef: ElementRef;
