@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ComputerModelComponent } from './computer-model/computer-model.component';
@@ -24,7 +24,9 @@ import { TerminalComponent } from './terminal/terminal.component';
     FontAwesomeModule,
     OverlayModule,
   ],
-  providers: [],
+  providers: [
+    provideClientHydration(withEventReplay())
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
