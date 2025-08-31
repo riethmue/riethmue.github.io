@@ -2,8 +2,10 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
+  inject,
   OnDestroy,
   OnInit,
+  PLATFORM_ID,
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
@@ -17,6 +19,7 @@ import { InitialSceneConfig } from './computer-model/scene-constants';
 import { ModalService } from './services/modal/modal.service';
 import { AboutMeCardComponent } from './about-me-card/about-me-card.component';
 import { ModelInteractionService } from './services/model-interaction/model-interaction.service';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-root',
@@ -27,6 +30,7 @@ import { ModelInteractionService } from './services/model-interaction/model-inte
 export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('model') modelRef: ElementRef;
   @ViewChild('appContainer', { read: ViewContainerRef })
+  platformId = inject(PLATFORM_ID);
   container: ViewContainerRef;
   sceneLoaded = false;
   resize$: Observable<Event>;
@@ -51,15 +55,21 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     private modalService: ModalService<AboutMeCardComponent>
   ) {}
 
+  isBrowser() {
+    return isPlatformBrowser(this.platformId);
+  }
+
   ngOnDestroy() {
     this.destroyed$.next();
     this.destroyed$.complete();
   }
   ngOnInit() {
-    this.resize$ = fromEvent(window, 'resize');
-    this.resize$.pipe(takeUntil(this.destroyed$)).subscribe(() => {
-      this.resizeView();
-    });
+    if (this.isBrowser()) {
+      this.resize$ = fromEvent(window, 'resize');
+      this.resize$
+        .pipe(takeUntil(this.destroyed$))
+        .subscribe(() => this.resizeView());
+    }
   }
 
   ngAfterViewInit() {

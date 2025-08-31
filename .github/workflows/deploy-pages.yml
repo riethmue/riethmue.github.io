@@ -23,9 +23,6 @@ jobs:
       - name: Build & Prerender
         run: |
           npx ng build --configuration production
-          npx ng run web:prerender
-          npx ng run web:server:production
-          npx ng run web:prerender
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
