@@ -28,5 +28,6 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 ## Todo
 
-- Collusion detection and avoidance of objects in rendering screen
 - fix mobile bug
+- fix threejs errors
+- udpate clean up function in threejs (check latest version)

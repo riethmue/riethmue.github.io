@@ -307,36 +307,43 @@ export class ModelScene {
 
     for (let i = 0; i < 50; i++) {
       const geom = geometries[Math.floor(Math.random() * geometries.length)];
-
-      const color = new THREE.Color();
-      color.setHSL(
-        Math.random(),
-        0.7 + 0.2 * Math.random(),
-        0.5 + 0.1 * Math.random()
-      );
-
-      const mat = new THREE.MeshPhongMaterial({ color: color, shininess: 200 });
-
-      const mesh = new THREE.Mesh(geom, mat);
-
       const scale = 3 + Math.random();
-      const randomizer = 0.5;
       const radiusDelta = 500;
-      mesh.scale.set(scale, scale, scale);
-      mesh.position
-        .set(
-          Math.random() - randomizer,
-          Math.random() - randomizer,
-          Math.random() - randomizer
-        )
-        .normalize();
-      mesh.position.multiplyScalar(Math.random() * radiusDelta);
-      mesh.rotation.set(
-        Math.random() * 2,
-        Math.random() * 2,
-        Math.random() * 2
-      );
-      group.add(mesh);
+      let mesh: THREE.Mesh;
+      let tries = 0;
+      let tooClose = true;
+
+      while (tooClose && tries < 50) {
+        tries++;
+        const mat = new THREE.MeshPhongMaterial({
+          color: new THREE.Color().setHSL(
+            Math.random(),
+            0.7 + 0.2 * Math.random(),
+            0.5 + 0.1 * Math.random()
+          ),
+        });
+        mesh = new THREE.Mesh(geom, mat);
+
+        mesh.scale.set(scale, scale, scale);
+        mesh.position
+          .set(
+            Math.random() * 2 - 1,
+            Math.random() * 2 - 1,
+            Math.random() * 2 - 1
+          )
+          .normalize()
+          .multiplyScalar(Math.random() * radiusDelta);
+
+        // Check distance to others
+        tooClose = group.children.some((child: THREE.Mesh) => {
+          const minDist =
+            (child.geometry.boundingSphere?.radius ?? 1) * child.scale.x +
+            (mesh.geometry.boundingSphere?.radius ?? 1) * mesh.scale.x;
+          return child.position.distanceTo(mesh.position) < minDist * 0.6; // 0.6 = safety factor
+        });
+      }
+
+      group.add(mesh!);
     }
 
     this.scene.add(group);
