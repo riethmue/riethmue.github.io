@@ -40,8 +40,12 @@ export class ModelScene {
     this.scene.background = new THREE.Color(0x000000);
     this.onMouseDownClick = this.onMouseDown.bind(this);
     this.onMouseMove = this.onMouseHover.bind(this);
-    document.addEventListener('pointerdown', this.onMouseDownClick, false);
-    document.addEventListener('pointermove', this.onMouseMove, false);
+    document.addEventListener('pointerdown', this.onMouseDownClick, {
+      passive: true,
+    });
+    document.addEventListener('pointermove', this.onMouseMove, {
+      passive: true,
+    });
     this.raycaster = new THREE.Raycaster();
     this.mouse = new THREE.Vector2();
 

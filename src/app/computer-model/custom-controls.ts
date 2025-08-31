@@ -706,8 +706,8 @@ export const CustomControls = function (object, domElement) {
     }
 
     if (state !== STATE.NONE) {
-      document.addEventListener('mousemove', onMouseMove, false);
-      document.addEventListener('mouseup', onMouseUp, false);
+      document.addEventListener('mousemove', onMouseMove, { passive: true });
+      document.addEventListener('mouseup', onMouseUp, { passive: true });
       scope.dispatchEvent(startEvent);
     }
   }
@@ -920,13 +920,21 @@ export const CustomControls = function (object, domElement) {
     event.preventDefault();
   }
 
-  scope.domElement.addEventListener('contextmenu', onContextMenu, false);
-  scope.domElement.addEventListener('mousedown', onMouseDown, false);
-  scope.domElement.addEventListener('wheel', onMouseWheel, false);
-  scope.domElement.addEventListener('touchstart', onTouchStart, false);
-  scope.domElement.addEventListener('touchend', onTouchEnd, false);
-  scope.domElement.addEventListener('touchmove', onTouchMove, false);
-  scope.domElement.addEventListener('keydown', onKeyDown, false);
+  scope.domElement.addEventListener('contextmenu', onContextMenu, {
+    passive: true,
+  });
+  scope.domElement.addEventListener('mousedown', onMouseDown, {
+    passive: true,
+  });
+  scope.domElement.addEventListener('wheel', onMouseWheel, { passive: true });
+  scope.domElement.addEventListener('touchstart', onTouchStart, {
+    passive: true,
+  });
+  scope.domElement.addEventListener('touchend', onTouchEnd, { passive: true });
+  scope.domElement.addEventListener('touchmove', onTouchMove, {
+    passive: true,
+  });
+  scope.domElement.addEventListener('keydown', onKeyDown, { passive: true });
 
   // make sure element can receive keys.
   if (scope.domElement.tabIndex === -1) {
