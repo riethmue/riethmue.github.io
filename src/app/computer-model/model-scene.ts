@@ -459,12 +459,20 @@ export class ModelScene {
   public resizeView(width: number, height: number) {
     this.config.renderer.size.width = width;
     this.config.renderer.size.height = height;
-    this.camera.aspect = this.calculateAspectRatio();
-    console.log('resizeView', width, height, this.calculateAspectRatio());
 
+    this.camera.aspect = width / height;
     this.camera.updateProjectionMatrix();
-    this.renderer?.setSize(width, height);
-    this.renderer?.render(this.scene, this.camera);
+
+    this.renderer.setSize(width, height);
+
+    this.effectComposer?.setSize(width, height);
+
+    if (this.pixelPass) {
+      const res = this.pixelPass.uniforms['resolution'].value as THREE.Vector2;
+      res.set(width, height).multiplyScalar(window.devicePixelRatio || 1);
+    }
+
+    this.renderer.render(this.scene, this.camera);
   }
 
   private getPointerNDC(ev: PointerEvent): THREE.Vector2 {
