@@ -10,7 +10,7 @@ import {
 import {
   faGithub,
   faMedium,
-  faTwitter,
+  faXTwitter,
 } from '@fortawesome/free-brands-svg-icons';
 import { Observable, Subject, fromEvent, takeUntil } from 'rxjs';
 import { InitialSceneConfig } from './computer-model/scene-constants';
@@ -19,10 +19,10 @@ import { AboutMeCardComponent } from './about-me-card/about-me-card.component';
 import { ModelInteractionService } from './services/model-interaction/model-interaction.service';
 
 @Component({
-    selector: 'app-root',
-    templateUrl: './app.component.html',
-    styleUrls: ['./app.component.scss'],
-    standalone: false
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss'],
+  standalone: false,
 })
 export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('model') modelRef: ElementRef;
@@ -31,19 +31,19 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   sceneLoaded = false;
   resize$: Observable<Event>;
   destroyed$ = new Subject<void>();
-  faTwitter = faTwitter;
+  faXTwitter = faXTwitter;
   faMedium = faMedium;
   faGithub = faGithub;
   terminalWidth = 70;
   currentYear = new Date().getFullYear();
   AsciiGreeting = `
-  ######   ###  #######  #######  #     #  #     #  #     #  ####### 
-  #     #   #   #           #     #     #  ##   ##  #     #  #       
-  #     #   #   #           #     #     #  # # # #  #     #  #       
-  ######    #   #####       #     #######  #  #  #  #     #  #####   
-  #   #     #   #           #     #     #  #     #  #     #  #       
-  #    #    #   #           #     #     #  #     #  #     #  #       
-  #     #  ###  #######     #     #     #  #     #   #####   ####### 
+  ######   ###  #######  #######  #     #  #     #  #     #  #######
+  #     #   #   #           #     #     #  ##   ##  #     #  #
+  #     #   #   #           #     #     #  # # # #  #     #  #
+  ######    #   #####       #     #######  #  #  #  #     #  #####
+  #   #     #   #           #     #     #  #     #  #     #  #
+  #    #    #   #           #     #     #  #     #  #     #  #
+  #     #  ###  #######     #     #     #  #     #   #####   #######
   `;
 
   constructor(
