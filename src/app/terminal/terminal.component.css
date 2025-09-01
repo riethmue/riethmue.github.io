@@ -7,7 +7,7 @@
 .container {
   font-family: monospace;
   padding: 10px;
-  background-color: rgba(0, 0, 0, 0.514);
+  background-color: rgba(0, 0, 0, 0.5);
   overflow: auto;
 }
 
