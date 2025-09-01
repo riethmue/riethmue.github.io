@@ -1,10 +1,8 @@
-@use '@material/fab';
-/* Load Tailwind v4 layers */
+/* Tailwind layers */
 @import 'tailwindcss';
 
-/* Define your design tokens here (v4 way) */
+/* Design tokens (v4 way) */
 @theme {
-  /* fonts */
   --font-sans: 'Roboto', 'Helvetica Neue', ui-sans-serif, system-ui, sans-serif;
 
   /* primary */
@@ -55,7 +53,7 @@
   --color-warn-a400: #ff2d5b;
   --color-warn-a700: #ff2d5b;
 
-  /* contrast (was Sass rgba(black,0.87) → echtes RGBA) */
+  /* contrast */
   --color-contrast-50: rgba(0, 0, 0, 0.87);
   --color-contrast-100: rgba(0, 0, 0, 0.87);
   --color-contrast-200: rgba(0, 0, 0, 0.87);
@@ -72,17 +70,14 @@
   --color-contrast-a700: rgba(0, 0, 0, 0.87);
 }
 
-@include fab.core-styles;
-@import 'material-icons/iconfont/material-icons.css';
-
-/* Base tweaks using utilities */
+/* Base tweaks */
 html,
 body {
   @apply h-full;
-} /* Inline doc: apply Tailwind utilities */
+}
 body {
   @apply m-0 font-sans;
-} /* Inline doc: use tokenized font */
+}
 .terminal-dialog-container .mat-dialog-container {
   padding: 0 !important;
   background-color: #000000a4;

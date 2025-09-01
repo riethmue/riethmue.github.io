@@ -4,7 +4,7 @@ import { ModalService } from '../services/modal/modal.service';
 @Component({
   selector: 'app-modal',
   templateUrl: './modal.component.html',
-  styleUrls: ['./modal.component.scss'],
+  styleUrls: ['./modal.component.css'],
   standalone: true,
 })
 export class ModalComponent<T> {

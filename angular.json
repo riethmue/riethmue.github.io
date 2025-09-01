@@ -20,7 +20,11 @@
             "polyfills": ["src/polyfills.ts"],
             "tsConfig": "tsconfig.app.json",
             "assets": ["src/favicon.ico", "src/assets"],
-            "styles": ["src/styles.scss"],
+            "styles": [
+              "src/styles.css",
+              "node_modules/material-icons/iconfont/material-icons.css",
+              "src/material-theme.scss"
+            ],
             "browser": "src/main.ts",
             "server": "src/main.server.ts",
             "outputMode": "server",
@@ -85,7 +89,11 @@
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
             "assets": ["src/favicon.ico", "src/assets"],
-            "styles": ["src/styles.scss"],
+            "styles": [
+              "src/styles.css",
+              "node_modules/material-icons/iconfont/material-icons.css",
+              "src/material-theme.scss"
+            ],
             "scripts": []
           }
         }
@@ -94,7 +102,7 @@
   },
   "schematics": {
     "@schematics/angular:component": {
-      "style": "scss"
+      "style": "css"
     }
   },
   "cli": {

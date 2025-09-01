@@ -18,7 +18,7 @@ import { InitialSceneConfig } from './scene-constants';
 @Component({
   selector: 'app-computer-model',
   templateUrl: './computer-model.component.html',
-  styleUrls: ['./computer-model.component.scss'],
+  styleUrls: ['./computer-model.component.css'],
   standalone: true,
 })
 export class ComputerModelComponent implements OnInit {

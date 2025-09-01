@@ -11,7 +11,7 @@ import { concatMap, delay, from, of, Subject, takeUntil } from 'rxjs';
 @Component({
   selector: 'app-terminal',
   templateUrl: './terminal.component.html',
-  styleUrls: ['./terminal.component.scss'],
+  styleUrls: ['./terminal.component.css'],
   standalone: true,
 })
 export class TerminalComponent implements OnInit {

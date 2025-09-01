@@ -11,7 +11,7 @@ import { TerminalComponent } from '../terminal/terminal.component';
 @Component({
   selector: 'app-about-me-card',
   templateUrl: './about-me-card.component.html',
-  styleUrls: ['./about-me-card.component.scss'],
+  styleUrls: ['./about-me-card.component.css'],
   standalone: true,
   imports: [TerminalComponent, ModalComponent],
 })
