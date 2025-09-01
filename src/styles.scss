@@ -1,24 +1,89 @@
-// see: https://material.angular.io/guide/theming
-@use 'styles/variables';
 @use '@material/fab';
-@use 'tailwindcss';
+/* Load Tailwind v4 layers */
+@import 'tailwindcss';
+
+/* Define your design tokens here (v4 way) */
+@theme {
+  /* fonts */
+  --font-sans: 'Roboto', 'Helvetica Neue', ui-sans-serif, system-ui, sans-serif;
+
+  /* primary */
+  --color-primary-50: #f7e0ff;
+  --color-primary-100: #ebb3ff;
+  --color-primary-200: #de80ff;
+  --color-primary-300: #d14dff;
+  --color-primary-400: #c726ff;
+  --color-primary-500: #bd00ff;
+  --color-primary-600: #b700ff;
+  --color-primary-700: #ae00ff;
+  --color-primary-800: #a600ff;
+  --color-primary-900: #9800ff;
+  --color-primary-a100: #000000;
+  --color-primary-a200: #ffffff;
+  --color-primary-a400: #001eff;
+  --color-primary-a700: #00b8ff;
+
+  /* accent */
+  --color-accent-50: #e0fff3;
+  --color-accent-100: #b3ffe2;
+  --color-accent-200: #80ffcf;
+  --color-accent-300: #4dffbc;
+  --color-accent-400: #26ffad;
+  --color-accent-500: #00ff9f;
+  --color-accent-600: #00ff97;
+  --color-accent-700: #00ff8d;
+  --color-accent-800: #00ff83;
+  --color-accent-900: #00ff72;
+  --color-accent-a100: #000000;
+  --color-accent-a200: #ffffff;
+  --color-accent-a400: #001eff;
+  --color-accent-a700: #00b8ff;
+
+  /* warn */
+  --color-warn-50: #f2e1e9;
+  --color-warn-100: #deb4c7;
+  --color-warn-200: #c982a2;
+  --color-warn-300: #b3507c;
+  --color-warn-400: #a22b60;
+  --color-warn-500: #920544;
+  --color-warn-600: #8a043e;
+  --color-warn-700: #7f0435;
+  --color-warn-800: #75032d;
+  --color-warn-900: #63011f;
+  --color-warn-a100: #ff93aa;
+  --color-warn-a200: #ff6083;
+  --color-warn-a400: #ff2d5b;
+  --color-warn-a700: #ff2d5b;
+
+  /* contrast (was Sass rgba(black,0.87) → echtes RGBA) */
+  --color-contrast-50: rgba(0, 0, 0, 0.87);
+  --color-contrast-100: rgba(0, 0, 0, 0.87);
+  --color-contrast-200: rgba(0, 0, 0, 0.87);
+  --color-contrast-300: rgba(0, 0, 0, 0.87);
+  --color-contrast-400: #ffffff;
+  --color-contrast-500: #ffffff;
+  --color-contrast-600: #ffffff;
+  --color-contrast-700: #ffffff;
+  --color-contrast-800: #ffffff;
+  --color-contrast-900: #ffffff;
+  --color-contrast-a100: rgba(0, 0, 0, 0.87);
+  --color-contrast-a200: rgba(0, 0, 0, 0.87);
+  --color-contrast-a400: rgba(0, 0, 0, 0.87);
+  --color-contrast-a700: rgba(0, 0, 0, 0.87);
+}
 
 @include fab.core-styles;
 @import 'material-icons/iconfont/material-icons.css';
 
-/* html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; } */
-.terminal-dialog-container .mat-dialog-container {
-  padding: 0px !important;
-  background-color: #000000a4;
-}
-
+/* Base tweaks using utilities */
 html,
 body {
   @apply h-full;
-}
-
+} /* Inline doc: apply Tailwind utilities */
 body {
-  @apply m-0;
-  @apply font-sans;
+  @apply m-0 font-sans;
+} /* Inline doc: use tokenized font */
+.terminal-dialog-container .mat-dialog-container {
+  padding: 0 !important;
+  background-color: #000000a4;
 }
