@@ -1,12 +1,16 @@
 import {
+  AfterViewInit,
   Component,
   ElementRef,
   EventEmitter,
-  OnInit,
+  OnDestroy,
   Output,
   ViewChild,
 } from '@angular/core';
-import { concatMap, delay, from, of, Subject, takeUntil } from 'rxjs';
+import { FitAddon } from '@xterm/addon-fit';
+import { Terminal } from '@xterm/xterm';
+import { from, of, Subject } from 'rxjs';
+import { concatMap, delay, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-terminal',
@@ -14,54 +18,97 @@ import { concatMap, delay, from, of, Subject, takeUntil } from 'rxjs';
   styleUrls: ['./terminal.component.css'],
   standalone: true,
 })
-export class TerminalComponent implements OnInit {
-  output = '[~] ';
-  destroyed$ = new Subject<void>();
-  @ViewChild('terminal') terminal: ElementRef;
-  @Output()
-  exit = new EventEmitter<any>();
-  ngOnInit(): void {
-    const greeding =
-      'I am a fullstack developer, devops engineer and cloud architect. I studied Computational visualistics and have a passion for all cloud-related topics and computer-aided graphics. Do you want to have a look into my cv? [y/N]$%';
-    this.emulateTyping(greeding, () => {
-      this.terminal.nativeElement.focus();
+export class TerminalComponent implements AfterViewInit, OnDestroy {
+  private term!: Terminal;
+  private destroyed$ = new Subject<void>();
+  private fitAddon!: FitAddon;
+  private resizeObserver!: ResizeObserver;
+
+  @ViewChild('term', { static: true })
+  terminalContainer!: ElementRef<HTMLDivElement>;
+
+  @Output() exit = new EventEmitter<void>();
+
+  ngAfterViewInit(): void {
+    this.term = new Terminal({
+      cursorBlink: true,
+      cursorStyle: 'underline',
+      fontFamily: 'monospace',
+      fontSize: 13,
+      theme: {
+        background: '#000000',
+        foreground: '#00ff29',
+        cursor: '#00ff29',
+        selectionBackground: '#444444',
+      },
     });
-    window.location.hash = '#terminal';
+
+    this.fitAddon = new FitAddon();
+    this.term.loadAddon(this.fitAddon);
+    this.term.open(this.terminalContainer.nativeElement);
+    this.fitAddon.fit();
+
+    this.resizeObserver = new ResizeObserver(() => this.fitAddon.fit());
+    this.resizeObserver.observe(this.terminalContainer.nativeElement);
+
+    const greeting =
+      'I am a fullstack developer, devops engineer and cloud architect.\r\n' +
+      'I studied Computational visualistics and have a passion for all cloud-related topics and computer-aided graphics.\r\n' +
+      'Do you want to have a look into my cv? [y/N]$%';
+
+    this.emulateTyping(greeting, () => {
+      this.term.focus();
+      this.listenForInput();
+    });
   }
 
-  onKeyPress(e: KeyboardEvent) {
-    const key = e.key.toLowerCase();
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
+    this.resizeObserver?.disconnect();
+    this.term?.dispose();
+  }
 
-    if (key === 'y') {
-      const output = ' cat curriculumvitae.pdf%';
-      this.emulateTyping(output, () => {
-        window.open('assets/curriculum_vitae.pdf');
+  private listenForInput() {
+    this.term.onKey((e) => {
+      const key = e.key.toLowerCase();
+
+      if (key === 'y') {
+        const cmd = ' cat curriculumvitae.pdf%';
+        this.emulateTyping(cmd, () => {
+          const win = window.open('', '_blank');
+          if (win) {
+            win.location.href = 'assets/curriculum_vitae.pdf';
+          } else {
+            window.location.href = 'assets/curriculum_vitae.pdf';
+          }
+          this.exit.emit();
+        });
+      } else if (key === 'n') {
         this.exit.emit();
-      });
-    } else if (key === 'n') {
-      this.exit.emit();
-    } else {
-      this.output += '\r\n[~] command not found';
-    }
+      } else {
+        this.term.writeln('\r\n[~] command not found');
+        this.term.write('[~] ');
+      }
+    });
   }
 
-  emulateTyping(output: string, endFunction: () => void) {
-    from(output.split(''))
+  private emulateTyping(text: string, endFn: () => void) {
+    from(text.split(''))
       .pipe(
         takeUntil(this.destroyed$),
-        concatMap((val) => of(val).pipe(delay(50)))
+        concatMap((ch) => of(ch).pipe(delay(1)))
       )
-      .subscribe((i) => {
-        switch (i) {
+      .subscribe((ch) => {
+        switch (ch) {
           case '$':
-            this.output += '\r\n[~]';
+            this.term.write('\r\n[~] ');
             break;
           case '%':
-            endFunction();
+            endFn();
             break;
           default:
-            this.output += i;
-            break;
+            this.term.write(ch);
         }
       });
   }

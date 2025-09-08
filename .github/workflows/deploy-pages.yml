@@ -17,12 +17,21 @@ jobs:
           node-version: 20
           cache: 'npm'
 
+      - name: Cache Angular build
+        uses: actions/cache@v3
+        with:
+          path: .angular/cache
+          key: ${{ runner.os }}-angular-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-angular-
+
       - name: Install
         run: npm ci
 
-      - name: Build
+      - name: Build & Prerender
         run: |
           npx ng build --configuration production
+          npx ng run web:prerender
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4

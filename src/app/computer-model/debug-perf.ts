@@ -6,7 +6,7 @@ export class DebugPerf {
   private frames = 0;
   private accTime = 0;
   private overlay?: HTMLDivElement;
-  private enabled = !environment.production;
+  private enabled = true; // hehe :3
   constructor() {
     if (this.enabled) this.createOverlay();
   }
@@ -44,7 +44,7 @@ export class DebugPerf {
 
     if (this.overlay && this.fps) {
       this.overlay.textContent =
-        `FPS: ${this.fps}  |  Calls: ${calls}  |  Tris: ${tris}  |  ` +
+        `FPS: ${this.fps}  |  Calls: ${calls}  |  Triangles: ${tris}  |  ` +
         `Lines: ${lines}  |  Points: ${points}  |  Geometries: ${geos}  |  Textures: ${texs}`;
     }
   }
