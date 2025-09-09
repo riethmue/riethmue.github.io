@@ -1,12 +1,5 @@
 <app-modal #modalComponent class="absolute top-0">
   <div class="grid justify-between">
-    <button
-      class="justify-self-end p-2 hover:animate-spin text-primary-500"
-      data-bs-dismiss="modal"
-      (click)="onTerminalExited()"
-    >
-      <span class="material-icons">close</span>
-    </button>
     <div
       class="p-5 flex flex-col justify-start items-center content-center rounded overflow-auto shadow-lg"
     >
@@ -14,30 +7,18 @@
         class="w-full flex flex-row flex-wrap justify-start items-center content-center"
       >
         <div class="flex flex-col">
-          <img class="rounded-lg m-5" src="assets/img/me_8bit.png" />
-          <div class="font-mono text-xl font-medium text-primary-500 ml-5">
-            #Sarah Riethmüller
-          </div>
+          <img class="m-5" src="assets/img/me_8bit.png" />
           <div class="flex flex-row flex-wrap px-6 pt-4 pb-2">
-            <span
-              class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
-              >#js/ts</span
-            >
-            <span
-              class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
-              >#python</span
-            >
-            <span
-              class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
-              >#angular/ react</span
-            >
-            <span
-              class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
-              >#azure</span
-            >
+            <span class="retro-chip">#js/ts</span>
+            <span class="retro-chip">#python</span>
+            <span class="retro-chip">#angular/react</span>
+            <span class="retro-chip">#azure</span>
           </div>
         </div>
-        <app-terminal (exit)="onTerminalExited()" class="w-full"></app-terminal>
+        <app-terminal
+          (exit)="onTerminalExited()"
+          class="mt-5 w-full"
+        ></app-terminal>
       </div>
     </div>
   </div>

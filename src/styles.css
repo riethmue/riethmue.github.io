@@ -5,69 +5,65 @@
 @theme {
   --font-sans: 'Roboto', 'Helvetica Neue', ui-sans-serif, system-ui, sans-serif;
 
-  /* primary */
-  --color-primary-50: #f7e0ff;
-  --color-primary-100: #ebb3ff;
-  --color-primary-200: #de80ff;
-  --color-primary-300: #d14dff;
-  --color-primary-400: #c726ff;
-  --color-primary-500: #bd00ff;
-  --color-primary-600: #b700ff;
-  --color-primary-700: #ae00ff;
-  --color-primary-800: #a600ff;
-  --color-primary-900: #9800ff;
-  --color-primary-a100: #000000;
-  --color-primary-a200: #ffffff;
-  --color-primary-a400: #001eff;
-  --color-primary-a700: #00b8ff;
+  /* cyber primary = neon green */
+  --color-primary-50: #e6ffe9;
+  --color-primary-100: #b3ffc2;
+  --color-primary-200: #80ff9c;
+  --color-primary-300: #4dff75;
+  --color-primary-400: #26ff57;
+  --color-primary-500: #00ff29; /* core neon */
+  --color-primary-600: #00e626;
+  --color-primary-700: #00b81f;
+  --color-primary-800: #008a18;
+  --color-primary-900: #004d0d;
 
-  /* accent */
-  --color-accent-50: #e0fff3;
-  --color-accent-100: #b3ffe2;
-  --color-accent-200: #80ffcf;
-  --color-accent-300: #4dffbc;
-  --color-accent-400: #26ffad;
-  --color-accent-500: #00ff9f;
-  --color-accent-600: #00ff97;
-  --color-accent-700: #00ff8d;
-  --color-accent-800: #00ff83;
-  --color-accent-900: #00ff72;
-  --color-accent-a100: #000000;
-  --color-accent-a200: #ffffff;
-  --color-accent-a400: #001eff;
-  --color-accent-a700: #00b8ff;
+  /* accent = neon magenta/pink (contrast, button, etc) */
+  --color-accent-50: #ffe6fa;
+  --color-accent-100: #ffb3ef;
+  --color-accent-200: #ff80e4;
+  --color-accent-300: #ff4dd8;
+  --color-accent-400: #ff26cf;
+  --color-accent-500: #ff00c6;
+  --color-accent-600: #e600b2;
+  --color-accent-700: #b8008d;
+  --color-accent-800: #8a0069;
+  --color-accent-900: #4d003a;
 
-  /* warn */
-  --color-warn-50: #f2e1e9;
-  --color-warn-100: #deb4c7;
-  --color-warn-200: #c982a2;
-  --color-warn-300: #b3507c;
-  --color-warn-400: #a22b60;
-  --color-warn-500: #920544;
-  --color-warn-600: #8a043e;
-  --color-warn-700: #7f0435;
-  --color-warn-800: #75032d;
-  --color-warn-900: #63011f;
-  --color-warn-a100: #ff93aa;
-  --color-warn-a200: #ff6083;
-  --color-warn-a400: #ff2d5b;
-  --color-warn-a700: #ff2d5b;
+  /* warn = amber/orange (errors & alerts) */
+  --color-warn-50: #fff3e0;
+  --color-warn-100: #ffe0b3;
+  --color-warn-200: #ffcc80;
+  --color-warn-300: #ffb84d;
+  --color-warn-400: #ffa726;
+  --color-warn-500: #ff9100;
+  --color-warn-600: #e67f00;
+  --color-warn-700: #b86600;
+  --color-warn-800: #8a4d00;
+  --color-warn-900: #4d2900;
 
-  /* contrast */
-  --color-contrast-50: rgba(0, 0, 0, 0.87);
-  --color-contrast-100: rgba(0, 0, 0, 0.87);
-  --color-contrast-200: rgba(0, 0, 0, 0.87);
-  --color-contrast-300: rgba(0, 0, 0, 0.87);
-  --color-contrast-400: #ffffff;
-  --color-contrast-500: #ffffff;
-  --color-contrast-600: #ffffff;
-  --color-contrast-700: #ffffff;
-  --color-contrast-800: #ffffff;
-  --color-contrast-900: #ffffff;
-  --color-contrast-a100: rgba(0, 0, 0, 0.87);
-  --color-contrast-a200: rgba(0, 0, 0, 0.87);
-  --color-contrast-a400: rgba(0, 0, 0, 0.87);
-  --color-contrast-a700: rgba(0, 0, 0, 0.87);
+  /* neutral background shades = deep dark blues + black */
+  --color-neutral-50: #0d0d0d;
+  --color-neutral-100: #141414;
+  --color-neutral-200: #1a1a1a;
+  --color-neutral-300: #1f1f1f;
+  --color-neutral-400: #262626;
+  --color-neutral-500: #2e2e2e;
+  --color-neutral-600: #393939;
+  --color-neutral-700: #444444;
+  --color-neutral-800: #555555;
+  --color-neutral-900: #666666;
+
+  /* contrast = text on neon backgrounds */
+  --color-contrast-50: #ffffff;
+  --color-contrast-100: #f0f0f0;
+  --color-contrast-200: #d9d9d9;
+  --color-contrast-300: #bfbfbf;
+  --color-contrast-400: #999999;
+  --color-contrast-500: #808080;
+  --color-contrast-600: #666666;
+  --color-contrast-700: #4d4d4d;
+  --color-contrast-800: #333333;
+  --color-contrast-900: #1a1a1a;
 }
 
 /* Base tweaks */
@@ -78,30 +74,32 @@ body {
 body {
   @apply m-0 font-sans;
 }
+
+/* xtermjs terminal styles */
 .terminal-dialog-container .mat-dialog-container {
   padding: 0 !important;
-  background-color: #000000a4;
+  background-color: #000;
 }
 
-/* Terminal scrollbar hack for Chromium/Edge */
+/* xtermjs scrollbar styles */
 .xterm-viewport::-webkit-scrollbar {
-  width: 20px !important; /* fetter Balken */
+  width: 20px !important;
   height: 20px !important;
 }
 
 .xterm-viewport::-webkit-scrollbar-track {
   background: #000 !important;
-  border-left: 2px solid #003b00 !important;
+  border: 2px solid var(--color-primary-900) !important;
 }
 
 .xterm-viewport::-webkit-scrollbar-thumb {
-  background-color: #00ff29 !important;
+  background-color: var(--color-primary-500) !important;
   border-radius: 0 !important;
   border: 2px solid #003b00 !important;
-  box-shadow: inset 0 0 6px #39ff14 !important;
+  box-shadow: inset 0 0 6px var(--color-primary-300) !important;
 }
 
 .xterm-viewport::-webkit-scrollbar-thumb:hover {
-  background-color: #39ff14 !important;
-  box-shadow: inset 0 0 8px #72ff72 !important;
+  background-color: var(--color-primary-400) !important;
+  box-shadow: inset 0 0 8px var(--color-primary-200) !important;
 }

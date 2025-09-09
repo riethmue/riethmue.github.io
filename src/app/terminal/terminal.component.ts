@@ -36,6 +36,8 @@ export class TerminalComponent implements AfterViewInit, OnDestroy {
       cursorStyle: 'underline',
       fontFamily: 'monospace',
       fontSize: 13,
+      lineHeight: 1.2, // mehr vertikaler Abstand
+      letterSpacing: 1,
       theme: {
         background: '#000000',
         foreground: '#00ff29',

@@ -1,19 +1,27 @@
 <section
   [class.open]="display"
-  class="fixed z-10 inset-0 overflow-y-auto"
-  (click)="close()"
+  class="retro-modal fixed z-10 inset-0 overflow-y-auto"
 >
-  <div
-    class="flex items-center justify-center min-h-screen m-0 sm:m-5 text-center"
-  >
+  <div class="flex items-center justify-center min-h-screen">
     <div
       (click)="$event.stopPropagation()"
-      class="inline-block align-bottom rounded-lg text-left overflow-hidden shadow-xl transform transition-all w-full h-full bg-gray-900 opacity-80"
+      class="retro-window"
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-headline"
     >
-      <ng-content></ng-content>
+      <div class="retro-titlebar">
+        <span class="retro-title">~ Sarah Riethmüller.exe</span>
+        <div class="retro-controls">
+          <!-- <span class="ctrl">−</span>
+          <span class="ctrl">□</span> -->
+          <span class="ctrl close" (click)="close()">X</span>
+        </div>
+      </div>
+
+      <div class="retro-content">
+        <ng-content></ng-content>
+      </div>
     </div>
   </div>
 </section>
