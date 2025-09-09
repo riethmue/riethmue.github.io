@@ -4,7 +4,7 @@
   (click)="close()"
 >
   <div
-    class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:p-0"
+    class="flex items-center justify-center min-h-screen m-0 sm:m-5 text-center"
   >
     <div
       (click)="$event.stopPropagation()"
@@ -13,9 +13,7 @@
       aria-modal="true"
       aria-labelledby="modal-headline"
     >
-      <div class="px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-        <ng-content></ng-content>
-      </div>
+      <ng-content></ng-content>
     </div>
   </div>
 </section>

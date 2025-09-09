@@ -23,6 +23,7 @@ export class TerminalComponent implements AfterViewInit, OnDestroy {
   private destroyed$ = new Subject<void>();
   private fitAddon!: FitAddon;
   private resizeObserver!: ResizeObserver;
+  private keySub?: { dispose: () => void };
 
   @ViewChild('term', { static: true })
   terminalContainer!: ElementRef<HTMLDivElement>;
@@ -46,6 +47,11 @@ export class TerminalComponent implements AfterViewInit, OnDestroy {
     this.fitAddon = new FitAddon();
     this.term.loadAddon(this.fitAddon);
     this.term.open(this.terminalContainer.nativeElement);
+
+    // Check size after open
+    const rect = this.terminalContainer.nativeElement.getBoundingClientRect();
+    console.log('Terminal container rect:', rect);
+
     this.fitAddon.fit();
 
     this.resizeObserver = new ResizeObserver(() => this.fitAddon.fit());
@@ -65,12 +71,13 @@ export class TerminalComponent implements AfterViewInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
+    this.keySub?.dispose();
     this.resizeObserver?.disconnect();
     this.term?.dispose();
   }
 
   private listenForInput() {
-    this.term.onKey((e) => {
+    this.keySub = this.term.onKey((e) => {
       const key = e.key.toLowerCase();
 
       if (key === 'y') {
