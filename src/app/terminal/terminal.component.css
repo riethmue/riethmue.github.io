@@ -5,7 +5,3 @@
   overflow: auto;
   height: 100%;
 }
-
-.xterm .xterm-viewport {
-  overflow-y: none;
-}
