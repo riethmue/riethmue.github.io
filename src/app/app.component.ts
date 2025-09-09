@@ -53,15 +53,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   faGithub = faGithub;
   terminalWidth = 70;
   currentYear = new Date().getFullYear();
-  AsciiGreeting = `
-  ######   ###  #######  #######  #     #  #     #  #     #  #######
-  #     #   #   #           #     #     #  ##   ##  #     #  #
-  #     #   #   #           #     #     #  # # # #  #     #  #
-  ######    #   #####       #     #######  #  #  #  #     #  #####
-  #   #     #   #           #     #     #  #     #  #     #  #
-  #    #    #   #           #     #     #  #     #  #     #  #
-  #     #  ###  #######     #     #     #  #     #   #####   #######
-  `;
 
   constructor(
     private modelInteractionService: ModelInteractionService,

@@ -50,18 +50,31 @@
 
 .fab button,
 .fab a {
-  font-size: 1.4rem;
-  border: 2px solid #00ff29;
   background: black;
-  color: #00ff29;
-  box-shadow: 0 0 6px #00ff29;
-
-  transition: all 150ms ease-in;
+  color: var(--color-primary-500);
+  border: 3px solid var(--color-primary-500);
+  font-family: monospace;
+  text-transform: uppercase;
+  padding: 0.3rem 0.8rem;
+  margin: 0.3rem;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+  /* pixel shadow */
+  box-shadow: 4px 4px 0px #003b00, 6px 6px 0px #000;
+  transition: transform 0.1s ease-in-out;
 }
 
 .fab button:hover,
 .fab a:hover {
-  background: #00ff29;
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px #003b00, 8px 8px 0px #000;
+  background: var(--color-primary-500);
   color: black;
-  box-shadow: 0 0 12px #00ff29;
+}
+
+.fab fa-icon {
+  font-size: 1.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

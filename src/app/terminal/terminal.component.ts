@@ -50,7 +50,7 @@ export class TerminalComponent implements AfterViewInit, OnDestroy {
     this.term.loadAddon(this.fitAddon);
     this.term.open(this.terminalContainer.nativeElement);
 
-    // Check size after open
+    // check size after open
     const rect = this.terminalContainer.nativeElement.getBoundingClientRect();
     console.log('Terminal container rect:', rect);
 
@@ -60,6 +60,11 @@ export class TerminalComponent implements AfterViewInit, OnDestroy {
     this.resizeObserver.observe(this.terminalContainer.nativeElement);
 
     const greeting =
+      '  / ___/____ __________ _/ /_   ___  _  _____ \r\n' +
+      '  \\__ \\/ __ `/ ___/ __ `/ __ \\ / _ \\| |/_/ _ \\\r\n' +
+      ' ___/ / /_/ / /  / /_/ / / / //  __/>  </  __/\r\n' +
+      '/____/\\__,_/_/   \\__,_/_/ /_/(_)___/_/|_|\\___/ \r\n' +
+      '\r\n' +
       'I am a fullstack developer, devops engineer and cloud architect.\r\n' +
       'I studied Computational visualistics and have a passion for all cloud-related topics and computer-aided graphics.\r\n' +
       'Do you want to have a look into my cv? [y/N]$%';

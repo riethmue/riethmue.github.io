@@ -8,12 +8,19 @@
       >
         <div class="flex flex-col">
           <img class="m-5" src="assets/img/me_8bit.png" />
-          <div class="flex flex-row flex-wrap px-6 pt-4 pb-2">
-            <span class="retro-chip">#js/ts</span>
-            <span class="retro-chip">#python</span>
-            <span class="retro-chip">#angular/react</span>
-            <span class="retro-chip">#azure</span>
+          <div class="retro-panel">
+            <div class="retro-panel__title">skills.ini</div>
+            <div class="retro-panel__body">
+              <span class="retro-chip">#js/ts</span>
+              <span class="retro-chip">#python</span>
+              <span class="retro-chip">#angular/react</span>
+              <span class="retro-chip">#IaC</span>
+              <span class="retro-chip">#CI/CD</span>
+            </div>
           </div>
+        </div>
+        <div class="retro-rule">
+          ┌──────────────── TERMINAL ────────────────┐
         </div>
         <app-terminal
           (exit)="onTerminalExited()"
