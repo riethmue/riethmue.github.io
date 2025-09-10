@@ -3,7 +3,10 @@
 
 /* Design tokens (v4 way) */
 @theme {
-  --font-sans: 'Roboto', 'Helvetica Neue', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    'Liberation Mono', 'Courier New', monospace;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    'Liberation Mono', 'Courier New', monospace;
 
   /* cyber primary = neon green */
   --color-primary-50: #e6ffe9;
@@ -79,6 +82,10 @@ body {
 .terminal-dialog-container .mat-dialog-container {
   padding: 0 !important;
   background-color: #000;
+}
+
+.xterm {
+  font-family: 'Fira Code', 'DejaVu Sans Mono', monospace;
 }
 
 /* xtermjs scrollbar styles */

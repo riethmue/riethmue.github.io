@@ -30,8 +30,6 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 - fix mobile key bug
 - open terminal on computer click
 - accessibility features
-- terminal inputs
-- retro design
 - get rid of tailwind maybe...
 - stop geometrics glitch into of the computer xD
-- retro font
+- optimize rendering performance

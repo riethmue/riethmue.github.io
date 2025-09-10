@@ -1,8 +1,11 @@
 import {
   AfterViewInit,
   Component,
+  DOCUMENT,
   ElementRef,
   EventEmitter,
+  Inject,
+  inject,
   OnDestroy,
   Output,
   ViewChild,
@@ -24,11 +27,13 @@ export class TerminalComponent implements AfterViewInit, OnDestroy {
   private fitAddon!: FitAddon;
   private resizeObserver!: ResizeObserver;
   private keySub?: { dispose: () => void };
+  private inputBuffer = '';
 
   @ViewChild('term', { static: true })
   terminalContainer!: ElementRef<HTMLDivElement>;
-
   @Output() exit = new EventEmitter<void>();
+
+  constructor(@Inject(DOCUMENT) private document: Document) {}
 
   ngAfterViewInit(): void {
     this.term = new Terminal({
@@ -36,7 +41,7 @@ export class TerminalComponent implements AfterViewInit, OnDestroy {
       cursorStyle: 'underline',
       fontFamily: 'monospace',
       fontSize: 13,
-      lineHeight: 1.2, // mehr vertikaler Abstand
+      lineHeight: 1.2,
       letterSpacing: 1,
       theme: {
         background: '#000000',
@@ -49,6 +54,10 @@ export class TerminalComponent implements AfterViewInit, OnDestroy {
     this.fitAddon = new FitAddon();
     this.term.loadAddon(this.fitAddon);
     this.term.open(this.terminalContainer.nativeElement);
+    console.log(
+      'Terminal opened, container:',
+      this.terminalContainer.nativeElement
+    );
 
     // check size after open
     const rect = this.terminalContainer.nativeElement.getBoundingClientRect();
@@ -60,16 +69,14 @@ export class TerminalComponent implements AfterViewInit, OnDestroy {
     this.resizeObserver.observe(this.terminalContainer.nativeElement);
 
     const greeting =
-      '  / ___/____ __________ _/ /_   ___  _  _____ \r\n' +
-      '  \\__ \\/ __ `/ ___/ __ `/ __ \\ / _ \\| |/_/ _ \\\r\n' +
-      ' ___/ / /_/ / /  / /_/ / / / //  __/>  </  __/\r\n' +
-      '/____/\\__,_/_/   \\__,_/_/ /_/(_)___/_/|_|\\___/ \r\n' +
+      'Welcome to SarahOS [Version 1.0.0]\r\n' +
+      '(c) 2025 Sarah Riethmüller. All rights reserved.\r\n' +
       '\r\n' +
-      'I am a fullstack developer, devops engineer and cloud architect.\r\n' +
-      'I studied Computational visualistics and have a passion for all cloud-related topics and computer-aided graphics.\r\n' +
-      'Do you want to have a look into my cv? [y/N]$%';
+      'Type "help" to see available commands.\r\n%';
 
     this.emulateTyping(greeting, () => {
+      this.term.writeln('');
+      this.term.write('[~] ');
       this.term.focus();
       this.listenForInput();
     });
@@ -84,27 +91,179 @@ export class TerminalComponent implements AfterViewInit, OnDestroy {
   }
 
   private listenForInput() {
-    this.keySub = this.term.onKey((e) => {
-      const key = e.key.toLowerCase();
-
-      if (key === 'y') {
-        const cmd = ' cat curriculumvitae.pdf%';
-        this.emulateTyping(cmd, () => {
-          const win = window.open('', '_blank');
-          if (win) {
-            win.location.href = 'assets/curriculum_vitae.pdf';
-          } else {
-            window.location.href = 'assets/curriculum_vitae.pdf';
-          }
-          this.exit.emit();
-        });
-      } else if (key === 'n') {
-        this.exit.emit();
-      } else {
-        this.term.writeln('\r\n[~] command not found');
-        this.term.write('[~] ');
+    this.keySub = this.term.onKey(({ key, domEvent }) => {
+      console.log('key', key, 'domevent', domEvent);
+      const ev = domEvent;
+      if (ev.key === 'Enter') {
+        const cmd = this.inputBuffer.trim();
+        this.term.write('\r\n'); // move to next line
+        this.handleCommand(cmd);
+        this.inputBuffer = '';
+        this.term.write('[~] '); // prompt
+      } else if (ev.key === 'Backspace') {
+        if (this.inputBuffer.length > 0) {
+          this.inputBuffer = this.inputBuffer.slice(0, -1);
+          this.term.write('\b \b'); // delete char visually
+        }
+      } else if (key.length === 1) {
+        this.inputBuffer += key;
+        this.term.write(key); // echo character
       }
     });
+  }
+
+  private printAscii() {
+    this.term.writeln('                                        __       ');
+    this.term.writeln('                                       |  \\      ');
+    this.term.writeln('  _______   ______    ______   ______  | $$____  ');
+    this.term.writeln(' /       \\ |      \\  /      \\ |      \\ | $$    \\ ');
+    this.term.writeln(
+      '|  $$$$$$$  \\$$$$$$\\|  $$$$$$\\ \\$$$$$$\\| $$$$$$$\\'
+    );
+    this.term.writeln(' \\$$    \\  /      $$| $$   \\$$/      $$| $$  | $$');
+    this.term.writeln(' _\\$$$$$$\\|  $$$$$$$| $$     |  $$$$$$$| $$  | $$');
+    this.term.writeln('|       $$ \\$$    $$| $$      \\$$    $$| $$  | $$');
+    this.term.writeln(
+      ' \\$$$$$$$   \\$$$$$$$ \\$$       \\$$$$$$$ \\$$   \\$$'
+    );
+    this.term.writeln('');
+  }
+
+  private handleCommand(cmd: string) {
+    switch (cmd.toLowerCase()) {
+      case 'help':
+        this.showHelp();
+        break;
+
+      case 'cv':
+        const win = window.open('', '_blank');
+        if (win) {
+          win.location.href = 'assets/curriculum_vitae.pdf';
+        } else {
+          window.location.href = 'assets/curriculum_vitae.pdf';
+        }
+        this.exit.emit();
+        break;
+
+      case 'about':
+        this.term.writeln('👩🏻‍💻 Sarah Riethmüller');
+        this.term.writeln('Fullstack Dev, Cloud Architect, DevOps');
+        this.term.writeln('Passionate about 3D, graphics & retro vibes ✨');
+        break;
+
+      case 'skills':
+        this.term.writeln('=== Languages ===');
+        this.term.writeln('  • TypeScript, Python, C#, SQL');
+        this.term.writeln('');
+        this.term.writeln('=== Frameworks ===');
+        this.term.writeln('  • Angular, React, Node.js');
+        this.term.writeln('');
+        this.term.writeln('=== Cloud ===');
+        this.term.writeln('  • Azure ☁️');
+        this.term.writeln('');
+        this.term.writeln('=== DevOps ===');
+        this.term.writeln(
+          '  • Terraform, Docker, GitHub Actions, Azure DevOps'
+        );
+        this.term.writeln('');
+        this.term.writeln('=== Databases ===');
+        this.term.writeln('  • MySQL, MariaDB, SQLite, Cosmos DB');
+        break;
+
+      case 'info':
+        this.term.writeln('                                        __       ');
+        this.term.writeln('                                       |  \\      ');
+        this.term.writeln('  _______   ______    ______   ______  | $$____  ');
+        this.term.writeln(
+          ' /       \\ |      \\  /      \\ |      \\ | $$    \\ '
+        );
+        this.term.writeln(
+          '|  $$$$$$$  \\$$$$$$\\|  $$$$$$\\ \\$$$$$$\\| $$$$$$$\\'
+        );
+        this.term.writeln(
+          ' \\$$    \\  /      $$| $$   \\$$/      $$| $$  | $$'
+        );
+        this.term.writeln(
+          ' _\\$$$$$$\\|  $$$$$$$| $$     |  $$$$$$$| $$  | $$'
+        );
+        this.term.writeln(
+          '|       $$ \\$$    $$| $$      \\$$    $$| $$  | $$'
+        );
+        this.term.writeln(
+          ' \\$$$$$$$   \\$$$$$$$ \\$$       \\$$$$$$$ \\$$   \\$$'
+        );
+        this.term.writeln('');
+        this.term.writeln('Welcome to SarahOS [Version 1.0.0]');
+        this.term.writeln('(c) 2025 Sarah Riethmüller. All rights reserved.');
+        this.term.writeln('');
+        this.term.writeln('Type "help" to see available commands.');
+        break;
+
+      case 'fortune':
+        const fortunes = [
+          '💡 Code is like humor. When you have to explain it, it’s bad.',
+          '🚀 There is no cloud… just someone else’s computer.',
+          '👾 Hack the planet!',
+          '🐺 Trust your instincts, like a wolf in the wild.',
+          '✨ Keep it retro, keep it green.',
+        ];
+        const random = fortunes[Math.floor(Math.random() * fortunes.length)];
+        this.term.writeln('');
+        this.term.writeln('--------------------------------');
+        this.term.writeln(random);
+        this.term.writeln('--------------------------------');
+        this.term.writeln('');
+        break;
+
+      case 'projects':
+        this.term.writeln('🔹 Vaultwarden on Azure (Terraform, DevOps)');
+        this.term.writeln('🔹 Exopulse Mollii Suit App (Ottobock)');
+        this.term.writeln('🔹 3D Experiments with Three.js + Angular');
+        break;
+
+      case 'contact':
+        this.term.writeln('📧 Mail: sarah@example.com');
+        this.term.writeln('🐦 Twitter: @riethmue93');
+        this.term.writeln('💻 GitHub: github.com/riethmue');
+        break;
+
+      // easteregg
+      case 'hobbies':
+        this.term.writeln('=== Hobbies ===');
+        this.term.writeln('  • 🥋 Martial Arts (Krav Maga)');
+        this.term.writeln('  • 🎮 Retro Gaming & Retro Consoles');
+        this.term.writeln('  • 📚 Reading');
+        this.term.writeln('  • 👩🏻‍💻 Experimenting with AI & 3D graphics');
+        break;
+
+      case 'clear':
+        this.term.clear();
+        break;
+
+      case '':
+        break;
+
+      default:
+        this.term.writeln(`command not found: ${cmd}`);
+    }
+  }
+
+  private showHelp() {
+    const lines = [
+      '+-------------------------------+',
+      '|       Available Commands      |',
+      '+-------------------------------+',
+      '| help     - Show this help     |',
+      '| cv       - Open my CV         |',
+      '| about    - Info about me      |',
+      '| skills   - Show my skills     |',
+      '| hobbies  - Show my hobbies    |',
+      '| fortune  - Random fortune     |',
+      '| info   - Show system info     |',
+      '| clear    - Clear terminal     |',
+      '+-------------------------------+',
+    ];
+    lines.forEach((line) => this.term.writeln(line));
   }
 
   private emulateTyping(text: string, endFn: () => void) {
