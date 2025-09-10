@@ -14,9 +14,11 @@ import { PixelArtShader } from './shader/pixel-art-shader';
 import { DebugPerf } from './debug-perf';
 
 export class ModelScene {
+  public hoverModel = false;
   modelClicked = new EventEmitter<void>();
   sceneLoaded = new EventEmitter<any>();
   scene = new THREE.Scene();
+  perf = new DebugPerf();
   renderer: THREE.WebGLRenderer;
   camera: THREE.PerspectiveCamera;
   controls: any;
@@ -24,7 +26,7 @@ export class ModelScene {
   renderPass: RenderPass;
   pixelPass: ShaderPass;
   glitchPass: GlitchPass;
-
+  pickables: THREE.Object3D[] = [];
   raycaster: THREE.Raycaster;
   mouse: THREE.Vector2;
   originalMaterial: THREE.MeshBasicMaterial;
@@ -35,8 +37,7 @@ export class ModelScene {
   onMouseDownClick: any;
   onMouseMove: any;
   initialModelMaterialColor: any;
-  public hoverModel = false;
-  perf = new DebugPerf();
+  lastHover = 0;
 
   constructor(public htmlElement: ElementRef, public config: SceneConfig) {
     this.scene.background = new THREE.Color(0x000000);
@@ -270,6 +271,7 @@ export class ModelScene {
       gltfScene.traverse((child) => {
         if (child.isMesh) {
           child.material.side = THREE.DoubleSide;
+          this.pickables.push(child);
         }
       });
       this.scene.add(gltfScene);
@@ -545,10 +547,13 @@ export class ModelScene {
   onMouseDown = (ev: PointerEvent) => {
     const ndc = this.getPointerNDC(ev);
     this.raycaster.setFromCamera(ndc, this.camera);
-    const hits = this.raycaster.intersectObjects(this.scene.children, true);
+    const hits = this.raycaster.intersectObjects(this.pickables, true);
     if (hits.length) this.modelClicked.emit();
   };
+
   onMouseHover = (ev: PointerEvent) => {
+    const now = performance.now();
+    if (now - this.lastHover < 100) return;
     const ndc = this.getPointerNDC(ev);
     this.raycaster.setFromCamera(ndc, this.camera);
     const hits = this.raycaster.intersectObjects(this.scene.children, true);
