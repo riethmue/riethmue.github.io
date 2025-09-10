@@ -124,6 +124,7 @@ export class ModelScene {
     this.controls.maxDistance = 300;
 
     this.controls.autoRotate = true;
+    this.controls.autoRotateSpeed = 3.0;
 
     // // lock rotation to x-axis
     this.controls.minPolarAngle = Math.PI / 2;
@@ -297,7 +298,7 @@ export class ModelScene {
     this.pixelPass.uniforms['resolution'].value.multiplyScalar(
       window.devicePixelRatio
     );
-    this.pixelPass.uniforms['pixelSize'].value = 8;
+    this.pixelPass.uniforms['pixelSize'].value = 5;
     this.effectComposer.addPass(this.pixelPass);
 
     this.glitchPass = new GlitchPass();
@@ -313,6 +314,7 @@ export class ModelScene {
     ];
 
     const group = new THREE.Group();
+    const offset = new THREE.Vector3(0, 0, -20);
 
     for (let i = 0; i < 50; i++) {
       const geom = geometries[Math.floor(Math.random() * geometries.length)];
@@ -342,6 +344,8 @@ export class ModelScene {
           )
           .normalize()
           .multiplyScalar(Math.random() * radiusDelta);
+
+        mesh.position.add(offset);
 
         // Check distance to others
         tooClose = group.children.some((child: THREE.Mesh) => {

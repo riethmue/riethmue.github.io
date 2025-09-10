@@ -28,8 +28,6 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 - enable ts strict mode and fix errs
 - fix mobile key bug
-- open terminal on computer click
 - accessibility features
 - get rid of tailwind maybe...
-- stop geometries glitch into the computer xD
-- optimize rendering performance
+- add log service
