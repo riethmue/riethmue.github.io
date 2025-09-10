@@ -31,5 +31,5 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 - open terminal on computer click
 - accessibility features
 - get rid of tailwind maybe...
-- stop geometrics glitch into of the computer xD
+- stop geometries glitch into the computer xD
 - optimize rendering performance

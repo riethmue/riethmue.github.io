@@ -93,7 +93,9 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     this.cd.markForCheck();
   }
 
-  onModelClicked() {}
+  onModelClicked() {
+    this.onTerminalButtonClicked();
+  }
 
   async onTerminalButtonClicked() {
     await this.modalService.open(AboutMeCardComponent);
