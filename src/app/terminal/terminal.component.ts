@@ -28,9 +28,12 @@ export class TerminalComponent implements AfterViewInit, OnDestroy {
   private resizeObserver!: ResizeObserver;
   private keySub?: { dispose: () => void };
   private inputBuffer = '';
+  private isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
   @ViewChild('term', { static: true })
   terminalContainer!: ElementRef<HTMLDivElement>;
+  @ViewChild('hiddenInput', { static: true })
+  hiddenInput!: ElementRef<HTMLTextAreaElement>;
   @Output() exit = new EventEmitter<void>();
 
   constructor(@Inject(DOCUMENT) private document: Document) {}
@@ -59,6 +62,10 @@ export class TerminalComponent implements AfterViewInit, OnDestroy {
       this.terminalContainer.nativeElement
     );
 
+    // safari: disable autocaps
+    const el = this.hiddenInput.nativeElement;
+    (el as any).autocapitalize = 'none';
+
     // check size after open
     const rect = this.terminalContainer.nativeElement.getBoundingClientRect();
     console.log('Terminal container rect:', rect);
@@ -78,6 +85,7 @@ export class TerminalComponent implements AfterViewInit, OnDestroy {
       this.term.writeln('');
       this.term.write('[~] ');
       this.term.focus();
+      this.focusHiddenInput();
       this.listenForInput();
     });
   }
@@ -90,26 +98,72 @@ export class TerminalComponent implements AfterViewInit, OnDestroy {
     this.term?.dispose();
   }
 
+  private focusHiddenInput() {
+    const el = this.hiddenInput.nativeElement;
+    el.focus({ preventScroll: true });
+    // sarari-hack: cursor at the end
+    el.setSelectionRange(el.value.length, el.value.length);
+  }
+
   private listenForInput() {
-    this.keySub = this.term.onKey(({ key, domEvent }) => {
-      console.log('key', key, 'domevent', domEvent);
-      const ev = domEvent;
-      if (ev.key === 'Enter') {
-        const cmd = this.inputBuffer.trim();
-        this.term.write('\r\n'); // move to next line
-        this.handleCommand(cmd);
-        this.inputBuffer = '';
-        this.term.write('[~] '); // prompt
-      } else if (ev.key === 'Backspace') {
-        if (this.inputBuffer.length > 0) {
-          this.inputBuffer = this.inputBuffer.slice(0, -1);
-          this.term.write('\b \b'); // delete char visually
+    if (this.isMobile) {
+      // --- iOS/Android workaround via hidden input ---
+      const el = this.hiddenInput.nativeElement;
+      (el as any).autocapitalize = 'none'; // Safari-only property
+      el.autocomplete = 'off';
+      el.autocorrect = false;
+      el.spellcheck = false;
+
+      el.addEventListener('input', () => {
+        const value = el.value;
+        if (value) {
+          this.inputBuffer += value;
+          this.term.write(value);
+          el.value = ''; // leeren
         }
-      } else if (key.length === 1) {
-        this.inputBuffer += key;
-        this.term.write(key); // echo character
-      }
-    });
+      });
+
+      el.addEventListener('keydown', (ev: KeyboardEvent) => {
+        if (ev.key === 'Enter') {
+          ev.preventDefault();
+          const cmd = this.inputBuffer.trim();
+          this.term.write('\r\n');
+          this.handleCommand(cmd);
+          this.inputBuffer = '';
+          this.term.write('[~] ');
+        } else if (ev.key === 'Backspace') {
+          if (this.inputBuffer.length > 0) {
+            this.inputBuffer = this.inputBuffer.slice(0, -1);
+            this.term.write('\b \b');
+          }
+        }
+      });
+
+      // click into terminal setzt hidden input
+      this.terminalContainer.nativeElement.addEventListener('click', () =>
+        el.focus()
+      );
+    } else {
+      // --- dekstop: xterm KeyListener ---
+      this.keySub = this.term.onKey(({ key, domEvent }) => {
+        const ev = domEvent;
+        if (ev.key === 'Enter') {
+          const cmd = this.inputBuffer.trim();
+          this.term.write('\r\n');
+          this.handleCommand(cmd);
+          this.inputBuffer = '';
+          this.term.write('[~] ');
+        } else if (ev.key === 'Backspace') {
+          if (this.inputBuffer.length > 0) {
+            this.inputBuffer = this.inputBuffer.slice(0, -1);
+            this.term.write('\b \b');
+          }
+        } else if (key.length === 1) {
+          this.inputBuffer += key;
+          this.term.write(key);
+        }
+      });
+    }
   }
 
   private printAscii() {
@@ -259,7 +313,7 @@ export class TerminalComponent implements AfterViewInit, OnDestroy {
       '| skills   - Show my skills     |',
       '| hobbies  - Show my hobbies    |',
       '| fortune  - Random fortune     |',
-      '| info   - Show system info     |',
+      '| info     - Show system info   |',
       '| clear    - Clear terminal     |',
       '+-------------------------------+',
     ];
