@@ -1,16 +1,17 @@
 .retro-modal {
   background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
 }
 
 .retro-window {
-  width: 80%;
   max-width: 900px;
-  height: 80%;
+  max-height: 100vh;
   border: 4px solid #00ff29;
   background: rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
-  box-shadow: 0 0 12px #00ff29, /* außen, dezenter Glow */ inset 0 0 6px #003b00;
+  box-shadow: 0 0 12px #00ff29, inset 0 0 6px #003b00;
   animation: scanline-fade-in 600ms steps(5) forwards;
 }
 
