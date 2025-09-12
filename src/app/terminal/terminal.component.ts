@@ -14,6 +14,7 @@ import { FitAddon } from '@xterm/addon-fit';
 import { Terminal } from '@xterm/xterm';
 import { from, of, Subject } from 'rxjs';
 import { concatMap, delay, takeUntil } from 'rxjs/operators';
+import { Command } from '../util/command.enum';
 
 @Component({
   selector: 'app-terminal',
@@ -197,7 +198,7 @@ export class TerminalComponent implements AfterViewInit, OnDestroy {
 
   private handleCommand(cmd: string) {
     switch (cmd.toLowerCase()) {
-      case 'help':
+      case Command.Help:
         this.showHelp();
         break;
 
@@ -211,13 +212,13 @@ export class TerminalComponent implements AfterViewInit, OnDestroy {
         this.exit.emit();
         break;
 
-      case 'about':
+      case Command.About:
         this.term.writeln('👩🏻‍💻 Sarah Riethmüller');
         this.term.writeln('Fullstack Dev, Cloud Architect, DevOps');
         this.term.writeln('Passionate about 3D, graphics & retro vibes ✨');
         break;
 
-      case 'skills':
+      case Command.Skills:
         this.term.writeln('=== Languages ===');
         this.term.writeln('  • TypeScript, Python, C#, SQL');
         this.term.writeln('');
@@ -236,7 +237,7 @@ export class TerminalComponent implements AfterViewInit, OnDestroy {
         this.term.writeln('  • MySQL, MariaDB, SQLite, Cosmos DB');
         break;
 
-      case 'info':
+      case Command.Info:
         this.printAscii();
         this.term.writeln('');
         this.term.writeln('Welcome to SarahOS [Version 1.0.0]');
@@ -245,7 +246,7 @@ export class TerminalComponent implements AfterViewInit, OnDestroy {
         this.term.writeln('Type "help" to see available commands.');
         break;
 
-      case 'fortune':
+      case Command.Fortune:
         const fortunes = [
           '💡 Code is like humor. When you have to explain it, it’s bad.',
           '🚀 There is no cloud… just someone else’s computer.',
@@ -261,28 +262,28 @@ export class TerminalComponent implements AfterViewInit, OnDestroy {
         this.term.writeln('');
         break;
 
-      case 'projects':
+      case Command.Projects:
         this.term.writeln('🔹 Vaultwarden on Azure (Terraform, DevOps)');
         this.term.writeln('🔹 Exopulse Mollii Suit App (Ottobock)');
         this.term.writeln('🔹 3D Experiments with Three.js + Angular');
         break;
 
-      case 'contact':
+      case Command.Contact:
         this.term.writeln('📧 Mail: sarah@example.com');
         this.term.writeln('🐦 Twitter: @riethmue93');
         this.term.writeln('💻 GitHub: github.com/riethmue');
         break;
 
-      // easteregg
-      case 'hobbies':
+      case Command.Hobbies:
         this.term.writeln('=== Hobbies ===');
         this.term.writeln('  • 🥋 Martial Arts (Krav Maga)');
         this.term.writeln('  • 🎮 Retro Gaming & Retro Consoles');
+        this.term.writeln('  • 🌱 gardening');
         this.term.writeln('  • 📚 Reading');
         this.term.writeln('  • 👩🏻‍💻 Experimenting with AI & 3D graphics');
         break;
 
-      case 'clear':
+      case Command.Clear:
         this.term.clear();
         break;
 
@@ -295,21 +296,28 @@ export class TerminalComponent implements AfterViewInit, OnDestroy {
   }
 
   private showHelp() {
-    const lines = [
-      '+-------------------------------+',
-      '|       Available Commands      |',
-      '+-------------------------------+',
-      '| help     - Show this help     |',
-      '| cv       - Open my CV         |',
-      '| about    - Info about me      |',
-      '| skills   - Show my skills     |',
-      '| hobbies  - Show my hobbies    |',
-      '| fortune  - Random fortune     |',
-      '| info     - Show system info   |',
-      '| clear    - Clear terminal     |',
-      '+-------------------------------+',
-    ];
-    lines.forEach((line) => this.term.writeln(line));
+    const descriptions: Record<Command, string> = {
+      [Command.Help]: 'Show this help',
+      [Command.Cv]: 'Open my CV',
+      [Command.About]: 'Info about me',
+      [Command.Skills]: 'Show my skills',
+      [Command.Hobbies]: 'Show my hobbies',
+      [Command.Fortune]: 'Random fortune',
+      [Command.Info]: 'Show system info',
+      [Command.Clear]: 'Clear terminal',
+      [Command.Projects]: 'List my projects',
+      [Command.Contact]: 'Show contact info',
+    };
+
+    this.term.writeln('+-------------------------------+');
+    this.term.writeln('|       Available Commands      |');
+    this.term.writeln('+-------------------------------+');
+
+    Object.entries(descriptions).forEach(([cmd, desc]) => {
+      this.term.writeln(`| ${cmd.padEnd(8)} - ${desc.padEnd(17)}|`);
+    });
+
+    this.term.writeln('+-------------------------------+');
   }
 
   private emulateTyping(text: string, endFn: () => void) {
