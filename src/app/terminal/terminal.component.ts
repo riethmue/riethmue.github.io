@@ -83,6 +83,7 @@ export class TerminalComponent implements AfterViewInit, OnDestroy {
 
     this.emulateTyping(greeting, () => {
       this.term.writeln('');
+      this.printAscii();
       this.term.write('[~] ');
       this.term.focus();
       this.focusHiddenInput();
@@ -96,6 +97,34 @@ export class TerminalComponent implements AfterViewInit, OnDestroy {
     this.keySub?.dispose();
     this.resizeObserver?.disconnect();
     this.term?.dispose();
+  }
+
+  private asciiMini = [
+    '                      _     ',
+    '                     | |    ',
+    '  ___  __ _ _ __ __ _| |__  ',
+    " / __|/ _` | '__/ _` | '_ \\ ",
+    ' \\__ \\ (_| | | | (_| | | | |',
+    ' |___/\\__,_|_|  \\__,_|_| |_|',
+    '                            ',
+    '                            ',
+  ];
+  private asciiBig = [
+    ' ░▒▓███████▓▒░░▒▓██████▓▒░░▒▓███████▓▒░ ░▒▓██████▓▒░░▒▓█▓▒░░▒▓█▓▒░ ',
+    '░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░ ',
+    '░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░ ',
+    ' ░▒▓██████▓▒░░▒▓████████▓▒░▒▓███████▓▒░░▒▓████████▓▒░▒▓████████▓▒░ ',
+    '       ░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░ ',
+    '       ░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░ ',
+    '░▒▓███████▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░ ',
+    '                                                                   ',
+  ];
+
+  private printAscii() {
+    const banner = window.innerWidth < 480 ? this.asciiMini : this.asciiBig;
+
+    banner.forEach((line) => this.term.writeln(line));
+    this.term.writeln('');
   }
 
   private focusHiddenInput() {
@@ -166,23 +195,6 @@ export class TerminalComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  private printAscii() {
-    this.term.writeln('                                        __       ');
-    this.term.writeln('                                       |  \\      ');
-    this.term.writeln('  _______   ______    ______   ______  | $$____  ');
-    this.term.writeln(' /       \\ |      \\  /      \\ |      \\ | $$    \\ ');
-    this.term.writeln(
-      '|  $$$$$$$  \\$$$$$$\\|  $$$$$$\\ \\$$$$$$\\| $$$$$$$\\'
-    );
-    this.term.writeln(' \\$$    \\  /      $$| $$   \\$$/      $$| $$  | $$');
-    this.term.writeln(' _\\$$$$$$\\|  $$$$$$$| $$     |  $$$$$$$| $$  | $$');
-    this.term.writeln('|       $$ \\$$    $$| $$      \\$$    $$| $$  | $$');
-    this.term.writeln(
-      ' \\$$$$$$$   \\$$$$$$$ \\$$       \\$$$$$$$ \\$$   \\$$'
-    );
-    this.term.writeln('');
-  }
-
   private handleCommand(cmd: string) {
     switch (cmd.toLowerCase()) {
       case 'help':
@@ -225,27 +237,7 @@ export class TerminalComponent implements AfterViewInit, OnDestroy {
         break;
 
       case 'info':
-        this.term.writeln('                                        __       ');
-        this.term.writeln('                                       |  \\      ');
-        this.term.writeln('  _______   ______    ______   ______  | $$____  ');
-        this.term.writeln(
-          ' /       \\ |      \\  /      \\ |      \\ | $$    \\ '
-        );
-        this.term.writeln(
-          '|  $$$$$$$  \\$$$$$$\\|  $$$$$$\\ \\$$$$$$\\| $$$$$$$\\'
-        );
-        this.term.writeln(
-          ' \\$$    \\  /      $$| $$   \\$$/      $$| $$  | $$'
-        );
-        this.term.writeln(
-          ' _\\$$$$$$\\|  $$$$$$$| $$     |  $$$$$$$| $$  | $$'
-        );
-        this.term.writeln(
-          '|       $$ \\$$    $$| $$      \\$$    $$| $$  | $$'
-        );
-        this.term.writeln(
-          ' \\$$$$$$$   \\$$$$$$$ \\$$       \\$$$$$$$ \\$$   \\$$'
-        );
+        this.printAscii();
         this.term.writeln('');
         this.term.writeln('Welcome to SarahOS [Version 1.0.0]');
         this.term.writeln('(c) 2025 Sarah Riethmüller. All rights reserved.');
