@@ -26,7 +26,5 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 ## Todos
 
-- enable ts strict mode and fix errs
 - accessibility features
 - get rid of tailwind maybe...
-- add log service

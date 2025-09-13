@@ -7,7 +7,7 @@ export class RenderingPerformance {
   private fps = 0;
   private frames = 0;
   private accTime = 0;
-  private overlay?: HTMLDivElement;
+  private overlay: HTMLDivElement;
   private BREAKPOINT = 900;
   constructor() {
     if (this.enabled) this.createOverlay();
