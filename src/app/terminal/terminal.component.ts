@@ -15,6 +15,7 @@ import { Terminal } from '@xterm/xterm';
 import { from, of, Subject } from 'rxjs';
 import { concatMap, delay, takeUntil } from 'rxjs/operators';
 import { Command } from '../util/command.enum';
+import { isMobile } from '../util/utils';
 
 @Component({
   selector: 'app-terminal',
@@ -29,7 +30,7 @@ export class TerminalComponent implements AfterViewInit, OnDestroy {
   private resizeObserver!: ResizeObserver;
   private keySub?: { dispose: () => void };
   private inputBuffer = '';
-  private isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  private isMobile = isMobile();
 
   @ViewChild('term', { static: true })
   terminalContainer!: ElementRef<HTMLDivElement>;

@@ -11,14 +11,14 @@ import { DracoModel } from './draco-model';
 import { SceneConfig } from './scene-constants';
 import { environment } from '../../environments/environment';
 import { PixelArtShader } from './shader/pixel-art-shader';
-import { DebugPerf } from './debug-perf';
+import { RenderingPerformance } from './rendering-performance';
 
 export class ModelScene {
   public hoverModel = false;
   modelClicked = new EventEmitter<void>();
   sceneLoaded = new EventEmitter<any>();
   scene = new THREE.Scene();
-  perf = new DebugPerf();
+  perf = new RenderingPerformance();
   renderer: THREE.WebGLRenderer;
   camera: THREE.PerspectiveCamera;
   controls: any;
