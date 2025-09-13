@@ -8,25 +8,25 @@
 .retro-window {
   max-width: 900px;
   max-height: 100vh;
-  border: 4px solid #00ff29;
+  border: 4px solid var(--color-primary-500);
   background: rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
-  box-shadow: 0 0 12px #00ff29, inset 0 0 6px #003b00;
+  box-shadow: 0 0 12px var(--color-primary-500), inset 0 0 6px #003b00;
   animation: scanline-fade-in 600ms steps(5) forwards;
 }
 
 .retro-titlebar {
   background: #003b00;
-  color: #00ff29;
+  color: var(--color-primary-500);
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 6px 10px;
   font-family: monospace;
   font-size: 14px;
-  border-bottom: 2px solid #00ff29;
-  box-shadow: inset 0 -2px 0 #00ff29;
+  border-bottom: 2px solid var(--color-primary-500);
+  box-shadow: inset 0 -2px 0 var(--color-primary-500);
 }
 
 .retro-title {
@@ -41,13 +41,13 @@
 .ctrl {
   cursor: pointer;
   padding: 0 6px;
-  border: 1px solid #00ff29;
+  border: 1px solid var(--color-primary-500);
   background: black;
-  color: #00ff29;
+  color: var(--color-primary-500);
 }
 
 .ctrl:hover {
-  background: #00ff29;
+  background: var(--color-primary-500);
   color: black;
 }
 
@@ -64,7 +64,7 @@
 .retro-content {
   flex: 1;
   overflow: auto;
-  color: #00ff29;
+  color: var(--color-primary-500);
   font-family: monospace;
 }
 

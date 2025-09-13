@@ -21,17 +21,17 @@
 }
 
 .retro-panel {
-  border: 2px solid #00ff29;
+  border: 2px solid var(--color-primary-500);
   background: #000000b3;
-  box-shadow: 0 0 10px #00ff29, inset 0 0 6px #003b00;
+  box-shadow: 0 0 10px var(--color-primary-500), inset 0 0 6px #003b00;
   margin: 12px 0;
 }
 .retro-panel__title {
   padding: 4px 8px;
   font: 14px/1 monospace;
-  color: #00ff29;
+  color: var(--color-primary-500);
   background: #003b00;
-  border-bottom: 2px solid #00ff29;
+  border-bottom: 2px solid var(--color-primary-500);
   letter-spacing: 0.5px;
 }
 .retro-panel__body {
@@ -40,7 +40,7 @@
 
 .retro-rule {
   margin: 14px 0 10px;
-  color: #00ff29;
+  color: var(--color-primary-500);
   font: 14px/1 monospace;
-  text-shadow: 0 0 6px #00ff29;
+  text-shadow: 0 0 6px var(--color-primary-500);
 }

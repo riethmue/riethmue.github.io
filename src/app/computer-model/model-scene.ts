@@ -12,6 +12,7 @@ import { SceneConfig } from './scene-constants';
 import { environment } from '../../environments/environment';
 import { PixelArtShader } from './shader/pixel-art-shader';
 import { RenderingPerformance } from './rendering-performance';
+import type { LogService } from '../services/log/log';
 
 export class ModelScene {
   public hoverModel = false;
@@ -39,7 +40,11 @@ export class ModelScene {
   initialModelMaterialColor: any;
   lastHover = 0;
 
-  constructor(public htmlElement: ElementRef, public config: SceneConfig) {
+  constructor(
+    public htmlElement: ElementRef,
+    private log: LogService,
+    public config: SceneConfig
+  ) {
     this.scene.background = new THREE.Color(0x000000);
     this.onMouseDownClick = this.onMouseDown.bind(this);
     this.onMouseMove = this.onMouseHover.bind(this);
@@ -281,7 +286,7 @@ export class ModelScene {
       //this.prepareMaterials();
       this.sceneLoaded.emit();
     } catch (error) {
-      console.error(error);
+      this.log.error(error);
     }
   }
 

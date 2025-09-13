@@ -14,12 +14,14 @@ import * as THREE from 'three';
 import { ModelInteractionService } from '../services/model-interaction/model-interaction.service';
 import { ModelScene } from './model-scene';
 import { InitialSceneConfig } from './scene-constants';
+import { LogService } from '../services/log/log';
 
 @Component({
   selector: 'app-computer-model',
   templateUrl: './computer-model.component.html',
   styleUrls: ['./computer-model.component.css'],
   standalone: true,
+  imports: [],
 })
 export class ComputerModelComponent implements OnInit {
   @ViewChild('renderContainer', { static: true }) renderContainer: ElementRef;
@@ -36,7 +38,10 @@ export class ComputerModelComponent implements OnInit {
   destroyed$ = new Subject<void>();
   initialized$ = new Subject<void>();
 
-  constructor(private modelInteractionService: ModelInteractionService) {}
+  constructor(
+    private modelInteractionService: ModelInteractionService,
+    private log: LogService
+  ) {}
 
   ngOnDestroy() {
     this.scene?.disposeAll();
@@ -62,7 +67,7 @@ export class ComputerModelComponent implements OnInit {
   }
 
   public initialize(config: InitialSceneConfig): void {
-    this.scene = new ModelScene(this.renderContainer, {
+    this.scene = new ModelScene(this.renderContainer, this.log, {
       model: {
         filePath: 'assets/',
         fileName: 'retro_computer.glb',

@@ -59,10 +59,6 @@ export class TerminalComponent implements AfterViewInit, OnDestroy {
     this.fitAddon = new FitAddon();
     this.term.loadAddon(this.fitAddon);
     this.term.open(this.terminalContainer.nativeElement);
-    console.log(
-      'Terminal opened, container:',
-      this.terminalContainer.nativeElement
-    );
 
     // safari: disable autocaps
     const el = this.hiddenInput.nativeElement;
@@ -70,7 +66,6 @@ export class TerminalComponent implements AfterViewInit, OnDestroy {
 
     // check size after open
     const rect = this.terminalContainer.nativeElement.getBoundingClientRect();
-    console.log('Terminal container rect:', rect);
 
     this.fitAddon.fit();
 

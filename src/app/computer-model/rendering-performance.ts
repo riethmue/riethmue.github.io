@@ -44,16 +44,13 @@ export class RenderingPerformance {
     const geos = info.memory.geometries.toString().padStart(4, ' ');
     const texs = info.memory.textures.toString().padStart(3, ' ');
 
-    console.log('innerWidth', window.innerWidth);
     const wide = window.innerWidth > this.BREAKPOINT;
-    console.log('wide', wide);
     if (wide) {
       this.overlay.textContent =
         `FPS: ${this.fps.toString().padStart(3, ' ')}  |  ` +
         `Calls: ${calls}  |  Triangles: ${tris}  |  Lines: ${lines}  |  ` +
         `Points: ${points}  |  Geometries: ${geos}  |  Textures: ${texs}`;
     } else {
-      console.log('weit');
       this.overlay.textContent =
         `FPS: ${this.fps
           .toString()
