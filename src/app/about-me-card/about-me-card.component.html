@@ -1,25 +1,23 @@
-<app-modal #modalComponent class="absolute top-0 w-full">
-  <div class="p-5 flex flex-col justify-start overflow-auto shadow-lg w-full">
-    <div class="flex flex-col w-full">
-      <img class="m-5 profile-img" src="assets/img/me_8bit.png" />
-      <div class="retro-panel">
-        <div class="retro-panel__title">skills.ini</div>
-        <div class="retro-panel__body flex sm:flex-row flex-col">
-          <span class="retro-chip">#js/ts</span>
-          <span class="retro-chip">#python</span>
-          <span class="retro-chip">#angular/react</span>
-          <span class="retro-chip">#IaC</span>
-          <span class="retro-chip">#CI/CD</span>
-        </div>
+<div
+  #modalComponent
+  class="p-5 flex flex-col justify-start overflow-auto shadow-lg w-full"
+>
+  <div class="flex flex-col w-full">
+    <img class="m-5 profile-img" src="assets/img/me_8bit.png" />
+    <div class="retro-panel">
+      <div class="retro-panel__title">skills.ini</div>
+      <div class="retro-panel__body flex sm:flex-row flex-col">
+        <span class="retro-chip">#js/ts</span>
+        <span class="retro-chip">#python</span>
+        <span class="retro-chip">#angular/react</span>
+        <span class="retro-chip">#IaC</span>
+        <span class="retro-chip">#CI/CD</span>
       </div>
     </div>
-    <div class="retro-rule hidden sm:block">
-      ┌──────────────── TERMINAL ────────────────┐
-    </div>
-    <div class="retro-rule block sm:hidden">┌──── TERMINAL ────┐</div>
-    <app-terminal
-      (exit)="onTerminalExited()"
-      class="mt-5 w-full"
-    ></app-terminal>
   </div>
-</app-modal>
+  <div class="retro-rule hidden sm:block">
+    ┌──────────────── TERMINAL ────────────────┐
+  </div>
+  <div class="retro-rule block sm:hidden">┌──── TERMINAL ────┐</div>
+  <app-terminal (exit)="onTerminalExited()" class="mt-5 w-full"></app-terminal>
+</div>

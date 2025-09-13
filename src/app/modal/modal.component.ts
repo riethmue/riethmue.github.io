@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, ViewContainerRef } from '@angular/core';
 import { ModalService } from '../services/modal/modal.service';
 
 @Component({
@@ -7,16 +7,16 @@ import { ModalService } from '../services/modal/modal.service';
   styleUrls: ['./modal.component.css'],
   standalone: true,
 })
-export class ModalComponent<T> {
+export class ModalComponent {
   display = true;
 
-  constructor(private modalService: ModalService<T>) {}
+  @ViewChild('contentHost', { read: ViewContainerRef, static: true })
+  viewContainerRef!: ViewContainerRef;
 
-  async close(): Promise<void> {
+  constructor(private modalService: ModalService) {}
+
+  close(): void {
     this.display = false;
-
-    setTimeout(async () => {
-      await this.modalService.close();
-    }, 300);
+    setTimeout(() => this.modalService.close(), 300);
   }
 }

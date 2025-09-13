@@ -13,13 +13,11 @@ import { TerminalComponent } from '../terminal/terminal.component';
   templateUrl: './about-me-card.component.html',
   styleUrls: ['./about-me-card.component.css'],
   standalone: true,
-  imports: [TerminalComponent, ModalComponent],
+  imports: [TerminalComponent],
 })
 export class AboutMeCardComponent implements OnInit {
   isLandscape: boolean = false;
-  @ViewChild('modalComponent') modal:
-    | ModalComponent<AboutMeCardComponent>
-    | undefined;
+  @ViewChild('modalComponent') modal: ModalComponent | undefined;
   @Output()
   terminalExited = new EventEmitter<any>();
   constructor(public breakpointObserver: BreakpointObserver) {

@@ -56,7 +56,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
   constructor(
     private modelInteractionService: ModelInteractionService,
-    private modalService: ModalService<AboutMeCardComponent>,
+    private modalService: ModalService,
     private cd: ChangeDetectorRef
   ) {}
 
