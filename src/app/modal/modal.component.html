@@ -1,8 +1,5 @@
-<div
-  [class.open]="display"
-  class="retro-modal fixed z-10 inset-0 overflow-y-auto w-full"
->
-  <div class="flex items-center justify-center w-full">
+<div [class.open]="display" class="wrapper">
+  <div class="retro-modal">
     <div
       (click)="$event.stopPropagation()"
       class="retro-window"
@@ -18,7 +15,6 @@
           <span class="ctrl close" (click)="close()">X</span>
         </div>
       </div>
-
       <div class="retro-content">
         <ng-template #contentHost></ng-template>
       </div>

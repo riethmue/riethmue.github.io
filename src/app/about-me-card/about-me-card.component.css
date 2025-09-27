@@ -1,3 +1,11 @@
+.wrapper {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 100%;
+}
+
 .retro-chip {
   background: black;
   color: var(--color-primary-500);
@@ -26,7 +34,8 @@
   box-shadow: 0 0 10px var(--color-primary-500), inset 0 0 6px #003b00;
   margin: 12px 0;
 }
-.retro-panel__title {
+
+.title {
   padding: 4px 8px;
   font: 14px/1 monospace;
   color: var(--color-primary-500);
@@ -34,8 +43,18 @@
   border-bottom: 2px solid var(--color-primary-500);
   letter-spacing: 0.5px;
 }
-.retro-panel__body {
+
+.body {
+  display: flex;
+  flex-direction: column;
   padding: 10px;
+  min-height: 0;
+}
+
+@media (min-width: 640px) {
+  .body {
+    flex-direction: row;
+  }
 }
 
 .retro-rule {
@@ -45,9 +64,30 @@
   text-shadow: 0 0 6px var(--color-primary-500);
 }
 
+.retro-rule--long {
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .retro-rule--long {
+    display: block;
+  }
+}
+
+.retro-rule--short {
+  display: block;
+}
+
+@media (min-width: 640px) {
+  .retro-rule--short {
+    display: none;
+  }
+}
+
 .profile-img {
   max-width: 50%;
   height: auto;
+  margin: 5px;
   object-fit: contain;
 }
 
@@ -57,4 +97,13 @@
     margin: 0 auto;
     display: block;
   }
+}
+
+.terminal {
+  margin: 5px;
+  width: 100%;
+  flex: 1;
+  min-height: 0; /* wichtig bei flexbox, sonst wächst es unendlich */
+  max-height: 400px; /* oder was ins Modal passt */
+  overflow: hidden; /* damit nichts rausläuft */
 }

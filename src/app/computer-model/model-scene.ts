@@ -6,20 +6,19 @@ import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer
 import { GlitchPass } from 'three/examples/jsm/postprocessing/GlitchPass.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
+import { environment } from '../../environments/environment';
+import type { LogService } from '../services/log/log';
+import { PerformanceStatsService } from '../services/performance-stats/performance-stats.service';
 import { CustomControls } from './custom-controls';
 import { DracoModel } from './draco-model';
 import { SceneConfig } from './scene-constants';
-import { environment } from '../../environments/environment';
 import { PixelArtShader } from './shader/pixel-art-shader';
-import { RenderingPerformance } from './rendering-performance';
-import type { LogService } from '../services/log/log';
 
 export class ModelScene {
   public hoverModel = false;
   modelClicked = new EventEmitter<void>();
   sceneLoaded = new EventEmitter<any>();
   scene = new THREE.Scene();
-  perf = new RenderingPerformance();
   renderer: THREE.WebGLRenderer;
   camera: THREE.PerspectiveCamera;
   controls: any;
@@ -43,6 +42,7 @@ export class ModelScene {
   constructor(
     public htmlElement: ElementRef,
     private log: LogService,
+    private performance: PerformanceStatsService,
     public config: SceneConfig
   ) {
     this.scene.background = new THREE.Color(0x000000);
@@ -64,14 +64,41 @@ export class ModelScene {
     this.initControls();
     this.addLights();
 
-    this.perf.init(this.renderer);
-
     this.renderer.setAnimationLoop((ts: number) => {
-      this.perf.beginFrame(this.renderer);
-
+      this.renderer.info.reset();
       this.animation(this.renderer, this.scene, this.camera, this.controls);
+      this.updatePerformanceStats(this.renderer, ts);
+    });
+  }
 
-      this.perf.endFrame(this.renderer, ts);
+  private lastTs = 0;
+  private frames = 0;
+  private accTime = 0;
+  private lastFps = 0;
+
+  private updatePerformanceStats(renderer: THREE.WebGLRenderer, ts: number) {
+    if (this.lastTs === 0) this.lastTs = ts;
+    const dt = ts - this.lastTs;
+    this.lastTs = ts;
+    this.frames += 1;
+    this.accTime += dt;
+
+    let fps = 0;
+    if (this.accTime >= 500) {
+      this.lastFps = Math.round((this.frames * 1000) / this.accTime);
+      this.frames = 0;
+      this.accTime = 0;
+    }
+
+    const info = renderer.info;
+    this.performance.update({
+      fps: this.lastFps,
+      calls: info.render.calls,
+      tris: info.render.triangles,
+      lines: info.render.lines,
+      points: info.render.points,
+      geos: info.memory.geometries,
+      texs: info.memory.textures,
     });
   }
 
@@ -229,6 +256,8 @@ export class ModelScene {
     if ((this.renderer as any).debug) {
       (this.renderer as any).debug.checkShaderErrors = !environment.production;
     }
+
+    this.renderer.info.autoReset = false;
 
     this.htmlElement.nativeElement.appendChild(this.renderer.domElement);
     this.renderer.render(this.scene, this.camera);
@@ -559,27 +588,29 @@ export class ModelScene {
     const hits = this.raycaster.intersectObjects(this.pickables, true);
     if (hits.length) this.modelClicked.emit();
   };
-
-  onMouseHover = (ev: PointerEvent) => {
+  onMouseHover(ev: PointerEvent) {
     const now = performance.now();
     if (now - this.lastHover < 100) return;
+    this.lastHover = now;
     const ndc = this.getPointerNDC(ev);
     this.raycaster.setFromCamera(ndc, this.camera);
     const hits = this.raycaster.intersectObjects(this.scene.children, true);
     if (hits.length) {
       const m = hits[0].object as THREE.Mesh;
-      if (m?.name)
+      if (m?.name) {
         (m.material as THREE.MeshStandardMaterial)?.color.set(
           Math.random() * 0xffffff
         );
+      }
     } else {
       this.hoverModel = false;
       this.scene.traverse((c: any) => {
-        if (c.isMesh && c?.name)
+        if (c.isMesh && c?.name) {
           (c.material as THREE.MeshStandardMaterial)?.color.set(0xffffff);
+        }
       });
     }
-  };
+  }
 
   animation(renderer, scene, camera, controls) {
     //renderer.render(scene, camera);

@@ -1,8 +1,4 @@
-/* Tailwind layers */
-@import 'tailwindcss';
-
-/* Design tokens (v4 way) */
-@theme {
+:root {
   --font-sans: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
     'Liberation Mono', 'Courier New', monospace;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
@@ -20,7 +16,7 @@
   --color-primary-800: #008a18;
   --color-primary-900: #004d0d;
 
-  /* accent = neon magenta/pink (contrast, button, etc) */
+  /* accent = neon magenta/pink */
   --color-accent-50: #ffe6fa;
   --color-accent-100: #ffb3ef;
   --color-accent-200: #ff80e4;
@@ -32,7 +28,7 @@
   --color-accent-800: #8a0069;
   --color-accent-900: #4d003a;
 
-  /* warn = amber/orange (errors & alerts) */
+  /* warn = amber/orange */
   --color-warn-50: #fff3e0;
   --color-warn-100: #ffe0b3;
   --color-warn-200: #ffcc80;
@@ -44,7 +40,7 @@
   --color-warn-800: #8a4d00;
   --color-warn-900: #4d2900;
 
-  /* neutral background shades = deep dark blues + black */
+  /* neutral background shades */
   --color-neutral-50: #0d0d0d;
   --color-neutral-100: #141414;
   --color-neutral-200: #1a1a1a;
@@ -56,7 +52,7 @@
   --color-neutral-800: #555555;
   --color-neutral-900: #666666;
 
-  /* contrast = text on neon backgrounds */
+  /* contrast text */
   --color-contrast-50: #ffffff;
   --color-contrast-100: #f0f0f0;
   --color-contrast-200: #d9d9d9;
@@ -69,13 +65,17 @@
   --color-contrast-900: #1a1a1a;
 }
 
-/* Base tweaks */
 html,
 body {
-  @apply h-full;
+  height: 100%;
 }
+
 body {
-  @apply m-0 font-sans;
+  margin: 0;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 /* xtermjs terminal styles */
@@ -89,6 +89,7 @@ body {
 }
 
 /* xtermjs scrollbar styles */
+
 .xterm-viewport::-webkit-scrollbar {
   width: 20px !important;
   height: 20px !important;

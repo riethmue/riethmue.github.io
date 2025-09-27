@@ -1,0 +1,6 @@
+<div class="perf-overlay">
+  @if (stats$ | async; as stats) { FPS: {{ stats.fps }} | Calls:
+  {{ stats.calls }} | Tris: {{ stats.tris }}<br />
+  Lines: {{ stats.lines }} | Points: {{ stats.points }} | Geos:
+  {{ stats.geos }} | Texs: {{ stats.texs }} }
+</div>

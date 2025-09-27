@@ -64,10 +64,9 @@ export class TerminalComponent implements AfterViewInit, OnDestroy {
     const el = this.hiddenInput.nativeElement;
     (el as any).autocapitalize = 'none';
 
-    // check size after open
-    const rect = this.terminalContainer.nativeElement.getBoundingClientRect();
-
-    this.fitAddon.fit();
+    setTimeout(() => {
+      this.fitAddon.fit();
+    }, 0);
 
     this.resizeObserver = new ResizeObserver(() => this.fitAddon.fit());
     this.resizeObserver.observe(this.terminalContainer.nativeElement);
@@ -118,7 +117,7 @@ export class TerminalComponent implements AfterViewInit, OnDestroy {
   ];
 
   private printAscii() {
-    const banner = window.innerWidth < 480 ? this.asciiMini : this.asciiBig;
+    const banner = window.innerWidth < 700 ? this.asciiMini : this.asciiBig;
 
     banner.forEach((line) => this.term.writeln(line));
     this.term.writeln('');

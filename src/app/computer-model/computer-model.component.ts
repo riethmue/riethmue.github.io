@@ -11,17 +11,19 @@ import { Subject } from 'rxjs';
 import { skip, takeUntil } from 'rxjs/operators';
 import * as THREE from 'three';
 
+import { LogService } from '../services/log/log';
 import { ModelInteractionService } from '../services/model-interaction/model-interaction.service';
+import { PerformanceStatsService } from '../services/performance-stats/performance-stats.service';
 import { ModelScene } from './model-scene';
 import { InitialSceneConfig } from './scene-constants';
-import { LogService } from '../services/log/log';
+import { RenderingPerformanceComponent } from '../rendering-performance/rendering-performance.component';
 
 @Component({
   selector: 'app-computer-model',
   templateUrl: './computer-model.component.html',
   styleUrls: ['./computer-model.component.css'],
   standalone: true,
-  imports: [],
+  imports: [RenderingPerformanceComponent],
 })
 export class ComputerModelComponent implements OnInit {
   @ViewChild('renderContainer', { static: true }) renderContainer: ElementRef;
@@ -40,6 +42,7 @@ export class ComputerModelComponent implements OnInit {
 
   constructor(
     private modelInteractionService: ModelInteractionService,
+    private performance: PerformanceStatsService,
     private log: LogService
   ) {}
 
@@ -67,37 +70,42 @@ export class ComputerModelComponent implements OnInit {
   }
 
   public initialize(config: InitialSceneConfig): void {
-    this.scene = new ModelScene(this.renderContainer, this.log, {
-      model: {
-        filePath: 'assets/',
-        fileName: 'retro_computer.glb',
-        scaling: 50,
-        position: new THREE.Vector3(0, 0, 0),
-      },
-      renderer: {
-        rendererParameter: {
-          antialias: true,
-          alpha: true,
+    this.scene = new ModelScene(
+      this.renderContainer,
+      this.log,
+      this.performance,
+      {
+        model: {
+          filePath: 'assets/',
+          fileName: 'retro_computer.glb',
+          scaling: 50,
+          position: new THREE.Vector3(0, 0, 0),
         },
-        devicePixelRatio: config.devicePixelRatio,
-        size: config.size,
-      },
-      camera: {
-        fov: 50,
-        position: new THREE.Vector3(0, 5, 5),
-        lookAt: new THREE.Vector3(0, 0, 0),
-        near: 1,
-        far: 1000,
-      },
-      lights: [
-        {
-          light: new THREE.AmbientLight(0xffffff, 0.6),
+        renderer: {
+          rendererParameter: {
+            antialias: true,
+            alpha: true,
+          },
+          devicePixelRatio: config.devicePixelRatio,
+          size: config.size,
         },
-        {
-          light: new THREE.DirectionalLight(0xffffff, 2.0),
+        camera: {
+          fov: 50,
+          position: new THREE.Vector3(0, 5, 5),
+          lookAt: new THREE.Vector3(0, 0, 0),
+          near: 1,
+          far: 1000,
         },
-      ],
-    });
+        lights: [
+          {
+            light: new THREE.AmbientLight(0xffffff, 0.6),
+          },
+          {
+            light: new THREE.DirectionalLight(0xffffff, 2.0),
+          },
+        ],
+      }
+    );
 
     this.scene.sceneLoaded
       .pipe(takeUntil(this.destroyed$))

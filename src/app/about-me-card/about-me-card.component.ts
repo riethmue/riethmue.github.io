@@ -17,7 +17,6 @@ import { TerminalComponent } from '../terminal/terminal.component';
 })
 export class AboutMeCardComponent implements OnInit {
   isLandscape: boolean = false;
-  @ViewChild('modalComponent') modal: ModalComponent | undefined;
   @Output()
   terminalExited = new EventEmitter<any>();
   constructor(public breakpointObserver: BreakpointObserver) {
@@ -32,9 +31,7 @@ export class AboutMeCardComponent implements OnInit {
       });
   }
 
-  onTerminalExited() {
-    this.modal?.close();
-  }
+  onTerminalExited() {}
 
   ngOnInit(): void {}
 }

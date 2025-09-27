@@ -1,51 +1,32 @@
-<div #appContainer class="app-container">
+<div #appContainer class="app">
   <ng-container *ngIf="isBrowserEnv">
-    <div class="model-scene relative" #model>
+    <div class="background" #model>
       <app-computer-model
+        #model
         (loaded)="onSceneLoaded()"
         (modelClicked)="onModelClicked()"
       ></app-computer-model>
 
-      <div
-        *ngIf="!sceneLoaded"
-        class="absolute inset-0 flex items-center justify-center bg-black/60"
-      >
-        <div class="text-white font-mono">loading 3D scene…</div>
-      </div>
+      <div *ngIf="!sceneLoaded" class="loading">Loading 3D scene…</div>
     </div>
   </ng-container>
-  <div class="bg-black flex justify-center">
-    <div class="fixed bottom-0 m-5">
-      <div class="fab flex flex-wrap justify-center m-2">
-        <button
-          class="m-0.5 bg-primary-500 w-10 h-10 rounded-full drop-shadow-lg flex justify-center items-center text-white text-4xl"
-          (click)="onTerminalButtonClicked()"
-        >
+  <div class="footer-container">
+    <div class="footer">
+      <div class="fab floating-buttons">
+        <button (click)="onTerminalButtonClicked()">
           <span class="material-icons">terminal</span>
         </button>
-        <a
-          href="https://github.com/riethmue/website"
-          title="Github"
-          class="m-0.5 bg-primary-500 w-10 h-10 rounded-full drop-shadow-lg flex justify-center items-center text-white text-4xl"
-        >
-          <fa-icon size="xs" [icon]="faGithub"></fa-icon>
+        <a href="https://github.com/riethmue/website" title="Github">
+          <fa-icon [icon]="faGithub"></fa-icon>
         </a>
-        <a
-          href="https://twitter.com/riethmue93"
-          title="Twitter"
-          class="m-0.5 bg-primary-500 w-10 h-10 rounded-full drop-shadow-lg flex justify-center items-center text-white text-4xl"
-        >
-          <fa-icon size="xs" [icon]="faXTwitter"></fa-icon>
+        <a href="https://twitter.com/riethmue93" title="Twitter">
+          <fa-icon [icon]="faXTwitter"></fa-icon>
         </a>
-        <a
-          href="https://medium.com/@sriethmueller_41398"
-          title="Medium"
-          class="m-0.5 bg-primary-500 w-10 h-10 rounded-full drop-shadow-lg flex justify-center items-center text-white text-4xl"
-        >
-          <fa-icon size="xs" [icon]="faMedium"></fa-icon>
+        <a href="https://medium.com/@sriethmueller_41398" title="Medium">
+          <fa-icon [icon]="faMedium"></fa-icon>
         </a>
       </div>
-      <div class="font-mono text-xs text-center text-white">
+      <div class="credits">
         &lt;Sarah Riethmüller&gt; &lt;👩🏻‍💻 Software Developer&gt; &lt;{{
           currentYear
         }}&gt;
