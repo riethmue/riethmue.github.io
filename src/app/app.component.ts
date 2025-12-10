@@ -77,11 +77,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     if (!this.isBrowserEnv || !this.modelRef) return;
 
     const el = this.modelRef.nativeElement;
-    // Cap pixel ratio for mobile performance (retina displays can be 2-3x)
-    const pixelRatio = Math.min(
-      window.devicePixelRatio,
-      window.innerWidth < 768 ? 1.5 : 2
-    );
+    // Cap pixel ratio to 1.5 for performance (even high DPI displays)
+    const pixelRatio = Math.min(window.devicePixelRatio, 1.5);
     const config: InitialSceneConfig = {
       size: { width: el.offsetWidth, height: el.offsetHeight },
       devicePixelRatio: pixelRatio,

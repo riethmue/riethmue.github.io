@@ -103,8 +103,6 @@ export class ModelScene {
       antialias: this.config.renderer.rendererParameter.antialias,
       isMobile: window.innerWidth < 768,
     });
-      texs: info.memory.textures,
-    });
   }
 
   //#region prepare scene
@@ -247,17 +245,18 @@ export class ModelScene {
     this.renderer = new THREE.WebGLRenderer(
       this.config.renderer.rendererParameter
     );
-    this.renderer?.setSize(
+    this.renderer.setSize(
       this.config.renderer.size.width,
       this.config.renderer.size.height
     );
 
     if (this.config.renderer.devicePixelRatio) {
-      this.renderer?.setPixelRatio(this.config.renderer.devicePixelRatio);
+      this.renderer.setPixelRatio(this.config.renderer.devicePixelRatio);
     }
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
-    this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    this.renderer.toneMappingExposure = 1.0;
+    // Disable tone mapping for performance
+    // this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    // this.renderer.toneMappingExposure = 1.0;
     if ((this.renderer as any).debug) {
       (this.renderer as any).debug.checkShaderErrors = !environment.production;
     }
@@ -329,31 +328,30 @@ export class ModelScene {
     this.effectComposer = new EffectComposer(this.renderer);
     this.effectComposer.addPass(new RenderPass(this.scene, this.camera));
 
-    const isMobile = window.innerWidth < 768;
-
-    // Disable expensive effects on mobile
-    if (!isMobile) {
-      this.pixelPass = new ShaderPass(PixelArtShader);
-      this.pixelPass.material.transparent = false;
-      this.pixelPass.uniforms['resolution'].value = new THREE.Vector2(
-        window.innerWidth,
-        window.innerHeight
-      );
-      this.pixelPass.uniforms['resolution'].value.multiplyScalar(
-        window.devicePixelRatio
-      );
-      this.pixelPass.uniforms['pixelSize'].value = 5;
-      this.effectComposer.addPass(this.pixelPass);
-
-      this.glitchPass = new GlitchPass();
-      this.effectComposer.addPass(this.glitchPass);
-    }
+    // Disable expensive effects for better performance
+    // const isMobile = window.innerWidth < 768;
+    // if (!isMobile) {
+    //   this.pixelPass = new ShaderPass(PixelArtShader);
+    //   this.pixelPass.material.transparent = false;
+    //   this.pixelPass.uniforms['resolution'].value = new THREE.Vector2(
+    //     window.innerWidth,
+    //     window.innerHeight
+    //   );
+    //   this.pixelPass.uniforms['resolution'].value.multiplyScalar(
+    //     window.devicePixelRatio
+    //   );
+    //   this.pixelPass.uniforms['pixelSize'].value = 5;
+    //   this.effectComposer.addPass(this.pixelPass);
+    //   this.glitchPass = new GlitchPass();
+    //   this.effectComposer.addPass(this.glitchPass);
+    // }
   }
 
   async addGeometries() {
     const isMobile = window.innerWidth < 768;
-    const sphereDetail = isMobile ? 32 : 64;
-    const coneDetail = isMobile ? 16 : 32;
+    // Reduce detail for all devices
+    const sphereDetail = isMobile ? 24 : 32;
+    const coneDetail = isMobile ? 12 : 16;
     const geometries = [
       new THREE.SphereGeometry(1, sphereDetail, sphereDetail),
       new THREE.BoxGeometry(1, 1, 1),
@@ -364,7 +362,8 @@ export class ModelScene {
     const group = new THREE.Group();
     const offset = new THREE.Vector3(0, 0, -20);
 
-    for (let i = 0; i < 50; i++) {
+    // Reduce particle count from 50 to 30
+    for (let i = 0; i < (isMobile ? 20 : 30); i++) {
       const geom = geometries[Math.floor(Math.random() * geometries.length)];
       const scale = 3 + Math.random();
       const radiusDelta = 500;
