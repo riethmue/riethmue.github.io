@@ -9,6 +9,9 @@ export interface PerformanceStats {
   points: number;
   geos: number;
   texs: number;
+  pixelRatio?: number;
+  antialias?: boolean;
+  isMobile?: boolean;
 }
 
 @Injectable({ providedIn: 'root' })

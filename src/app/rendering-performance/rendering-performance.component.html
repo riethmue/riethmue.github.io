@@ -50,5 +50,20 @@
       <span class="stat-value">{{ stats.texs }}</span>
     </div>
   </div>
+  <div class="perf-header" style="margin-top: 8px">⚙️ SETTINGS</div>
+  <div class="perf-content">
+    <div class="stat-row">
+      <span class="stat-label">PixelR</span>
+      <span class="stat-value" style="grid-column: 2 / 4;">{{ stats.pixelRatio?.toFixed(1) || 'N/A' }}</span>
+    </div>
+    <div class="stat-row">
+      <span class="stat-label">AA</span>
+      <span class="stat-value" style="grid-column: 2 / 4;">{{ stats.antialias ? 'ON' : 'OFF' }}</span>
+    </div>
+    <div class="stat-row">
+      <span class="stat-label">Mode</span>
+      <span class="stat-value" style="grid-column: 2 / 4;">{{ stats.isMobile ? 'MOBILE' : 'DESKTOP' }}</span>
+    </div>
+  </div>
   }
 </div>

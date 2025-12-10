@@ -99,6 +99,11 @@ export class ModelScene {
       points: info.render.points,
       geos: info.memory.geometries,
       texs: info.memory.textures,
+      pixelRatio: this.config.renderer.devicePixelRatio,
+      antialias: this.config.renderer.rendererParameter.antialias,
+      isMobile: window.innerWidth < 768,
+    });
+      texs: info.memory.textures,
     });
   }
 
@@ -306,6 +311,7 @@ export class ModelScene {
       gltfScene.traverse((child) => {
         if (child.isMesh) {
           child.material.side = THREE.DoubleSide;
+          child.frustumCulled = true;
           this.pickables.push(child);
         }
       });
@@ -323,27 +329,35 @@ export class ModelScene {
     this.effectComposer = new EffectComposer(this.renderer);
     this.effectComposer.addPass(new RenderPass(this.scene, this.camera));
 
-    this.pixelPass = new ShaderPass(PixelArtShader);
-    this.pixelPass.material.transparent = false;
-    this.pixelPass.uniforms['resolution'].value = new THREE.Vector2(
-      window.innerWidth,
-      window.innerHeight
-    );
-    this.pixelPass.uniforms['resolution'].value.multiplyScalar(
-      window.devicePixelRatio
-    );
-    this.pixelPass.uniforms['pixelSize'].value = 5;
-    this.effectComposer.addPass(this.pixelPass);
+    const isMobile = window.innerWidth < 768;
 
-    this.glitchPass = new GlitchPass();
-    this.effectComposer.addPass(this.glitchPass);
+    // Disable expensive effects on mobile
+    if (!isMobile) {
+      this.pixelPass = new ShaderPass(PixelArtShader);
+      this.pixelPass.material.transparent = false;
+      this.pixelPass.uniforms['resolution'].value = new THREE.Vector2(
+        window.innerWidth,
+        window.innerHeight
+      );
+      this.pixelPass.uniforms['resolution'].value.multiplyScalar(
+        window.devicePixelRatio
+      );
+      this.pixelPass.uniforms['pixelSize'].value = 5;
+      this.effectComposer.addPass(this.pixelPass);
+
+      this.glitchPass = new GlitchPass();
+      this.effectComposer.addPass(this.glitchPass);
+    }
   }
 
   async addGeometries() {
+    const isMobile = window.innerWidth < 768;
+    const sphereDetail = isMobile ? 32 : 64;
+    const coneDetail = isMobile ? 16 : 32;
     const geometries = [
-      new THREE.SphereGeometry(1, 64, 64),
+      new THREE.SphereGeometry(1, sphereDetail, sphereDetail),
       new THREE.BoxGeometry(1, 1, 1),
-      new THREE.ConeGeometry(1, 1, 32),
+      new THREE.ConeGeometry(1, 1, coneDetail),
       new THREE.TetrahedronGeometry(1),
     ];
 
