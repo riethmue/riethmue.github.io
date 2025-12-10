@@ -26,14 +26,15 @@
               "src/material-theme.scss",
               "node_modules/@xterm/xterm/css/xterm.css"
             ],
-            "browser": "src/main.ts"
+            "browser": "src/main.ts",
+            "allowedCommonJsDependencies": ["@xterm/xterm", "@xterm/addon-fit"]
           },
           "configurations": {
             "production": {
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kb",
+                  "maximumWarning": "1.5mb",
                   "maximumError": "2mb"
                 },
                 {

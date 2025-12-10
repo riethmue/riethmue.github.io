@@ -28,10 +28,8 @@ jobs:
       - name: Install
         run: npm ci
 
-      - name: Build & Prerender
-        run: |
-          npx ng build --configuration production
-          npx ng run web:prerender
+      - name: Build
+        run: npx ng build --configuration production
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
