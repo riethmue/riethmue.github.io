@@ -134,7 +134,7 @@ Build artifacts will be stored in the `dist/` directory.
 
 ## 🔗 Links
 
-- [Live Demo](https://riethmue.github.io/website/)
+- [Live Demo](https://riethmue.github.io/)
 - [GitHub](https://github.com/riethmue)
 - [Twitter](https://twitter.com/riethmue93)
 
