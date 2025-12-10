@@ -1,31 +1,143 @@
-# Personal Website
+# 👩🏻‍💻 Sarah Riethmüller - Personal Website
 
-## Development server
+> A retro-styled cyberpunk portfolio with an interactive 3D scene and terminal interface
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+[![Angular](https://img.shields.io/badge/Angular-20.2-DD0031?logo=angular)](https://angular.io/)
+[![Three.js](https://img.shields.io/badge/Three.js-0.179-000000?logo=three.js)](https://threejs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?logo=typescript)](https://www.typescriptlang.org/)
 
-## Code scaffolding
+## ✨ Features
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+- 🎮 **Retro Terminal Interface** - Interactive xterm.js terminal with custom commands
+- 🖥️ **3D Computer Model** - Three.js rendered 3D scene with pixel art shader
+- 💚 **Cyberpunk Aesthetics** - Neon green terminal vibes with scanline effects
+- 📱 **Mobile Optimized** - Responsive design with mobile-specific layouts
+- ⚡ **Performance Stats** - Real-time rendering metrics with ASCII bargraphs
+- 🎨 **Pixel Art Graphics** - Custom shaders and retro visual effects
 
-## Build
+## 🚀 Quick Start
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+### Prerequisites
 
-## Running unit tests
+- Node.js 20+
+- npm
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+### Installation
 
-## Running end-to-end tests
+```bash
+npm install
+```
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+## 📜 Available Scripts
 
-## Further help
+| Command          | Description                                         |
+| ---------------- | --------------------------------------------------- |
+| `npm start`      | Start development server on `http://localhost:4200` |
+| `npm run build`  | Build for production (output in `dist/`)            |
+| `npm run watch`  | Build in watch mode for development                 |
+| `npm test`       | Run unit tests via Karma                            |
+| `npm run mobile` | Start dev server with QR code for mobile testing    |
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+### Mobile Development
 
-## Todos
+The `mobile` script starts a dev server accessible on your local network and displays a QR code for easy mobile testing:
 
-- accessibility features
-- get rid of tailwind maybe...
-- add tests
+```bash
+npm run mobile
+```
+
+## 🛠️ Tech Stack
+
+### Core
+
+- **Angular 20.2** - Modern web framework
+- **TypeScript 5.9** - Type-safe JavaScript
+- **RxJS 7.8** - Reactive programming
+
+### 3D & Graphics
+
+- **Three.js 0.179** - 3D rendering engine
+- **Custom GLSL Shaders** - Pixel art post-processing
+
+### Terminal
+
+- **xterm.js 5.5** - Terminal emulator
+- **xterm-addon-fit** - Terminal sizing
+
+### UI & Styling
+
+- **Tailwind CSS 4.1** - Utility-first CSS
+- **Angular CDK 20.2** - Component development kit
+- **FontAwesome 7.0** - Icon library
+
+## 🎨 Project Structure
+
+```
+src/
+├── app/
+│   ├── about-me-card/        # Main content card with terminal
+│   ├── computer-model/       # 3D scene with Three.js
+│   │   ├── shader/           # Custom GLSL shaders
+│   │   └── *.ts              # Scene setup & controls
+│   ├── modal/                # Retro-styled modal component
+│   ├── terminal/             # xterm.js terminal integration
+│   ├── rendering-performance/ # FPS & stats overlay
+│   └── services/             # Shared services
+├── assets/                   # Static assets
+└── styles.css               # Global styles & themes
+```
+
+## 🎯 Terminal Commands
+
+Type `help` in the terminal to see available commands:
+
+- `help` - Show all commands
+- `about` - Info about me
+- `skills` - Display my tech skills
+- `projects` - List my projects
+- `hobbies` - Show my hobbies
+- `contact` - Get contact info
+- `cv` - Open my CV
+- `fortune` - Random tech quote
+- `info` - System information
+- `clear` - Clear terminal
+
+## 🔧 Development
+
+### Code Scaffolding
+
+```bash
+ng generate component component-name
+ng generate directive|pipe|service|class|guard|interface|enum|module
+```
+
+### Build
+
+```bash
+npm run build
+```
+
+Build artifacts will be stored in the `dist/` directory.
+
+## 📝 TODO
+
+- [ ] Accessibility features (ARIA labels, keyboard navigation)
+- [ ] Consider removing Tailwind CSS dependency
+- [ ] Add comprehensive unit tests
+- [ ] Add E2E tests
+- [ ] PWA support
+- [ ] Dark/Light theme toggle
+
+## 📄 License
+
+© 2025 Sarah Riethmüller. All rights reserved.
+
+## 🔗 Links
+
+- [Live Demo](https://riethmue.github.io/website/)
+- [GitHub](https://github.com/riethmue)
+- [Twitter](https://twitter.com/riethmue93)
+
+---
+
+Built with 💚 and lots of ☕
