@@ -278,6 +278,16 @@ export class TerminalComponent implements AfterViewInit, OnDestroy {
         this.term.writeln('  • 👩🏻‍💻 Experimenting with AI & 3D graphics');
         break;
 
+      case 'jil':
+        this.term.writeln('');
+        this.term.writeln('╔═══════════════════════════════════╗');
+        this.term.writeln('║                                   ║');
+        this.term.writeln('║        I love you 💚              ║');
+        this.term.writeln('║                                   ║');
+        this.term.writeln('╚═══════════════════════════════════╝');
+        this.term.writeln('');
+        break;
+
       case Command.Clear:
         this.term.clear();
         break;
