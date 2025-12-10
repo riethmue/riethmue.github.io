@@ -288,6 +288,9 @@ export class TerminalComponent implements AfterViewInit, OnDestroy {
       default:
         this.term.writeln(`command not found: ${cmd}`);
     }
+    
+    // Auto-scroll to bottom after output
+    this.term.scrollToBottom();
   }
 
   private showHelp() {

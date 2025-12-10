@@ -1,9 +1,26 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
 .wrapper {
   padding: 1.25rem;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   width: 100%;
+  overflow: hidden;
+  flex: 1;
+  min-height: 0;
+}
+
+@media (max-width: 768px) {
+  .wrapper {
+    padding: 0.5rem;
+  }
 }
 
 .retro-chip {
@@ -33,6 +50,12 @@
   background: #000000b3;
   box-shadow: 0 0 10px var(--color-primary-500), inset 0 0 6px #003b00;
   margin: 12px 0;
+}
+
+@media (max-width: 768px) {
+  .retro-panel {
+    display: none;
+  }
 }
 
 .title {
@@ -93,17 +116,24 @@
 
 @media (max-width: 768px) {
   .profile-img {
-    max-width: 80%;
-    margin: 0 auto;
-    display: block;
+    display: none;
   }
 }
 
-.terminal {
+app-terminal {
   margin: 5px;
   width: 100%;
   flex: 1;
-  min-height: 0; /* wichtig bei flexbox, sonst wächst es unendlich */
-  max-height: 400px; /* oder was ins Modal passt */
-  overflow: hidden; /* damit nichts rausläuft */
+  min-height: 0;
+  max-height: 400px;
+  overflow: hidden;
+  display: flex;
+}
+
+@media (max-width: 768px) {
+  app-terminal {
+    max-height: none;
+    flex: 1;
+    margin: 0;
+  }
 }
