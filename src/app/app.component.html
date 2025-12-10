@@ -7,7 +7,30 @@
         (modelClicked)="onModelClicked()"
       ></app-computer-model>
 
-      <div *ngIf="!sceneLoaded" class="loading">Loading 3D scene…</div>
+      <div *ngIf="!sceneLoaded" class="loading">
+        <div class="spinner-container">
+          <div class="spinner">
+            <div class="spinner-dot"></div>
+            <div class="spinner-dot"></div>
+            <div class="spinner-dot"></div>
+            <div class="spinner-dot"></div>
+            <div class="spinner-dot"></div>
+            <div class="spinner-dot"></div>
+            <div class="spinner-dot"></div>
+            <div class="spinner-dot"></div>
+          </div>
+          <div class="loading-text">
+            <span class="bracket">[</span>
+            <span class="text">LOADING 3D SCENE</span>
+            <span class="dots">
+              <span class="dot">.</span>
+              <span class="dot">.</span>
+              <span class="dot">.</span>
+            </span>
+            <span class="bracket">]</span>
+          </div>
+        </div>
+      </div>
     </div>
   </ng-container>
   <div class="footer-container">
