@@ -257,6 +257,8 @@
   align-items: center;
   font-size: 2rem;
   line-height: 1;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .fab button:hover,
@@ -265,6 +267,16 @@
   box-shadow: 6px 6px 0px #003b00, 8px 8px 0px #000;
   background: var(--color-primary-500);
   color: black;
+}
+
+.fab button:focus,
+.fab a:focus {
+  outline: none;
+}
+
+.fab button:active,
+.fab a:active {
+  outline: none;
 }
 
 .fab fa-icon {
