@@ -47,6 +47,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   private platformId = inject(PLATFORM_ID);
   isBrowserEnv = isPlatformBrowser(this.platformId);
   sceneLoaded = false;
+  sceneInitialized = false;
   destroyed$ = new Subject<void>();
   faXTwitter = faXTwitter;
   faMedium = faMedium;
@@ -83,6 +84,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
     // defer emit to next macrotask so child subscriptions are active
     setTimeout(() => {
+      this.sceneInitialized = true;
+      this.cd.markForCheck();
       this.modelInteractionService.onSceneInitialized$.next(config);
       this.resizeView();
     });
