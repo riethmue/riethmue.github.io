@@ -1,33 +1,46 @@
 .app {
-  position: relative;
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
+  overflow: hidden;
 }
 
 .loading {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #000000;
+  background-color: rgba(0, 0, 0, 0.8);
   color: var(--color-primary-500);
+  z-index: 9999;
 }
 
 .spinner-container {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 30px;
+  width: 100%;
 }
 
 .spinner {
   width: 80px;
   height: 80px;
   position: relative;
+  margin: 0 auto;
 }
 
 .spinner-dot {
   position: absolute;
+  top: 50%;
+  left: 50%;
   width: 12px;
   height: 12px;
   background: var(--color-primary-500);
@@ -35,6 +48,7 @@
   box-shadow: 0 0 10px var(--color-primary-500),
     0 0 20px var(--color-primary-500);
   animation: orbit 2s linear infinite;
+  transform-origin: 0 0;
 }
 
 .spinner-dot:nth-child(1) {
@@ -81,6 +95,8 @@
   font-size: 16px;
   letter-spacing: 2px;
   text-shadow: 0 0 10px var(--color-primary-500);
+  text-align: center;
+  width: 100%;
 }
 
 .bracket {
@@ -137,12 +153,13 @@
 }
 
 .background {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   z-index: -1;
+  overflow: hidden;
 }
 
 .footer-container {

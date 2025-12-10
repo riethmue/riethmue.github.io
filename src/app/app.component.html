@@ -7,7 +7,10 @@
         (modelClicked)="onModelClicked()"
       ></app-computer-model>
 
-      <div *ngIf="sceneInitialized && !sceneLoaded" class="loading">
+      <div
+        *ngIf="(sceneInitialized && !sceneLoaded) || debugShowSpinner"
+        class="loading"
+      >
         <div class="spinner-container">
           <div class="spinner">
             <div class="spinner-dot"></div>

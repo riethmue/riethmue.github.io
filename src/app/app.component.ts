@@ -27,6 +27,7 @@ import { ModalComponent } from './modal/modal.component';
 import { ModalService } from './services/modal/modal.service';
 import { ModelInteractionService } from './services/model-interaction/model-interaction.service';
 import { TerminalComponent } from './terminal/terminal.component';
+import { environment } from '../environments/environment';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -54,6 +55,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   faGithub = faGithub;
   terminalWidth = 70;
   currentYear = new Date().getFullYear();
+  debugShowSpinner = environment.debug.showSpinner;
 
   constructor(
     private modelInteractionService: ModelInteractionService,
@@ -94,8 +96,12 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   onSceneLoaded() {
-    this.sceneLoaded = true;
-    this.cd.markForCheck();
+    // Apply debug delay if configured (local testing only)
+    const delay = environment.debug.forceLoadingDelay;
+    setTimeout(() => {
+      this.sceneLoaded = true;
+      this.cd.markForCheck();
+    }, delay);
   }
 
   onModelClicked() {

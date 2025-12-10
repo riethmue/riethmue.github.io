@@ -3,7 +3,11 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  debug: {
+    showSpinner: true, // Set to true to always show spinner (for testing)
+    forceLoadingDelay: 0, // Set to e.g. 2000 to keep spinner visible for 2 seconds (local testing only)
+  },
 };
 
 /*
