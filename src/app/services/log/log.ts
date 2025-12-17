@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { environment } from '../../environment/environment';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LogService {
-  private enabled = environment.enableLogging;
+  private enabled = environment.debug.enableLogging;
 
   log(...args: any[]) {
     if (this.enabled) {

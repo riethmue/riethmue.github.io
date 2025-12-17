@@ -36,15 +36,33 @@ export class DebugLoggerService {
     }
   }
 
+  debugWithContext(component: string, message: string, ...args: any[]): void {
+    if (this.isEnabled) {
+      console.log(`[${LogLevel.DEBUG}] [${component}] ${message}`, ...args);
+    }
+  }
+
   info(message: string, ...args: any[]): void {
     if (this.isEnabled) {
       console.info(`[${LogLevel.INFO}] ${message}`, ...args);
     }
   }
 
+  infoWithContext(component: string, message: string, ...args: any[]): void {
+    if (this.isEnabled) {
+      console.info(`[${LogLevel.INFO}] [${component}] ${message}`, ...args);
+    }
+  }
+
   warn(message: string, ...args: any[]): void {
     if (this.isEnabled) {
       console.warn(`[${LogLevel.WARN}] ${message}`, ...args);
+    }
+  }
+
+  warnWithContext(component: string, message: string, ...args: any[]): void {
+    if (this.isEnabled) {
+      console.warn(`[${LogLevel.WARN}] [${component}] ${message}`, ...args);
     }
   }
 
