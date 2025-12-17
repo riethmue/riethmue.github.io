@@ -18,6 +18,12 @@ import { concatMap, delay, takeUntil } from 'rxjs/operators';
 import { Command } from '../util/command.enum';
 import { log } from '../services/debug-logger/debug-logger.service';
 import { MOBILE_BREAKPOINTS } from '../util/utils';
+import {
+  ASCII_BIG,
+  ASCII_MINI,
+  EASTER_EGGS,
+  FORTUNES,
+} from './terminal-assets';
 
 @Component({
   selector: 'app-terminal',
@@ -110,29 +116,8 @@ export class TerminalComponent implements AfterViewInit, OnDestroy {
     this.term?.dispose();
   }
 
-  private asciiMini = [
-    '                      _     ',
-    '                     | |    ',
-    '  ___  __ _ _ __ __ _| |__  ',
-    " / __|/ _` | '__/ _` | '_ \\ ",
-    ' \\__ \\ (_| | | | (_| | | | |',
-    ' |___/\\__,_|_|  \\__,_|_| |_|',
-    '                            ',
-    '                            ',
-  ];
-  private asciiBig = [
-    ' ░▒▓███████▓▒░░▒▓██████▓▒░░▒▓███████▓▒░ ░▒▓██████▓▒░░▒▓█▓▒░░▒▓█▓▒░ ',
-    '░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░ ',
-    '░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░ ',
-    ' ░▒▓██████▓▒░░▒▓████████▓▒░▒▓███████▓▒░░▒▓████████▓▒░▒▓████████▓▒░ ',
-    '       ░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░ ',
-    '       ░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░ ',
-    '░▒▓███████▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░ ',
-    '                                                                   ',
-  ];
-
   private printAscii() {
-    const banner = this.isMobile ? this.asciiMini : this.asciiBig;
+    const banner = this.isMobile ? ASCII_MINI : ASCII_BIG;
 
     banner.forEach((line) => this.term.writeln(line));
     this.term.writeln('');
@@ -259,14 +244,7 @@ export class TerminalComponent implements AfterViewInit, OnDestroy {
         break;
 
       case Command.Fortune:
-        const fortunes = [
-          '💡 Code is like humor. When you have to explain it, it’s bad.',
-          '🚀 There is no cloud. just someone else’s computer.',
-          '👾 The cake is a lie!',
-          '🔮 42.',
-          '💀 Kein Backup. Kein Mitleid.',
-        ];
-        const random = fortunes[Math.floor(Math.random() * fortunes.length)];
+        const random = FORTUNES[Math.floor(Math.random() * FORTUNES.length)];
         this.term.writeln('');
         this.term.writeln('--------------------------------');
         this.term.writeln(random);
@@ -295,16 +273,6 @@ export class TerminalComponent implements AfterViewInit, OnDestroy {
         this.term.writeln('  • 👩🏻‍💻 Coding, System Administration & Automation');
         break;
 
-      case 'jil':
-        this.term.writeln('');
-        this.term.writeln('╔═══════════════════════════════════╗');
-        this.term.writeln('║                                   ║');
-        this.term.writeln('║        I love you 💚              ║');
-        this.term.writeln('║                                   ║');
-        this.term.writeln('╚═══════════════════════════════════╝');
-        this.term.writeln('');
-        break;
-
       case Command.Clear:
         this.term.clear();
         break;
@@ -313,7 +281,15 @@ export class TerminalComponent implements AfterViewInit, OnDestroy {
         break;
 
       default:
-        this.term.writeln(`command not found: ${cmd}`);
+        // Check for easter eggs
+        const easterEgg = EASTER_EGGS.find(
+          (egg) => egg.command.toLowerCase() === cmd.toLowerCase()
+        );
+        if (easterEgg) {
+          easterEgg.output.forEach((line) => this.term.writeln(line));
+        } else {
+          this.term.writeln(`command not found: ${cmd}`);
+        }
     }
 
     // Auto-scroll to bottom after output
