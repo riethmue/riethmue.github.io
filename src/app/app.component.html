@@ -7,6 +7,12 @@
         (modelClicked)="onModelClicked()"
       ></app-computer-model>
 
+      <!-- Landscape hint for mobile -->
+      <div class="landscape-hint">
+        <span class="icon">↻</span>
+        Rotate for terminal access
+      </div>
+
       <div
         *ngIf="(sceneInitialized && !sceneLoaded) || debugShowSpinner"
         class="loading"

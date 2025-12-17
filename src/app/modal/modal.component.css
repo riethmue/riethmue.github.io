@@ -11,6 +11,13 @@
   z-index: 9999;
 }
 
+/* hide modal in landscape on mobile */
+@media (max-width: 959px) and (orientation: landscape) {
+  .wrapper {
+    display: none;
+  }
+}
+
 .retro-modal {
   width: 100%;
   max-width: 1279px;
