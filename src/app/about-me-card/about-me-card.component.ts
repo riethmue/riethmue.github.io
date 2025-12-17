@@ -5,9 +5,9 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
-import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
-import { ModalComponent } from '../modal/modal.component';
+import { BreakpointObserver } from '@angular/cdk/layout';
 import { TerminalComponent } from '../terminal/terminal.component';
+
 @Component({
   selector: 'app-about-me-card',
   templateUrl: './about-me-card.component.html',
@@ -19,15 +19,12 @@ export class AboutMeCardComponent implements OnInit {
   isLandscape: boolean = false;
   @Output()
   terminalExited = new EventEmitter<any>();
+
   constructor(public breakpointObserver: BreakpointObserver) {
     this.breakpointObserver
-      .observe(['(max-height: 500px)'])
-      .subscribe((state: BreakpointState) => {
-        if (state.matches) {
-          this.isLandscape = true;
-        } else {
-          this.isLandscape = false;
-        }
+      .observe(['(orientation: landscape)'])
+      .subscribe((state) => {
+        this.isLandscape = state.matches;
       });
   }
 

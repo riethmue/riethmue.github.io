@@ -5,8 +5,8 @@
 export const environment = {
   production: false,
   debug: {
-    showSpinner: true, // Set to true to always show spinner (for testing)
-    forceLoadingDelay: 0, // Set to e.g. 2000 to keep spinner visible for 2 seconds (local testing only)
+    showSpinner: false, // Set to true to always show spinner (for testing)
+    enableLogging: true, // Enable debug logging in console
   },
 };
 

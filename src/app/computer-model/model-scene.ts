@@ -8,6 +8,8 @@ import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
 import { environment } from '../../environments/environment';
 import type { LogService } from '../services/log/log';
+import { MOBILE_BREAKPOINTS } from '../util/utils';
+import { BreakpointObserver } from '@angular/cdk/layout';
 import { PerformanceStatsService } from '../services/performance-stats/performance-stats.service';
 import { CustomControls } from './custom-controls';
 import { DracoModel } from './draco-model';
@@ -43,7 +45,8 @@ export class ModelScene {
     public htmlElement: ElementRef,
     private log: LogService,
     private performance: PerformanceStatsService,
-    public config: SceneConfig
+    public config: SceneConfig,
+    private breakpointObserver: BreakpointObserver
   ) {
     this.scene.background = new THREE.Color(0x000000);
     this.onMouseDownClick = this.onMouseDown.bind(this);
@@ -101,7 +104,7 @@ export class ModelScene {
       texs: info.memory.textures,
       pixelRatio: this.config.renderer.devicePixelRatio,
       antialias: this.config.renderer.rendererParameter.antialias,
-      isMobile: window.innerWidth < 768,
+      isMobile: this.breakpointObserver.isMatched(MOBILE_BREAKPOINTS),
     });
   }
 
@@ -348,10 +351,10 @@ export class ModelScene {
   }
 
   async addGeometries() {
-    const isMobile = window.innerWidth < 768;
+    const mobile = this.breakpointObserver.isMatched(MOBILE_BREAKPOINTS);
     // Reduce detail for all devices
-    const sphereDetail = isMobile ? 24 : 32;
-    const coneDetail = isMobile ? 12 : 16;
+    const sphereDetail = mobile ? 24 : 32;
+    const coneDetail = mobile ? 12 : 16;
     const geometries = [
       new THREE.SphereGeometry(1, sphereDetail, sphereDetail),
       new THREE.BoxGeometry(1, 1, 1),
@@ -363,7 +366,7 @@ export class ModelScene {
     const offset = new THREE.Vector3(0, 0, -20);
 
     // Reduce particle count from 50 to 30
-    for (let i = 0; i < (isMobile ? 20 : 30); i++) {
+    for (let i = 0; i < (mobile ? 20 : 30); i++) {
       const geom = geometries[Math.floor(Math.random() * geometries.length)];
       const scale = 3 + Math.random();
       const radiusDelta = 500;

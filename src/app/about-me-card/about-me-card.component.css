@@ -17,10 +17,43 @@
   min-height: 0;
 }
 
-@media (max-width: 768px) {
+/* no padding on small screens */
+@media (max-width: 1279px) and (orientation: portrait),
+  (max-width: 959px) and (orientation: landscape) {
   .wrapper {
     padding: 0.5rem;
   }
+}
+
+app-terminal {
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+  max-height: 400px;
+  overflow: hidden;
+  display: flex;
+}
+
+.retro-panel {
+  border: 2px solid var(--color-primary-500);
+  background: #000000b3;
+  box-shadow: 0 0 10px var(--color-primary-500), inset 0 0 6px #003b00;
+  margin: 12px 0;
+}
+
+/* hide on small screens */
+@media (max-width: 1279px) and (orientation: portrait),
+  (max-width: 959px) and (orientation: landscape) {
+  .retro-panel {
+    display: none;
+  }
+}
+
+.body {
+  display: flex;
+  flex-direction: row;
+  padding: 10px;
+  min-height: 0;
 }
 
 .retro-chip {
@@ -45,19 +78,6 @@
   color: black;
 }
 
-.retro-panel {
-  border: 2px solid var(--color-primary-500);
-  background: #000000b3;
-  box-shadow: 0 0 10px var(--color-primary-500), inset 0 0 6px #003b00;
-  margin: 12px 0;
-}
-
-@media (max-width: 768px) {
-  .retro-panel {
-    display: none;
-  }
-}
-
 .title {
   padding: 4px 8px;
   font: 14px/1 monospace;
@@ -67,73 +87,17 @@
   letter-spacing: 0.5px;
 }
 
-.body {
-  display: flex;
-  flex-direction: column;
-  padding: 10px;
-  min-height: 0;
-}
-
-@media (min-width: 640px) {
-  .body {
-    flex-direction: row;
-  }
-}
-
-.retro-rule {
-  margin: 14px 0 10px;
-  color: var(--color-primary-500);
-  font: 14px/1 monospace;
-  text-shadow: 0 0 6px var(--color-primary-500);
-}
-
-.retro-rule--long {
-  display: none;
-}
-
-@media (min-width: 640px) {
-  .retro-rule--long {
-    display: block;
-  }
-}
-
-.retro-rule--short {
-  display: block;
-}
-
-@media (min-width: 640px) {
-  .retro-rule--short {
-    display: none;
-  }
-}
-
 .profile-img {
-  max-width: 50%;
+  max-width: 33%;
   height: auto;
   margin: 5px;
   object-fit: contain;
 }
 
-@media (max-width: 768px) {
+/* hide on small screens */
+@media (max-width: 1279px) and (orientation: portrait),
+  (max-width: 959px) and (orientation: landscape) {
   .profile-img {
     display: none;
-  }
-}
-
-app-terminal {
-  margin: 5px;
-  width: 100%;
-  flex: 1;
-  min-height: 0;
-  max-height: 400px;
-  overflow: hidden;
-  display: flex;
-}
-
-@media (max-width: 768px) {
-  app-terminal {
-    max-height: none;
-    flex: 1;
-    margin: 0;
   }
 }

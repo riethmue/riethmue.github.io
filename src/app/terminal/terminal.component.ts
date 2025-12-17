@@ -10,12 +10,14 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
+import { BreakpointObserver } from '@angular/cdk/layout';
 import { FitAddon } from '@xterm/addon-fit';
 import { Terminal } from '@xterm/xterm';
 import { from, of, Subject } from 'rxjs';
 import { concatMap, delay, takeUntil } from 'rxjs/operators';
 import { Command } from '../util/command.enum';
-import { isMobile } from '../util/utils';
+import { log } from '../services/debug-logger/debug-logger.service';
+import { MOBILE_BREAKPOINTS } from '../util/utils';
 
 @Component({
   selector: 'app-terminal',
@@ -30,7 +32,8 @@ export class TerminalComponent implements AfterViewInit, OnDestroy {
   private resizeObserver!: ResizeObserver;
   private keySub?: { dispose: () => void };
   private inputBuffer = '';
-  private isMobile = isMobile();
+  private breakpointObserver = inject(BreakpointObserver);
+  private isMobile = false;
 
   @ViewChild('term', { static: true })
   terminalContainer!: ElementRef<HTMLDivElement>;
@@ -41,6 +44,9 @@ export class TerminalComponent implements AfterViewInit, OnDestroy {
   constructor(@Inject(DOCUMENT) private document: Document) {}
 
   ngAfterViewInit(): void {
+    // Check if mobile on init
+    this.isMobile = this.breakpointObserver.isMatched(MOBILE_BREAKPOINTS);
+
     this.term = new Terminal({
       cursorBlink: true,
       cursorStyle: 'underline',
@@ -64,11 +70,20 @@ export class TerminalComponent implements AfterViewInit, OnDestroy {
     const el = this.hiddenInput.nativeElement;
     (el as any).autocapitalize = 'none';
 
-    setTimeout(() => {
-      this.fitAddon.fit();
-    }, 0);
+    this.fitAddon.fit();
+    log.debug('Terminal initial fit', this.term.cols);
 
-    this.resizeObserver = new ResizeObserver(() => this.fitAddon.fit());
+    // ResizeObserver to detect when terminal container size changes
+    this.resizeObserver = new ResizeObserver(() => {
+      // Update mobile status
+      this.isMobile = this.breakpointObserver.isMatched(MOBILE_BREAKPOINTS);
+
+      log.debug(
+        'Terminal ResizeObserver triggered, calling fit()',
+        this.term.cols
+      );
+      this.fitAddon.fit();
+    });
     this.resizeObserver.observe(this.terminalContainer.nativeElement);
 
     const greeting =
@@ -117,7 +132,7 @@ export class TerminalComponent implements AfterViewInit, OnDestroy {
   ];
 
   private printAscii() {
-    const banner = window.innerWidth < 700 ? this.asciiMini : this.asciiBig;
+    const banner = this.isMobile ? this.asciiMini : this.asciiBig;
 
     banner.forEach((line) => this.term.writeln(line));
     this.term.writeln('');

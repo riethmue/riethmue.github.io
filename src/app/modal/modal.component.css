@@ -13,13 +13,16 @@
 
 .retro-modal {
   width: 100%;
+  max-width: 1279px;
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
 }
 
-@media (max-width: 768px) {
+/* align to top on small screens */
+@media (max-width: 1279px) and (orientation: portrait),
+  (max-width: 959px) and (orientation: landscape) {
   .retro-modal {
     align-items: flex-start;
   }
@@ -40,7 +43,10 @@
   box-sizing: border-box;
 }
 
-@media (max-width: 768px) {
+/* full width on small screens */
+/* keep space for keyboard on mobile devices */
+@media (max-width: 1279px) and (orientation: portrait),
+  (max-width: 959px) and (orientation: landscape) {
   .retro-window {
     width: 100%;
     max-width: 100%;

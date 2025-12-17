@@ -1,3 +1,11 @@
-export function isMobile(): boolean {
-  return /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-}
+import { Breakpoints } from '@angular/cdk/layout';
+
+/**
+ * Mobile/Tablet breakpoints for BreakpointObserver
+ */
+export const MOBILE_BREAKPOINTS = [
+  Breakpoints.HandsetPortrait,
+  Breakpoints.HandsetLandscape,
+  Breakpoints.TabletPortrait,
+  Breakpoints.TabletLandscape,
+];

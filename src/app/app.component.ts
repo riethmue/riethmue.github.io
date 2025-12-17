@@ -26,6 +26,7 @@ import { InitialSceneConfig } from './computer-model/scene-constants';
 import { ModalComponent } from './modal/modal.component';
 import { ModalService } from './services/modal/modal.service';
 import { ModelInteractionService } from './services/model-interaction/model-interaction.service';
+import { log } from './services/debug-logger/debug-logger.service';
 import { TerminalComponent } from './terminal/terminal.component';
 import { environment } from '../environments/environment';
 @Component({
@@ -56,12 +57,19 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   terminalWidth = 70;
   currentYear = new Date().getFullYear();
   debugShowSpinner = environment.debug.showSpinner;
+  private lastOrientation: 'portrait' | 'landscape' | null = null;
 
   constructor(
     private modelInteractionService: ModelInteractionService,
     private modalService: ModalService,
     private cd: ChangeDetectorRef
-  ) {}
+  ) {
+    log.info('App initialized', {
+      production: environment.production,
+      debugLogging: environment.debug.enableLogging,
+      showSpinner: environment.debug.showSpinner,
+    });
+  }
 
   ngOnDestroy() {
     this.destroyed$.next();
@@ -69,10 +77,13 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   }
   ngOnInit(): void {
     if (this.isBrowserEnv) {
-      // only subscribe if window exists
+      // Track orientation changes
       fromEvent(window, 'resize')
         .pipe(takeUntil(this.destroyed$))
-        .subscribe(() => this.resizeView());
+        .subscribe(() => {
+          this.resizeView();
+          this.updateOrientation();
+        });
     }
   }
   ngAfterViewInit(): void {
@@ -86,22 +97,22 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
       devicePixelRatio: pixelRatio,
     };
 
-    // defer emit to next macrotask so child subscriptions are active
-    setTimeout(() => {
-      this.sceneInitialized = true;
-      this.cd.markForCheck();
-      this.modelInteractionService.onSceneInitialized$.next(config);
-      this.resizeView();
+    log.debug('Scene initialization', {
+      width: el.offsetWidth,
+      height: el.offsetHeight,
+      pixelRatio,
     });
+
+    this.sceneInitialized = true;
+    this.cd.markForCheck();
+    this.modelInteractionService.onSceneInitialized$.next(config);
+    this.resizeView();
   }
 
   onSceneLoaded() {
-    // Apply debug delay if configured (local testing only)
-    const delay = environment.debug.forceLoadingDelay;
-    setTimeout(() => {
-      this.sceneLoaded = true;
-      this.cd.markForCheck();
-    }, delay);
+    log.info('3D Scene loaded');
+    this.sceneLoaded = true;
+    this.cd.markForCheck();
   }
 
   onModelClicked() {
@@ -119,6 +130,19 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
       el.offsetWidth,
       el.offsetHeight,
     ]);
+  }
+
+  updateOrientation(): void {
+    const currentOrientation =
+      window.innerHeight > window.innerWidth ? 'portrait' : 'landscape';
+
+    // Skip if orientation hasn't changed
+    if (this.lastOrientation === currentOrientation) {
+      return;
+    }
+
+    this.lastOrientation = currentOrientation;
+    log.debug(`Orientation changed to ${currentOrientation}`);
   }
 
   onResetView() {

@@ -10,10 +10,13 @@ import {
 import { Subject } from 'rxjs';
 import { skip, takeUntil } from 'rxjs/operators';
 import * as THREE from 'three';
+import { inject } from '@angular/core';
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 import { LogService } from '../services/log/log';
 import { ModelInteractionService } from '../services/model-interaction/model-interaction.service';
 import { PerformanceStatsService } from '../services/performance-stats/performance-stats.service';
+import { MOBILE_BREAKPOINTS } from '../util/utils';
 import { ModelScene } from './model-scene';
 import { InitialSceneConfig } from './scene-constants';
 import { RenderingPerformanceComponent } from '../rendering-performance/rendering-performance.component';
@@ -26,6 +29,7 @@ import { RenderingPerformanceComponent } from '../rendering-performance/renderin
   imports: [RenderingPerformanceComponent],
 })
 export class ComputerModelComponent implements OnInit {
+  private breakpointObserver = inject(BreakpointObserver);
   @ViewChild('renderContainer', { static: true }) renderContainer: ElementRef;
   scene: ModelScene | null = null;
   public get hoverModel() {
@@ -83,7 +87,7 @@ export class ComputerModelComponent implements OnInit {
         },
         renderer: {
           rendererParameter: {
-            antialias: window.innerWidth >= 768,
+            antialias: !this.breakpointObserver.isMatched(MOBILE_BREAKPOINTS),
             alpha: true,
             powerPreference: 'high-performance',
           },
@@ -105,7 +109,8 @@ export class ComputerModelComponent implements OnInit {
             light: new THREE.DirectionalLight(0xffffff, 2.0),
           },
         ],
-      }
+      },
+      this.breakpointObserver
     );
 
     this.scene.sceneLoaded
