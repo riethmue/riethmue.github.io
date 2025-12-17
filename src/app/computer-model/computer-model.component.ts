@@ -81,7 +81,7 @@ export class ComputerModelComponent implements OnInit {
       {
         model: {
           filePath: 'assets/',
-          fileName: 'retro_computer.glb',
+          fileName: 'retro_computer_optimized.glb',
           scaling: 50,
           position: new THREE.Vector3(0, 0, 0),
         },

@@ -230,17 +230,19 @@ export class TerminalComponent implements AfterViewInit, OnDestroy {
 
       case Command.Skills:
         this.term.writeln('=== Languages ===');
-        this.term.writeln('  • TypeScript, Python, C#, SQL');
+        this.term.writeln(
+          '  • TypeScript/ Javascript, Python, Bash, PowerShell'
+        );
         this.term.writeln('');
         this.term.writeln('=== Frameworks ===');
         this.term.writeln('  • Angular, React, Node.js');
         this.term.writeln('');
         this.term.writeln('=== Cloud ===');
-        this.term.writeln('  • Azure ☁️');
+        this.term.writeln('  • Azure, AWS');
         this.term.writeln('');
         this.term.writeln('=== DevOps ===');
         this.term.writeln(
-          '  • Terraform, Docker, GitHub Actions, Azure DevOps'
+          '  • Terraform, Docker, GitHub Actions, Azure DevOps, GitLab,'
         );
         this.term.writeln('');
         this.term.writeln('=== Databases ===');
@@ -259,10 +261,10 @@ export class TerminalComponent implements AfterViewInit, OnDestroy {
       case Command.Fortune:
         const fortunes = [
           '💡 Code is like humor. When you have to explain it, it’s bad.',
-          '🚀 There is no cloud… just someone else’s computer.',
-          '👾 Hack the planet!',
-          '🐺 Trust your instincts, like a wolf in the wild.',
-          '✨ Keep it retro, keep it green.',
+          '🚀 There is no cloud. just someone else’s computer.',
+          '👾 The cake is a lie!',
+          '🔮 42.',
+          '💀 Kein Backup. Kein Mitleid.',
         ];
         const random = fortunes[Math.floor(Math.random() * fortunes.length)];
         this.term.writeln('');
@@ -274,23 +276,23 @@ export class TerminalComponent implements AfterViewInit, OnDestroy {
 
       case Command.Projects:
         this.term.writeln('🔹 Vaultwarden on Azure (Terraform, DevOps)');
-        this.term.writeln('🔹 Exopulse Mollii Suit App (Ottobock)');
-        this.term.writeln('🔹 3D Experiments with Three.js + Angular');
+        this.term.writeln('🔹 Smart Documentation (Ottobock)');
+        this.term.writeln('🔹 Exopulse Mollii Suit (Ottobock)');
+        this.term.writeln('🔹 3D Experiments with Three.js');
         break;
 
       case Command.Contact:
-        this.term.writeln('📧 Mail: sarah@example.com');
         this.term.writeln('🐦 Twitter: @riethmue93');
         this.term.writeln('💻 GitHub: github.com/riethmue');
         break;
 
       case Command.Hobbies:
         this.term.writeln('=== Hobbies ===');
-        this.term.writeln('  • 🥋 Martial Arts (Krav Maga)');
-        this.term.writeln('  • 🎮 Retro Gaming & Retro Consoles');
-        this.term.writeln('  • 🌱 gardening');
+        this.term.writeln('  • 🥋 Krav Maga');
+        this.term.writeln('  • 🎮 Retro Gaming');
+        this.term.writeln('  • 🌱 Gardening');
         this.term.writeln('  • 📚 Reading');
-        this.term.writeln('  • 👩🏻‍💻 Experimenting with AI & 3D graphics');
+        this.term.writeln('  • 👩🏻‍💻 Coding, System Administration & Automation');
         break;
 
       case 'jil':
