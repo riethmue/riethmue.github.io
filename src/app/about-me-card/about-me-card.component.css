@@ -27,11 +27,11 @@
 
 app-terminal {
   width: 100%;
-  flex: 1;
+  flex: 1 1 auto;
   min-height: 0;
-  max-height: 400px;
   overflow: hidden;
   display: flex;
+  flex-direction: column;
 }
 
 .retro-panel {

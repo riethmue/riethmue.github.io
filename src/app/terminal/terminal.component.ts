@@ -70,17 +70,17 @@ export class TerminalComponent implements AfterViewInit, OnDestroy {
     const el = this.hiddenInput.nativeElement;
     (el as any).autocapitalize = 'none';
 
-    this.fitAddon.fit();
-    log.debug('Terminal initial fit', this.term.cols);
-
     // ResizeObserver to detect when terminal container size changes
-    this.resizeObserver = new ResizeObserver(() => {
+    this.resizeObserver = new ResizeObserver((entries) => {
+      const entry = entries[0];
+      const contentRect = entry.contentRect;
+
       // Update mobile status
       this.isMobile = this.breakpointObserver.isMatched(MOBILE_BREAKPOINTS);
 
       log.debug(
         'Terminal ResizeObserver triggered, calling fit()',
-        this.term.cols
+        this.term.rows
       );
       this.fitAddon.fit();
     });
