@@ -44,7 +44,7 @@ export interface EasterEgg {
 
 export const EASTER_EGGS: EasterEgg[] = [
   {
-    command: 'jil',
+    command: 'amelie',
     output: [
       '',
       '╔═══════════════════════════════════╗',
