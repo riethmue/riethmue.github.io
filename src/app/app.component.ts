@@ -1,4 +1,4 @@
-import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser } from '@angular/common';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -36,11 +36,10 @@ import { environment } from '../environments/environment';
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [
-    CommonModule,
     RouterModule,
     FontAwesomeModule,
-    ComputerModelComponent,
-  ],
+    ComputerModelComponent
+],
 })
 export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('model', { static: false }) modelRef?: ElementRef<HTMLElement>;

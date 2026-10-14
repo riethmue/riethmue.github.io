@@ -1,47 +1,46 @@
 <div #appContainer class="app">
-  <ng-container *ngIf="isBrowserEnv">
+  @if (isBrowserEnv) {
     <div class="background" #model>
       <app-computer-model
         #model
         (loaded)="onSceneLoaded()"
         (modelClicked)="onModelClicked()"
       ></app-computer-model>
-
       <!-- Landscape hint for mobile -->
       <div class="landscape-hint">
         <span class="icon">↻</span>
         Rotate for terminal access
       </div>
-
-      <div
-        *ngIf="(sceneInitialized && !sceneLoaded) || debugShowSpinner"
-        class="loading"
-      >
-        <div class="spinner-container">
-          <div class="spinner">
-            <div class="spinner-dot"></div>
-            <div class="spinner-dot"></div>
-            <div class="spinner-dot"></div>
-            <div class="spinner-dot"></div>
-            <div class="spinner-dot"></div>
-            <div class="spinner-dot"></div>
-            <div class="spinner-dot"></div>
-            <div class="spinner-dot"></div>
-          </div>
-          <div class="loading-text">
-            <span class="bracket">[</span>
-            <span class="text">LOADING 3D SCENE</span>
-            <span class="dots">
-              <span class="dot">.</span>
-              <span class="dot">.</span>
-              <span class="dot">.</span>
-            </span>
-            <span class="bracket">]</span>
+      @if ((sceneInitialized && !sceneLoaded) || debugShowSpinner) {
+        <div
+          class="loading"
+          >
+          <div class="spinner-container">
+            <div class="spinner">
+              <div class="spinner-dot"></div>
+              <div class="spinner-dot"></div>
+              <div class="spinner-dot"></div>
+              <div class="spinner-dot"></div>
+              <div class="spinner-dot"></div>
+              <div class="spinner-dot"></div>
+              <div class="spinner-dot"></div>
+              <div class="spinner-dot"></div>
+            </div>
+            <div class="loading-text">
+              <span class="bracket">[</span>
+              <span class="text">LOADING 3D SCENE</span>
+              <span class="dots">
+                <span class="dot">.</span>
+                <span class="dot">.</span>
+                <span class="dot">.</span>
+              </span>
+              <span class="bracket">]</span>
+            </div>
           </div>
         </div>
-      </div>
+      }
     </div>
-  </ng-container>
+  }
   <div class="footer-container">
     <div class="footer">
       <div class="fab floating-buttons">
