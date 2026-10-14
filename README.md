@@ -35,7 +35,7 @@ npm install
 | `npm start`      | Start development server on `http://localhost:4200` |
 | `npm run build`  | Build for production (output in `dist/`)            |
 | `npm run watch`  | Build in watch mode for development                 |
-| `npm test`       | Run unit tests via Karma                            |
+| `npm test`       | Run unit tests via Vitest                           |
 | `npm run mobile` | Start dev server with QR code for mobile testing    |
 
 ### Mobile Development
