@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { PerformanceStatsService } from './performance-stats.service.js';
+import { PerformanceStatsService } from './performance-stats.service';
 
 describe('PerformanceStatsService', () => {
   let service: PerformanceStatsService;
